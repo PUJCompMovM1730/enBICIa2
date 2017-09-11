@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 
-public class tienda extends AppCompatActivity {
+public class StoreActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,7 +17,7 @@ public class tienda extends AppCompatActivity {
         bmenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent= new Intent(getBaseContext(),menu.class);
+                Intent intent= new Intent(getBaseContext(),MenuActivity.class);
                 startActivity(intent);
             }
         });

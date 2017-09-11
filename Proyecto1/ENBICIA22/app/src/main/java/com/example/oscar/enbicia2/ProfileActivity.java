@@ -9,7 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.LinearLayout;
 
-public class profile extends AppCompatActivity {
+public class ProfileActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +31,7 @@ public class profile extends AppCompatActivity {
         fmenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent= new Intent(getBaseContext(),menu.class);
+                Intent intent= new Intent(getBaseContext(),MenuActivity.class);
                 startActivity(intent);
             }
         });
@@ -40,7 +40,7 @@ public class profile extends AppCompatActivity {
         lamigos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               Intent intent= new Intent(getBaseContext(),friends.class);
+               Intent intent= new Intent(getBaseContext(),FriendsActivity.class);
                 startActivity(intent);
             }
         });
@@ -49,7 +49,7 @@ public class profile extends AppCompatActivity {
         lrecorrido.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent= new Intent(getBaseContext(),resume_route.class);
+                Intent intent= new Intent(getBaseContext(),ResumeRouteActivity.class);
                 startActivity(intent);
             }
         });

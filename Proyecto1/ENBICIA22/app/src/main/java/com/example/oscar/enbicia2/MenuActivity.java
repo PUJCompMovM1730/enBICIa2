@@ -1,14 +1,12 @@
 package com.example.oscar.enbicia2;
 
 import android.content.Intent;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 
-public class menu extends AppCompatActivity {
+public class MenuActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +25,7 @@ public class menu extends AppCompatActivity {
         bperfil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent= new Intent(getBaseContext(),profile.class);
+                Intent intent= new Intent(getBaseContext(),ProfileActivity.class);
                 startActivity(intent);
             }
         });
@@ -36,7 +34,7 @@ public class menu extends AppCompatActivity {
         brecorrido.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent= new Intent(getBaseContext(),Routes.class);
+                Intent intent= new Intent(getBaseContext(),RoutesActivity.class);
                 startActivity(intent);
             }
         });
@@ -44,7 +42,7 @@ public class menu extends AppCompatActivity {
         bruta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent= new Intent(getBaseContext(),tours.class);
+                Intent intent= new Intent(getBaseContext(),TourActivity.class);
                 startActivity(intent);
             }
         });
@@ -52,7 +50,7 @@ public class menu extends AppCompatActivity {
         btienda.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent= new Intent(getBaseContext(),tienda.class);
+                Intent intent= new Intent(getBaseContext(),StoreActivity.class);
                 startActivity(intent);
             }
         });

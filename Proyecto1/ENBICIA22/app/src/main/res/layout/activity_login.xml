@@ -109,11 +109,11 @@
                 android:layout_centerHorizontal="true"
                 android:layout_below="@id/continua">
             <Button
-                android:id="@+id/google"
+                android:id="@+id/btnGoogle"
                 style="?android:textAppearanceSmall"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/facebook"
+                android:layout_alignTop="@+id/btnFacebook"
                 android:layout_weight="0.5"
                 android:background="@drawable/google"
                 android:drawableLeft="@drawable/ic_google_plus"
@@ -124,12 +124,12 @@
                 android:textStyle="bold" />
 
             <Button
-                android:id="@+id/facebook"
+                android:id="@+id/btnFacebook"
                 style="?android:textAppearanceSmall"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:layout_toRightOf="@id/google"
+                android:layout_toRightOf="@id/btnGoogle"
                 android:layout_weight="0.5"
                 android:background="@drawable/fb"
                 android:drawableLeft="@drawable/ic_facebook"

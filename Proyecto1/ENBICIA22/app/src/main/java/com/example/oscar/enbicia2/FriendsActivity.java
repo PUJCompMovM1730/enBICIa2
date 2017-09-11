@@ -5,31 +5,39 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 
-public class tours extends AppCompatActivity {
+public class FriendsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tours);
+        setContentView(R.layout.activity_friends);
 
-        LinearLayout lrecorrido= (LinearLayout) findViewById(R.id.tour1);
-        lrecorrido.setOnClickListener(new View.OnClickListener() {
+        ImageButton batras= (ImageButton) findViewById(R.id.atras);
+        batras.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent= new Intent(getBaseContext(),tourdetail.class);
+                finish();
+            }
+        });
+
+        ImageButton badd= (ImageButton) findViewById(R.id.add);
+        badd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent= new Intent(getBaseContext(),RequestFriendActivity.class);
                 startActivity(intent);
             }
         });
+
 
         ImageButton bmenu= (ImageButton) findViewById(R.id.atras);
         bmenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent= new Intent(getBaseContext(),menu.class);
-                startActivity(intent);
+                finish();
             }
         });
+
     }
 }

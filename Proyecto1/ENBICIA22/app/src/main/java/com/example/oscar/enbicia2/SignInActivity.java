@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-public class SignIn extends AppCompatActivity {
+public class SignInActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,7 +20,7 @@ public class SignIn extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Intent intent= new Intent(getBaseContext(),menu.class);
+                Intent intent= new Intent(getBaseContext(),MenuActivity.class);
                 startActivity(intent);
             }
         });

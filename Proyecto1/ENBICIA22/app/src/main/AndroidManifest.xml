@@ -34,26 +34,26 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SignIn"
+            android:name=".SignInActivity"
             android:label="Registro" />
         <activity
-            android:name=".Routes"
+            android:name=".RoutesActivity"
             android:label="@string/title_activity_routes" />
-        <activity android:name=".chat" />
+        <activity android:name=".ChatActivity" />
         <activity
-            android:name=".profile"
+            android:name=".ProfileActivity"
             android:label="@string/title_activity_profile"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".friends" />
-        <activity android:name=".request_friend" />
-        <activity android:name=".menu" />
-        <activity android:name=".resume_route" />
-        <activity android:name=".tours" />
-        <activity android:name=".group" />
+        <activity android:name=".FriendsActivity" />
+        <activity android:name=".RequestFriendActivity" />
+        <activity android:name=".MenuActivity" />
+        <activity android:name=".ResumeRouteActivity" />
+        <activity android:name=".TourActivity" />
+        <activity android:name=".GroupActivity" />
         <activity
-            android:name=".tourdetail"
+            android:name=".TourDetailActivity"
             android:label="@string/title_activity_tourdetail" />
-        <activity android:name=".tienda"></activity>
+        <activity android:name=".StoreActivity"></activity>
     </application>
 
 </manifest>

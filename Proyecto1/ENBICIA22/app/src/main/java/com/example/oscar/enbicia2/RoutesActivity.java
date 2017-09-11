@@ -1,9 +1,10 @@
 package com.example.oscar.enbicia2;
 
+import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageButton;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -12,18 +13,27 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class tourdetail extends FragmentActivity implements OnMapReadyCallback {
+public class RoutesActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tourdetail);
+        setContentView(R.layout.activity_routes);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        FloatingActionButton fmenu = (FloatingActionButton) findViewById(R.id.menu);
+        fmenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent= new Intent(getBaseContext(),MenuActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
 
@@ -41,16 +51,8 @@ public class tourdetail extends FragmentActivity implements OnMapReadyCallback {
         mMap = googleMap;
 
         // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-
-        ImageButton bmenu= (ImageButton) findViewById(R.id.atras);
-        bmenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+        LatLng javeriana = new LatLng(4.6284578,-74.0649077);
+        mMap.addMarker(new MarkerOptions().position(javeriana).title("Marker in Sydney"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(javeriana));
     }
 }

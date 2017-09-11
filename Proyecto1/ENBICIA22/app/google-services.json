@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "435084104866",
+    "firebase_url": "https://enbicia2-ccad2.firebaseio.com",
+    "project_id": "enbicia2-ccad2",
+    "storage_bucket": "enbicia2-ccad2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:435084104866:android:4875807de0e90d5b",
+        "android_client_info": {
+          "package_name": "com.example.oscar.enbicia2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "435084104866-3qrb6519llodlv98hiic8evfpljhjljh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.oscar.enbicia2",
+            "certificate_hash": "407ce096504770062f30d182057974c694cb41ec"
+          }
+        },
+        {
+          "client_id": "435084104866-eud5grmdf4n4fibqhn9luj33666fl3qm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDKOzpjdKH1n2IlMoIuCYWMUOM2cAl5Lz0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "435084104866-eud5grmdf4n4fibqhn9luj33666fl3qm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -47,7 +47,7 @@
                 android:name="com.google.android.gms.maps.SupportMapFragment"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
-                tools:context="com.example.oscar.enbicia2.tourdetail"
+                tools:context="com.example.oscar.enbicia2.TourDetailActivity"
                />
 
 

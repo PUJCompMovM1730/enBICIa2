@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.oscar.enbicia2.SignIn"
+    tools:context="com.example.oscar.enbicia2.SignInActivity"
     android:background="@color/background"
     android:padding="30dp">
 

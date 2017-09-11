@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/background"
-    tools:context="com.example.oscar.enbicia2.friends">
+    tools:context="com.example.oscar.enbicia2.FriendsActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
