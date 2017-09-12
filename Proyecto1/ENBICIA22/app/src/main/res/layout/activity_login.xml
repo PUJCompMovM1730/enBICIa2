@@ -123,7 +123,7 @@
                 android:textColor="@color/blanco"
                 android:textStyle="bold" />
 
-            <Button
+            <com.facebook.login.widget.LoginButton
                 android:id="@+id/btnFacebook"
                 style="?android:textAppearanceSmall"
                 android:layout_width="200dp"
@@ -139,6 +139,24 @@
                 android:textColor="@color/blanco"
                 android:textStyle="bold"
                 android:layout_marginLeft="30dp"/>
+
+
+            <!--<Button-->
+                <!--android:id="@+id/btnFacebook"-->
+                <!--style="?android:textAppearanceSmall"-->
+                <!--android:layout_width="200dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginTop="16dp"-->
+                <!--android:layout_toRightOf="@id/btnGoogle"-->
+                <!--android:layout_weight="0.5"-->
+                <!--android:background="@drawable/fb"-->
+                <!--android:drawableLeft="@drawable/ic_facebook"-->
+                <!--android:drawablePadding="2dp"-->
+                <!--android:paddingLeft="30dp"-->
+                <!--android:text="facebook"-->
+                <!--android:textColor="@color/blanco"-->
+                <!--android:textStyle="bold"-->
+                <!--android:layout_marginLeft="30dp"/>-->
             </RelativeLayout>
 
             <Button

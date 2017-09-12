@@ -118,4 +118,5 @@
     </string>
     <string name="title_activity_profile">profile</string>
     <string name="title_activity_tourdetail">Map</string>
+    <string name="facebook_app_id">207653939771200</string>
 </resources>
