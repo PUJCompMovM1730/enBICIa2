@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -35,72 +34,74 @@
             android:gravity="center_vertical"/>
 
     </LinearLayout>
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:padding="30dp">
 
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="30dp">
 
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:gravity="center"
-           >
+            android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="200dp"
                 android:layout_height="200dp"
-                android:orientation="vertical"
-                android:gravity="center"
                 android:layout_margin="10dp"
-                >
+                android:gravity="center"
+                android:orientation="vertical">
+
                 <ImageButton
                     android:id="@+id/perfil"
                     android:layout_width="150dp"
                     android:layout_height="150dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/user_4"
                     android:layout_margin="10dp"
-                    android:background="@color/blanco"/>
+                    android:background="@color/blanco"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/user_4" />
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
-                    android:text="Perfíl"
-                    android:textStyle="bold"
-                    android:textSize="25sp"
-                    android:textColor="@color/colorAccent"
+                    android:layout_margin="5dp"
                     android:gravity="center"
-                    android:layout_margin="5dp"/>
+                    android:text="Perfíl"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="25sp"
+                    android:textStyle="bold" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="200dp"
                 android:layout_height="200dp"
-                android:orientation="vertical"
-                android:gravity="center"
                 android:layout_margin="10dp"
-                >
+                android:gravity="center"
+                android:orientation="vertical">
+
                 <ImageButton
                     android:id="@+id/recorrido"
                     android:layout_width="150dp"
                     android:layout_height="150dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/map"
                     android:layout_margin="10dp"
-                    android:background="@color/blanco"/>
+                    android:background="@color/blanco"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/map" />
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
-                    android:text="Recorrido"
-                    android:textStyle="bold"
-                    android:textSize="25sp"
-                    android:textColor="@color/colorAccent"
+                    android:layout_margin="5dp"
                     android:gravity="center"
-                    android:layout_margin="5dp"/>
+                    android:text="Recorrido"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="25sp"
+                    android:textStyle="bold" />
             </LinearLayout>
 
         </LinearLayout>
@@ -108,41 +109,41 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:gravity="center"
-            >
+            android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="200dp"
                 android:layout_height="200dp"
-                android:orientation="vertical"
-                android:gravity="center"
                 android:layout_margin="10dp"
-                >
+                android:gravity="center"
+                android:orientation="vertical">
+
                 <ImageButton
                     android:layout_width="150dp"
                     android:layout_height="150dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/users_1"
                     android:layout_margin="10dp"
-                    android:background="@color/blanco"/>
+                    android:background="@color/blanco"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/users_1" />
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
-                    android:text="Grupos"
-                    android:textStyle="bold"
-                    android:textSize="25sp"
-                    android:textColor="@color/colorAccent"
+                    android:layout_margin="5dp"
                     android:gravity="center"
-                    android:layout_margin="5dp"/>
+                    android:text="Grupos"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="25sp"
+                    android:textStyle="bold" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="200dp"
                 android:layout_height="200dp"
-                android:orientation="vertical"
-                android:gravity="center"
                 android:layout_margin="10dp"
-                >
+                android:gravity="center"
+                android:orientation="vertical">
 
                 <ImageButton
                     android:id="@+id/imageButton"
@@ -156,12 +157,12 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
-                    android:text="Mensajes"
-                    android:textStyle="bold"
-                    android:textSize="25sp"
-                    android:textColor="@color/colorAccent"
+                    android:layout_margin="5dp"
                     android:gravity="center"
-                    android:layout_margin="5dp"/>
+                    android:text="Mensajes"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="25sp"
+                    android:textStyle="bold" />
             </LinearLayout>
 
         </LinearLayout>
@@ -169,62 +170,67 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:gravity="center"
-            >
+            android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="200dp"
                 android:layout_height="200dp"
-                android:orientation="vertical"
-                android:gravity="center"
                 android:layout_margin="10dp"
-                >
+                android:gravity="center"
+                android:orientation="vertical">
+
                 <ImageButton
                     android:id="@+id/ruta"
                     android:layout_width="150dp"
                     android:layout_height="150dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/route"
                     android:layout_margin="10dp"
-                    android:background="@color/blanco"/>
+                    android:background="@color/blanco"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/route" />
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
-                    android:text="Rutas"
-                    android:textStyle="bold"
-                    android:textSize="25sp"
-                    android:textColor="@color/colorAccent"
+                    android:layout_margin="5dp"
                     android:gravity="center"
-                    android:layout_margin="5dp"/>
+                    android:text="Rutas"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="25sp"
+                    android:textStyle="bold" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="200dp"
                 android:layout_height="200dp"
-                android:orientation="vertical"
-                android:gravity="center"
                 android:layout_margin="10dp"
-                >
+                android:gravity="center"
+                android:orientation="vertical">
+
                 <ImageButton
                     android:id="@+id/tienda"
                     android:layout_width="150dp"
                     android:layout_height="150dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/shop"
                     android:layout_margin="10dp"
-                    android:background="@color/blanco"/>
+                    android:background="@color/blanco"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/shop" />
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
-                    android:text="Tienda"
-                    android:textStyle="bold"
-                    android:textSize="25sp"
-                    android:textColor="@color/colorAccent"
+                    android:layout_margin="5dp"
                     android:gravity="center"
-                    android:layout_margin="5dp"/>
+                    android:text="Tienda"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="25sp"
+                    android:textStyle="bold" />
             </LinearLayout>
 
         </LinearLayout>
 
     </LinearLayout>
+
+
+
 </LinearLayout>

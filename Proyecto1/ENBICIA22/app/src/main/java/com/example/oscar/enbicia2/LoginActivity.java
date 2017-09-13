@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -23,6 +24,7 @@ import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.auth.api.signin.SignInAccount;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -59,6 +61,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
     private View mLoginFormView;
+    private TextView signin;
 
 
     @Override
@@ -69,6 +72,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         mPasswordView = (EditText) findViewById(R.id.password);
         btnFacebook = (LoginButton) findViewById(R.id.btnFacebook);
+        signin= (TextView) findViewById(R.id.registrarse);
 
         // [START initialize_auth]
         mAuth = FirebaseAuth.getInstance();
@@ -122,7 +126,14 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         });
         // [END initialize_fblogin]
 
-        mLoginFormView = findViewById(R.id.login_form);
+
+        signin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent= new Intent(getBaseContext(),SignInActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void signInEmail(String email, String password) {
