@@ -13,13 +13,15 @@ public class DetalleCompra {
     private String estado;
     private Date fecha_hora;
     private String metodoPago;
+    private Ciclista comprador;
 
-    public DetalleCompra(int cantidad, String estado, Date fecha_hora, String metodoPago) {
+    public DetalleCompra(int cantidad, String estado, Date fecha_hora, String metodoPago, Ciclista comprador) {
         this.cantidad = cantidad;
         this.estado = estado;
         //TODO: ¿La fecha y hora es la actual?
         this.fecha_hora = fecha_hora;
         this.metodoPago = metodoPago;
+        this.comprador = comprador;
     }
 
     public int getCantidad() {
@@ -52,5 +54,13 @@ public class DetalleCompra {
 
     public void setMetodoPago(String metodoPago) {
         this.metodoPago = metodoPago;
+    }
+
+    public Ciclista getComprador() {
+        return comprador;
+    }
+
+    public void setComprador(Ciclista comprador) {
+        this.comprador = comprador;
     }
 }

@@ -11,11 +11,13 @@ public class Peligro {
     private String descripcion;
     private Date fecha_hora;
     private String tipo;
+    private Punto punto;
 
-    public Peligro(String descripcion, Date fecha_hora, String tipo) {
+    public Peligro(String descripcion, Date fecha_hora, String tipo, Punto punto) {
         this.descripcion = descripcion;
         this.fecha_hora = fecha_hora;
         this.tipo = tipo;
+        this.punto = punto;
     }
 
     public String getDescripcion() {
@@ -40,5 +42,13 @@ public class Peligro {
 
     public void setTipo(String tipo) {
         this.tipo = tipo;
+    }
+
+    public Punto getPunto() {
+        return punto;
+    }
+
+    public void setPunto(Punto punto) {
+        this.punto = punto;
     }
 }

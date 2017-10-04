@@ -8,13 +8,19 @@ public class Indicador {
 
     private int duracion;
     private String frecuencia;
-
-    // TODO: No se como colocarle al atributo
-    private Punto sin_nombre;
+    private Punto punto;
+    private Empresa empresa;
 
     public Indicador(int duracion, String frecuencia) {
         this.duracion = duracion;
         this.frecuencia = frecuencia;
+    }
+
+    public Indicador(int duracion, String frecuencia, Punto punto, Empresa empresa) {
+        this.duracion = duracion;
+        this.frecuencia = frecuencia;
+        this.punto = punto;
+        this.empresa = empresa;
     }
 
     public int getDuracion() {
@@ -31,5 +37,21 @@ public class Indicador {
 
     public void setFrecuencia(String frecuencia) {
         this.frecuencia = frecuencia;
+    }
+
+    public Punto getPunto() {
+        return punto;
+    }
+
+    public void setPunto(Punto punto) {
+        this.punto = punto;
+    }
+
+    public Empresa getEmpresa() {
+        return empresa;
+    }
+
+    public void setEmpresa(Empresa empresa) {
+        this.empresa = empresa;
     }
 }

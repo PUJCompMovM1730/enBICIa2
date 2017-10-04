@@ -1,6 +1,7 @@
 package com.example.clases;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by juanpablorn30 on 2/10/17.
@@ -10,26 +11,22 @@ public class Recorrido {
 
     private String estado;
     private Date fecha_hora;
-
     private Punto puntoInicio;
     private Punto puntoFin;
-
-    /*
-        TODO: Agregar metodo para asignar organizador. ¿O es en el constructor?. Puede ser NULL
-     */
     private Ciclista organizador;
 
-    /**
-     * @param estado
-     * @param fecha_hora
-     * @param puntoInicio
-     * @param puntoFin
+    /*
+        TODO: Agregar método de agregar persona al recorrido.
+        TODO: Agregar método de eliminar persona del recorrido.
      */
-    public Recorrido(String estado, Date fecha_hora, Punto puntoInicio, Punto puntoFin) {
+    private List<Ciclista> grupo;
+
+    public Recorrido(String estado, Date fecha_hora, Punto puntoInicio, Punto puntoFin, Ciclista organizador) {
         this.estado = estado;
         this.fecha_hora = fecha_hora;
         this.puntoInicio = puntoInicio;
         this.puntoFin = puntoFin;
+        this.organizador = organizador;
     }
 
     public String getEstado() {
@@ -46,5 +43,29 @@ public class Recorrido {
 
     public void setFecha_hora(Date fecha_hora) {
         this.fecha_hora = fecha_hora;
+    }
+
+    public Punto getPuntoInicio() {
+        return puntoInicio;
+    }
+
+    public void setPuntoInicio(Punto puntoInicio) {
+        this.puntoInicio = puntoInicio;
+    }
+
+    public Punto getPuntoFin() {
+        return puntoFin;
+    }
+
+    public void setPuntoFin(Punto puntoFin) {
+        this.puntoFin = puntoFin;
+    }
+
+    public Ciclista getOrganizador() {
+        return organizador;
+    }
+
+    public void setOrganizador(Ciclista organizador) {
+        this.organizador = organizador;
     }
 }

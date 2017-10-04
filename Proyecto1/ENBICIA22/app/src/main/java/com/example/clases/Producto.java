@@ -22,11 +22,6 @@ public class Producto {
      */
     private List<DetalleCompra> xx;
 
-    /*
-        TODO: Agregar metodo para asignar vendedor. ¿O es en el constructor?
-     */
-    private Empresa vendedor;
-
     public Producto(int cantidad, String descripcion, double descuento, String nombre, int precio) {
         this.cantidad = cantidad;
         this.descripcion = descripcion;

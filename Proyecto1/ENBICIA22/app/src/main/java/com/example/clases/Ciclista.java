@@ -34,6 +34,18 @@ public class Ciclista extends Usuario{
      */
     private List<Recorrido> creados;
 
+    /*
+        TODO: Agregar método de recibir mensajes.
+        TODO: Agregar método de eliminar mensajes.
+     */
+    private List<Mensaje> bandejaEntrada;
+
+    /*
+        TODO: Agregar método de enviar mensajes.
+        TODO: Agregar método de eliminar mensajes.
+     */
+    private List<Mensaje> bandejaSalida;
+
     /**
      * @param password
      * @param email
@@ -44,5 +56,27 @@ public class Ciclista extends Usuario{
         super(password, email, date_birth, username);
     }
 
+    public List<DetalleCompra> getCarritoCompras() {
+        return carritoCompras;
+    }
 
+    public List<Ciclista> getAmigos() {
+        return amigos;
+    }
+
+    public List<Recorrido> getHistorial() {
+        return historial;
+    }
+
+    public List<Recorrido> getCreados() {
+        return creados;
+    }
+
+    public List<Mensaje> getBandejaEntrada() {
+        return bandejaEntrada;
+    }
+
+    public List<Mensaje> getBandejaSalida() {
+        return bandejaSalida;
+    }
 }

@@ -13,16 +13,16 @@ public class Empresa extends Usuario{
     private String sitioWeb;
 
     /*
-        TODO: Agregar método de agregar item a la tienda.
-        TODO: Agregar método de eliminar item a la tienda.
-     */
-    private List<Producto> tienda;
-
-    /*
         TODO: Agregar método de agregar item a recorridos.
         TODO: Agregar método de eliminar item a recorridos.
      */
     private List<RecorridoOrganizado> recorridos;
+
+    /*
+        TODO: Agregar método de agregar indicadores.
+        TODO: Agregar método de eliminar indicadores.
+     */
+    private List<Indicador> indicadores;
 
     public Empresa(String password, String email, Date date_birth, String username, String NIT, String sitioWeb) {
         super(password, email, date_birth, username);
@@ -44,5 +44,21 @@ public class Empresa extends Usuario{
 
     public void setSitioWeb(String sitioWeb) {
         this.sitioWeb = sitioWeb;
+    }
+
+    public List<RecorridoOrganizado> getRecorridos() {
+        return recorridos;
+    }
+
+    public void setRecorridos(List<RecorridoOrganizado> recorridos) {
+        this.recorridos = recorridos;
+    }
+
+    public List<Indicador> getIndicadores() {
+        return indicadores;
+    }
+
+    public void setIndicadores(List<Indicador> indicadores) {
+        this.indicadores = indicadores;
     }
 }

@@ -10,10 +10,15 @@ public class Mensaje {
 
     private Date fechaEnvio;
     private String contenido;
+    // TODO: Mirar si pueden haber chats grupales. En el caso que si, cambiar por una lista.
+    private Ciclista receptor;
+    private Ciclista emisor;
 
-    public Mensaje(Date fechaEnvio, String contenido) {
+    public Mensaje(Date fechaEnvio, String contenido, Ciclista receptor, Ciclista emisor) {
         this.fechaEnvio = fechaEnvio;
         this.contenido = contenido;
+        this.receptor = receptor;
+        this.emisor = emisor;
     }
 
     public Date getFechaEnvio() {
@@ -30,5 +35,21 @@ public class Mensaje {
 
     public void setContenido(String contenido) {
         this.contenido = contenido;
+    }
+
+    public Ciclista getReceptor() {
+        return receptor;
+    }
+
+    public void setReceptor(Ciclista receptor) {
+        this.receptor = receptor;
+    }
+
+    public Ciclista getEmisor() {
+        return emisor;
+    }
+
+    public void setEmisor(Ciclista emisor) {
+        this.emisor = emisor;
     }
 }

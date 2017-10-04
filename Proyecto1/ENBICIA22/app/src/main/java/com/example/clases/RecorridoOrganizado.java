@@ -9,15 +9,14 @@ import java.util.Date;
 public class RecorridoOrganizado extends Recorrido {
 
     private String descripcion;
-
-    /*
-        TODO: Agregar metodo para asignar organizador. ¿O es en el constructor?
-     */
     private Empresa organizador;
 
-    public RecorridoOrganizado(String estado, Date fecha_hora, Punto puntoInicio, Punto puntoFin, String descripcion) {
-        super(estado, fecha_hora, puntoInicio, puntoFin);
+    //TODO: Como hacemos con el ciclista organizador si una empresa puede serlo
+
+    public RecorridoOrganizado(String estado, Date fecha_hora, Punto puntoInicio, Punto puntoFin, Ciclista organizador, String descripcion, Empresa organizador1) {
+        super(estado, fecha_hora, puntoInicio, puntoFin, organizador);
         this.descripcion = descripcion;
+        this.organizador = organizador1;
     }
 
     public String getDescripcion() {
@@ -27,4 +26,5 @@ public class RecorridoOrganizado extends Recorrido {
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
+
 }
