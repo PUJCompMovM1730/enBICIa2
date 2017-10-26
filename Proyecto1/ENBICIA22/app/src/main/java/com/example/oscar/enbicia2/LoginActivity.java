@@ -171,10 +171,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private void updateUI(FirebaseUser currentUser) {
         Log.d(TAG_GOOGLE, "Entre a updateUI");
         Intent intent = new Intent(getBaseContext(), MenuActivity.class);
-        if( currentUser == null )
-            Toast.makeText(getBaseContext(), "No se ha logeado", Toast.LENGTH_SHORT).show();
-        else
-        {
+        if( currentUser != null ){
             startActivity(intent);
             finish();
         }

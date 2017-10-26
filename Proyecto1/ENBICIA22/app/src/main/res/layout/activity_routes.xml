@@ -19,8 +19,8 @@
         android:orientation="vertical"
         android:layout_gravity="bottom"
         android:layout_marginBottom="50dp"
-        android:padding="30dp"
-        android:background="@color/blanco"
+        android:padding="20dp"
+        android:background="#00000000"
         >
 
         <TextView
@@ -29,15 +29,12 @@
             android:textColor="@color/colorAccent"
             android:text="Punto de partida"
             android:textSize="15sp"/>
-        <EditText
-            android:id="@+id/et_Routes_PuntoPartida"
+        <fragment
+            android:id="@+id/place_autocomplete_fragment_source"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textPostalAddress"
-            android:background="@drawable/white" />
-
-
+            android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
+            />
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -45,14 +42,12 @@
             android:text="Punto de llegada"
             android:textSize="15sp"
             android:paddingTop="10dp"/>
-        <EditText
-            android:id="@+id/et_Routes_PuntoLlegada"
+        <fragment
+            android:id="@+id/place_autocomplete_fragment_target"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textPostalAddress"
-            android:background="@drawable/white"
-           />
+            android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
+            />
 
 
     </LinearLayout>

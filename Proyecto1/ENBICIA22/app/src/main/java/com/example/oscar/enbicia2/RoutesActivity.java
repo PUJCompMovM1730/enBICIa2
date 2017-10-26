@@ -26,6 +26,7 @@ import com.example.clases.DataParser;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.common.api.ResolvableApiException;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
@@ -33,12 +34,16 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.location.SettingsClient;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
@@ -62,23 +67,23 @@ import java.util.List;
 
 public class RoutesActivity extends FragmentActivity implements OnMapReadyCallback, View.OnClickListener {
 
+    private String TAG = "RoutesActivity";
     private FirebaseAuth mAuth;
     public List<Polyline> route;
     private FusedLocationProviderClient mFusedLocationClient;
     private static final int REQUEST_CODE_ASK_PERMISSIONS = 1;
     private static final int REQUEST_CHECK_SETTINGS = 2;
 
-    private EditText direction;
-    private Geocoder mGeocoder;
-    private Marker auxMark;
+    private Marker marker_target;
+    private Marker marker_source;
     private LatLng actual;
-
-    public static final double lowerLeftLatitude = 4.466214;
-    public static final double lowerLeftLongitude =  -74.225923;
-    public static final double upperRightLatitude = 4.825517;
-    public static final double upperRigthLongitude = -73.996583;
+    private LatLng source;
+    private LatLng target;
+    private PlaceAutocompleteFragment autocompleteFragmentSource;
+    private PlaceAutocompleteFragment autocompleteFragmentTarget;
 
     private GoogleMap mMap;
+    // Link api autocomplete https://developers.google.com/places/android-api/autocomplete
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,58 +98,66 @@ public class RoutesActivity extends FragmentActivity implements OnMapReadyCallba
         fmenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent= new Intent(getBaseContext(),MenuActivity.class);
+                Intent intent = new Intent(getBaseContext(), MenuActivity.class);
                 startActivity(intent);
             }
         });
 
-        direction = (EditText) findViewById(R.id.et_Routes_PuntoPartida);
         mAuth = FirebaseAuth.getInstance();
-        mGeocoder = new Geocoder(getBaseContext());
-        auxMark=null;
+        marker_target = marker_source = null;
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         route = new ArrayList<>();
 
-        direction.addTextChangedListener(new TextWatcher() {
-            public void afterTextChanged(Editable s) {
+        autocompleteFragmentSource = (PlaceAutocompleteFragment)
+                getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment_source);
+
+        autocompleteFragmentSource.setBoundsBias(new LatLngBounds(
+                new LatLng(Constants.lowerLeftLatitude, Constants.lowerLeftLongitude),
+                new LatLng(Constants.upperRightLatitude, Constants.upperRigthLongitude)));
+
+        autocompleteFragmentSource.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                source = place.getLatLng();
             }
 
-            public void beforeTextChanged(CharSequence s, int st, int ct,
-                                          int af) {
-            }
-
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                Log.v("Press: " , "Cualquier tecla");
-                if (s.length() < 1 || start >= s.length() || start < 0)
-                    return;
-
-                // If it was Enter
-                if (s.subSequence(start, start + 1).toString().equalsIgnoreCase("\n")) {
-                    Log.v("Press: " , "Enter");
-                    // Change text to show without '\n'
-                    String s_text = start > 0 ? s.subSequence(0, start).toString() : "";
-                    s_text += start < s.length() ? s.subSequence(start + 1, s.length()).toString() : "";
-                    direction.setText(s_text);
-
-                    // Move cursor to the end of the line
-                    direction.setSelection(s_text.length());
-
-                    searchLocation();
-                }
+            @Override
+            public void onError(Status status) {
+                Toast.makeText(getBaseContext(), "Error utilizando busqueda", Toast.LENGTH_SHORT).show();
+                Log.i("PLACE SELECT", "An error occurred: " + status);
             }
         });
+        autocompleteFragmentTarget = (PlaceAutocompleteFragment)
+                getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment_target);
+        autocompleteFragmentTarget.setBoundsBias(new LatLngBounds(
+                new LatLng(Constants.lowerLeftLatitude, Constants.lowerLeftLongitude),
+                new LatLng(Constants.upperRightLatitude, Constants.upperRigthLongitude)));
+
+        autocompleteFragmentTarget.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                target = place.getLatLng();
+
+            }
+
+            @Override
+            public void onError(Status status) {
+                Toast.makeText(getBaseContext(), "Error utilizando busqueda", Toast.LENGTH_SHORT).show();
+                Log.i("PLACE SELECT", "An error occurred: " + status);
+            }
+        });
+
+
         findViewById(R.id.btnRoutesSearch).setOnClickListener(this);
     }
 
     private void checkPermission() {
         int hasWriteContactsPermission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION);
         if (hasWriteContactsPermission != PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText(this, "Si desea ver su posición active el permiso.",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Si desea ver su posición active el permiso.", Toast.LENGTH_SHORT).show();
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE_ASK_PERMISSIONS);
-
         } else {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE_ASK_PERMISSIONS);
-
         }
         return;
     }
@@ -163,20 +176,15 @@ public class RoutesActivity extends FragmentActivity implements OnMapReadyCallba
     public void onMapReady(GoogleMap googleMap) {
         checkPermission();
         mMap = googleMap;
-
+        //TODO: CARGAR LOS PUNTOS DE INTERES DESDE FIREBASE.
+        //TODO: DEFINIR EL TAMAÑO DE LOS MARCADORES, NO SE SI ESTAN MUY GRANDES.
         LatLng bogota = new LatLng(4.65, -74.05);
-
         mMap.addMarker(new MarkerOptions().position(new LatLng(4.647752, -74.101672)).title("Gran Estación").snippet("Centro comercial").icon(BitmapDescriptorFactory.fromResource(R.drawable.store)));
-
         establecimientos(4.6269739, -74.0821102, "Green Wheels", "8:00 am a 5:00pm");
         establecimientos(4.7575693, -74.0465737, "La Bicicletería", "9:00 am a 6:00pm");
         establecimientos(4.6255434, -74.1233942, "Ekon", "8:00 am a 8:00pm");
         establecimientos(4.6072001, -74.0915225, "El mono megatienda", "7:00 am a 5:00pm");
         establecimientos(4.597785, -74.0787264, "Bike Suite", "8:00 am a 5:00pm");
-
-        mMap.getUiSettings().setZoomGesturesEnabled(true);
-        mMap.getUiSettings().setZoomControlsEnabled(true);
-
         mMap.moveCamera(CameraUpdateFactory.newLatLng(bogota));
         mMap.moveCamera(CameraUpdateFactory.zoomTo(Constants.ZOOM_CITY));
     }
@@ -188,8 +196,7 @@ public class RoutesActivity extends FragmentActivity implements OnMapReadyCallba
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 verify();
             }
-        }
-        else{
+        } else {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
 
@@ -197,11 +204,10 @@ public class RoutesActivity extends FragmentActivity implements OnMapReadyCallba
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.i("V:", "Entró al activity");
         switch (requestCode) {
             case REQUEST_CHECK_SETTINGS: {
-                Log.i("V:", "Entró al activity2");
                 if (resultCode == RESULT_OK) {
+                    Log.d(TAG, "Resultado");
                     getLocation();
                 } else {
                     Toast.makeText(this, "Sin	acceso a	localizacion,	hardware	deshabilitado!", Toast.LENGTH_LONG).show();
@@ -217,7 +223,7 @@ public class RoutesActivity extends FragmentActivity implements OnMapReadyCallba
     }
 
     public void verify() {
-        Log.i("V:  ", "Entró al verify");
+        Log.d(TAG, "ENTRE AL VERIFY");
         LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder().addLocationRequest(new LocationRequest());
         SettingsClient client = LocationServices.getSettingsClient(this);
         Task<LocationSettingsResponse> task = client.checkLocationSettings(builder.build());
@@ -225,20 +231,21 @@ public class RoutesActivity extends FragmentActivity implements OnMapReadyCallba
         task.addOnSuccessListener(this, new OnSuccessListener<LocationSettingsResponse>() {
             @Override
             public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
+                Log.d(TAG, "ENTRE AL SUCCESS LISTENER");
                 getLocation();
             }
         });
         task.addOnFailureListener(this, new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, "ENTRE AL FAILURE LISTENER");
                 int statusCode = ((ApiException) e).getStatusCode();
                 switch (statusCode) {
                     case CommonStatusCodes.RESOLUTION_REQUIRED: //	Location	settings	are	not	satisfied,	but	this	can	be	fixed	by	showing	the	user	a	dialog.
                         try {//	Show	the	dialog	by	calling	startResolutionForResult(),	and	check	the	result	in	onActivityResult().
                             ResolvableApiException resolvable = (ResolvableApiException) e;
-                            Log.i("V:", "Entre al aca");
+                            Log.d(TAG, "Entre a resolver");
                             resolvable.startResolutionForResult(RoutesActivity.this, REQUEST_CHECK_SETTINGS);
-
                         } catch (IntentSender.SendIntentException sendEx) { //	Ignore	the	error.
                         }
                         break;
@@ -249,19 +256,29 @@ public class RoutesActivity extends FragmentActivity implements OnMapReadyCallba
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("RouteOnResume: ", "Entre al onResume");
+        //getLocation();
+    }
+
     @SuppressWarnings("MissingPermission")
     private void getLocation() {
+        Log.d(TAG, "Entre al get location");
         mFusedLocationClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
                 if (location != null) {
+                    Log.d(TAG, " YA NO ESTOY DORMIDO");
                     actual = new LatLng(location.getLatitude(), location.getLongitude());
                     mMap.addMarker(new MarkerOptions().position(actual).title("Mi posición").snippet("Hola").icon(BitmapDescriptorFactory.fromResource(R.drawable.guy)));
                     mMap.moveCamera(CameraUpdateFactory.newLatLng(actual));
                     mMap.moveCamera(CameraUpdateFactory.zoomTo(Constants.ZOOM_BUILDINGS));
                 } else {
+                    Log.d(TAG, "ME QUEDE DORMIDO");
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(2000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -279,48 +296,38 @@ public class RoutesActivity extends FragmentActivity implements OnMapReadyCallba
         }
     }
 
-    public void searchLocation(){
-        String addressString = direction.getText().toString();
-        if (!addressString.isEmpty()) {
-            Log.i("HOLÁ: " , "Adentro");
-            try {
-                List<Address> addresses = mGeocoder.getFromLocationName( addressString, 2, lowerLeftLatitude, lowerLeftLongitude, upperRightLatitude, upperRigthLongitude);
-                if (addresses != null && !addresses.isEmpty()) {
-                    Address addressResult = addresses.get(0);
-                    LatLng position = new LatLng(addressResult.getLatitude(), addressResult.getLongitude());
-                    if (mMap != null) {
-                        if(auxMark!=null)
-                            auxMark.remove();
-                        if(!route.isEmpty()){
-                            for(Polyline aux : route){
-                                aux.remove();
-                            }
-                        }
-                        auxMark=mMap.addMarker(new MarkerOptions().position(position).title("Resultado").icon(BitmapDescriptorFactory.fromResource(R.drawable.location)));
-                        Location one= new Location("");
-                        one.setLatitude(actual.latitude);
-                        one.setLongitude(actual.longitude);
-                        Location two= new Location("");
-                        two.setLatitude(position.latitude);
-                        two.setLongitude(position.longitude);
-                        double auxil= (one.distanceTo(two)/1000.0);
-                        String url = getUrl(actual, position);
-                        Log.d("URLJSON", url.toString());
-                        FetchUrl FetchUrl = new FetchUrl();
-                        FetchUrl.execute(url);
-                        mMap.moveCamera(CameraUpdateFactory.newLatLng(actual));
-                        mMap.animateCamera(CameraUpdateFactory.zoomTo(Constants.ZOOM_CITY));
-                        Toast.makeText(this, "La distancia entre los puntos es: "+String.format("%.2g%n",auxil)+" km", Toast.LENGTH_SHORT ).show();
-
-                    }
-                } else {
-                    Toast.makeText(RoutesActivity.this, "Dirección no encontrada", Toast.LENGTH_SHORT).show();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
+    public void searchLocation() {
+        if (mMap != null) {
+            if (marker_target != null && marker_source != null){
+                marker_target.remove();
+                marker_source.remove();
             }
-        } else {
-            Toast.makeText(RoutesActivity.this, "La dirección esta vacía", Toast.LENGTH_SHORT).show();
+            if (!route.isEmpty()) {
+                for (Polyline aux : route) {
+                    aux.remove();
+                }
+            }
+            marker_source = mMap.addMarker(new MarkerOptions().position(source).title("Inicio").icon(BitmapDescriptorFactory.fromResource(R.drawable.location)));
+            marker_target = mMap.addMarker(new MarkerOptions().position(target).title("Destino").icon(BitmapDescriptorFactory.fromResource(R.drawable.location)));
+            Location one = new Location("");
+            one.setLatitude(source.latitude);
+            one.setLongitude(source.longitude);
+            Location two = new Location("");
+            two.setLatitude(target.latitude);
+            two.setLongitude(target.longitude);
+            double auxil = (one.distanceTo(two) / 1000.0);
+            String url = getUrl(source, target);
+            Log.d("URLJSON", url.toString());
+            FetchUrl FetchUrl = new FetchUrl();
+            FetchUrl.execute(url);
+            LatLngBounds.Builder builder = new LatLngBounds.Builder();
+            builder.include(source);
+            builder.include(target);
+            LatLngBounds bounds = builder.build();
+            int width = findViewById(R.id.map).getWidth();
+            int height = findViewById(R.id.map).getHeight();
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(bounds.getCenter(), Constants.getBoundsZoomLevel(bounds, width, height)));
+            Toast.makeText(this, "La distancia entre los puntos es: " + String.format("%.2g%n", auxil) + " km", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -395,16 +402,16 @@ public class RoutesActivity extends FragmentActivity implements OnMapReadyCallba
 
             try {
                 jObject = new JSONObject(jsonData[0]);
-                Log.d("ParserTask",jsonData[0].toString());
+                Log.d("ParserTask", jsonData[0].toString());
                 DataParser parser = new DataParser();
                 Log.d("ParserTask", parser.toString());
 
                 routes = parser.parse(jObject);
-                Log.d("ParserTask","Executing routes");
-                Log.d("ParserTask",routes.toString());
+                Log.d("ParserTask", "Executing routes");
+                Log.d("ParserTask", routes.toString());
 
             } catch (Exception e) {
-                Log.d("ParserTask",e.toString());
+                Log.d("ParserTask", e.toString());
                 e.printStackTrace();
             }
             return routes;
@@ -432,14 +439,13 @@ public class RoutesActivity extends FragmentActivity implements OnMapReadyCallba
                 lineOptions.addAll(points);
                 lineOptions.width(10);
                 lineOptions.color(Color.RED);
-                Log.d("onPostExecute","onPostExecute lineoptions decoded");
+                Log.d("onPostExecute", "onPostExecute lineoptions decoded");
 
             }
-            if(lineOptions != null) {
+            if (lineOptions != null) {
                 route.add(mMap.addPolyline(lineOptions));
-            }
-            else {
-                Log.d("onPostExecute","without Polylines drawn");
+            } else {
+                Log.d("onPostExecute", "without Polylines drawn");
             }
         }
     }
