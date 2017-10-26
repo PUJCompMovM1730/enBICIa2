@@ -15,8 +15,8 @@ public class EnBiciaa2 {
     private List<Usuario> usuarios;
 
     /*
-        TODO: Agregar método de agregar item a la tienda.
-        TODO: Agregar método de eliminar item a la tienda.
+        TODO: Agregar método de agregar item a la store.
+        TODO: Agregar método de eliminar item a la store.
      */
     private List<Producto> tienda;
 

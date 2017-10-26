@@ -30,7 +30,7 @@
             android:text="Punto de partida"
             android:textSize="15sp"/>
         <EditText
-            android:id="@+id/editText2"
+            android:id="@+id/et_Routes_PuntoPartida"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -46,18 +46,18 @@
             android:textSize="15sp"
             android:paddingTop="10dp"/>
         <EditText
-            android:id="@+id/editText3"
+            android:id="@+id/et_Routes_PuntoLlegada"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="textPostalAddress"
             android:background="@drawable/white"
            />
-        
 
 
     </LinearLayout>
     <Button
+        android:id="@+id/btnRoutesSearch"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_gravity="bottom"
