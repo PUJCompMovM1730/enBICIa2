@@ -13,8 +13,8 @@ public class RecorridoOrganizado extends Recorrido {
 
     //TODO: Como hacemos con el ciclista organizador si una empresa puede serlo
 
-    public RecorridoOrganizado(String estado, Date fecha_hora, Punto puntoInicio, Punto puntoFin, Ciclista organizador, String descripcion, Empresa organizador1) {
-        super(estado, fecha_hora, puntoInicio, puntoFin, organizador);
+    public RecorridoOrganizado(String estado, Punto puntoInicio, Punto puntoFin, Ciclista organizador, String descripcion, Empresa organizador1) {
+        super(estado, puntoInicio, puntoFin, organizador);
         this.descripcion = descripcion;
         this.organizador = organizador1;
     }

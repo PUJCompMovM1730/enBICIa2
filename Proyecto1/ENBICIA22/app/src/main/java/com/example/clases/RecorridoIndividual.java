@@ -12,8 +12,8 @@ public class RecorridoIndividual extends Recorrido{
     private String distanciaRecorrida;
     private int tiempoTranscurrido;
 
-    public RecorridoIndividual(String estado, Date fecha_hora, Punto puntoInicio, Punto puntoFin, Ciclista organizador, String informeClima, String distanciaRecorrida, int tiempoTranscurrido) {
-        super(estado, fecha_hora, puntoInicio, puntoFin, organizador);
+    public RecorridoIndividual(String estado, Punto puntoInicio, Punto puntoFin, Ciclista organizador, String informeClima, String distanciaRecorrida, int tiempoTranscurrido) {
+        super(estado, puntoInicio, puntoFin, organizador);
         this.informeClima = informeClima;
         this.distanciaRecorrida = distanciaRecorrida;
         this.tiempoTranscurrido = tiempoTranscurrido;

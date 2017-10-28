@@ -1,9 +1,54 @@
-<FrameLayout
+<LinearLayout
 
     android:layout_height="match_parent"
     android:layout_width="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="bottom"
+        android:padding="20dp"
+        android:background="#00000000"
+        >
+
+        <!--<TextView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:textColor="@color/colorAccent"-->
+            <!--android:text="Punto de partida"-->
+            <!--android:textSize="15sp"/>-->
+        <fragment
+            android:id="@+id/place_autocomplete_fragment_source"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
+            />
+        <!--<TextView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:textColor="@color/colorAccent"-->
+            <!--android:text="Punto de llegada"-->
+            <!--android:textSize="15sp"-->
+            <!--android:paddingTop="10dp"/>-->
+        <fragment
+            android:id="@+id/place_autocomplete_fragment_target"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
+            />
+        <Button
+            android:id="@+id/btnRoutesSearch"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_gravity="bottom"
+            android:text="Calcular"
+            android:background="@color/colorAccent"/>
+    </LinearLayout>
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:map="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
@@ -12,60 +57,5 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context="com.example.oscar.enbicia2.RoutesActivity" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_gravity="bottom"
-        android:layout_marginBottom="50dp"
-        android:padding="20dp"
-        android:background="#00000000"
-        >
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/colorAccent"
-            android:text="Punto de partida"
-            android:textSize="15sp"/>
-        <fragment
-            android:id="@+id/place_autocomplete_fragment_source"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
-            />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/colorAccent"
-            android:text="Punto de llegada"
-            android:textSize="15sp"
-            android:paddingTop="10dp"/>
-        <fragment
-            android:id="@+id/place_autocomplete_fragment_target"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
-            />
-
-
-    </LinearLayout>
-    <Button
-        android:id="@+id/btnRoutesSearch"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_gravity="bottom"
-        android:text="Calcular"
-        android:background="@color/colorAccent"/>
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/menu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top|start"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/menu_3"
-        android:tint="@color/blanco"/>
-</FrameLayout>
+</LinearLayout>
 

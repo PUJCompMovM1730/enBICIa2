@@ -52,4 +52,10 @@ public final class Constants {
     public static final double upperRightLatitude = 4.825517;
     public static final double upperRigthLongitude = -73.996583;
 
+    /**
+     * Values of state Recorrido
+     */
+    public static final String FINALIZADO = "finalizado";
+    public static final String ACTIVO = "activo";
+
 }

@@ -10,28 +10,17 @@ import java.util.List;
 public class Ciclista extends Usuario{
 
     /*
-        TODO: Agregar método de agregar item carrito compras.
-        TODO: Agregar método de eliminar item carrito compras.
-     */
-    private List<DetalleCompra> carritoCompras;
-
-    /*
         TODO: Agregar método de agregar amigo.
         TODO: Agregar método de eliminar amigo.
      */
     private List<Ciclista> amigos;
 
-    /*
-        TODO: Agregar método de agregar al historial (Debe ser automatico).
-        TODO: Agregar método de eliminar del historial.
-        TODO: ¿Interfaz debe tener botón de eliminar?
-     */
     private List<Recorrido> historial;
 
     /*
         TODO: Agregar método de agregar a creados.
         TODO: Agregar método de eliminar de creados.
-     */
+    */
     private List<Recorrido> creados;
 
     /*
@@ -56,8 +45,18 @@ public class Ciclista extends Usuario{
         super(password, email, date_birth, username);
     }
 
-    public List<DetalleCompra> getCarritoCompras() {
-        return carritoCompras;
+    public void agregarHistorial(Punto puntoInicio, Punto puntoFin){
+        this.historial.add(new Recorrido(Constants.FINALIZADO, puntoInicio, puntoFin, this));
+    }
+
+    //TODO: Pensar como eliminar el recorrido, con que criterio.
+    //TODO: ¿Interfaz debe tener botón de eliminar?. ¿Se puede eliminar?.
+    public void eliminarHistorial(){
+
+    }
+
+    public void enviarMensaje(String contenido, Ciclista receptor){
+        bandejaSalida.add(new Mensaje(contenido, receptor, this));
     }
 
     public List<Ciclista> getAmigos() {

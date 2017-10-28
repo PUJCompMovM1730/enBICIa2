@@ -12,8 +12,8 @@ public class RecorridoGrupal extends Recorrido{
     private String mensaje;
     private String nombre;
 
-    public RecorridoGrupal(String estado, Date fecha_hora, Punto puntoInicio, Punto puntoFin, Ciclista organizador, String frecuencia, String mensaje, String nombre) {
-        super(estado, fecha_hora, puntoInicio, puntoFin, organizador);
+    public RecorridoGrupal(String estado, Punto puntoInicio, Punto puntoFin, Ciclista organizador, String frecuencia, String mensaje, String nombre) {
+        super(estado, puntoInicio, puntoFin, organizador);
         this.frecuencia = frecuencia;
         this.mensaje = mensaje;
         this.nombre = nombre;

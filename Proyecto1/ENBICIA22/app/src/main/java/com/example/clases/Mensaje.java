@@ -1,5 +1,6 @@
 package com.example.clases;
 
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -10,12 +11,13 @@ public class Mensaje {
 
     private Date fechaEnvio;
     private String contenido;
+
     // TODO: Mirar si pueden haber chats grupales. En el caso que si, cambiar por una lista.
     private Ciclista receptor;
     private Ciclista emisor;
 
-    public Mensaje(Date fechaEnvio, String contenido, Ciclista receptor, Ciclista emisor) {
-        this.fechaEnvio = fechaEnvio;
+    public Mensaje(String contenido, Ciclista receptor, Ciclista emisor) {
+        this.fechaEnvio = Calendar.getInstance().getTime();;
         this.contenido = contenido;
         this.receptor = receptor;
         this.emisor = emisor;
