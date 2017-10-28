@@ -32,6 +32,7 @@ public final class Constants {
         double latZoom = zoom(height, GLOBE_WIDTH, latFraction);
         double lngZoom = zoom(width, GLOBE_WIDTH, lngFraction);
         double zoom = Math.min(Math.min(latZoom, lngZoom),ZOOM_MAX) - 1.0;
+        if(zoom < 0.0) zoom = 0.0;
         return (int)(zoom);
     }
     private static double latRad(double lat) {

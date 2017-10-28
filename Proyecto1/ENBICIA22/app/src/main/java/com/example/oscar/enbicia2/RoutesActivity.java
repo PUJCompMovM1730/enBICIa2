@@ -20,6 +20,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -61,6 +62,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.maps.android.PolyUtil;
 
 import org.json.JSONObject;
 
@@ -76,13 +78,15 @@ import java.util.List;
 
 public class RoutesActivity extends FragmentActivity implements OnMapReadyCallback, View.OnClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
-    private String TAG = "RoutesActivity";
-    private FirebaseAuth mAuth;
-    public List<Polyline> route;
-    private FusedLocationProviderClient mFusedLocationClient;
     private static final int REQUEST_CODE_ASK_PERMISSIONS = 1;
     private static final int REQUEST_CHECK_SETTINGS_GPS = 2;
 
+    private String TAG = "RoutesActivity";
+    private FirebaseAuth mAuth;
+    public List<Polyline> route;
+
+    private boolean onRoute;
+    private int indx_polyLine;
     private Marker marker_target;
     private Marker marker_source;
     private Marker marker_current;
@@ -107,18 +111,42 @@ public class RoutesActivity extends FragmentActivity implements OnMapReadyCallba
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        onRoute = false;
         mAuth = FirebaseAuth.getInstance();
         marker_target = marker_source = marker_current = null;
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        //mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         route = new ArrayList<>();
 
         autocompleteFragmentSource = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment_source);
-
-        ((EditText)autocompleteFragmentSource.getView().findViewById(R.id.place_autocomplete_search_input)).setTextSize(getResources().getDimension(R.dimen.search_edit_size));
-        ((EditText)autocompleteFragmentSource.getView().findViewById(R.id.place_autocomplete_search_input)).setHint(getResources().getString(R.string.location_source));
+        ViewGroup viewGroupSource = (ViewGroup) autocompleteFragmentSource.getView();
+        final EditText editTextSource = viewGroupSource.findViewById(R.id.place_autocomplete_search_input);
+        editTextSource.setTextSize(getResources().getDimension(R.dimen.search_edit_size));
+        editTextSource.setHint(getResources().getString(R.string.location_source));
+        ImageButton imageClearButtonSource = viewGroupSource.findViewById(R.id.place_autocomplete_clear_button);
+        imageClearButtonSource.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                erasePath();
+                ViewGroup viewGroupSource = (ViewGroup) autocompleteFragmentSource.getView();
+                EditText editTextSource = viewGroupSource.findViewById(R.id.place_autocomplete_search_input);
+                editTextSource.getText().clear();
+                ImageButton imageClearButtonSource = viewGroupSource.findViewById(R.id.place_autocomplete_clear_button);
+                imageClearButtonSource.setVisibility(View.GONE);
+                Log.d(TAG, marker_source.getTitle());
+                if(source != null) marker_source.remove();
+                LatLngBounds.Builder builder = new LatLngBounds.Builder();
+                builder.include(actual);
+                if(target != null) builder.include(target);
+                source = null;
+                LatLngBounds bounds = builder.build();
+                int width = findViewById(R.id.map).getWidth();
+                int height = findViewById(R.id.map).getHeight();
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(bounds.getCenter(), Constants.getBoundsZoomLevel(bounds, width, height)));
+            }
+        });
         autocompleteFragmentSource.getView().setBackgroundResource(R.drawable.autocomplete_fragment_background);
-        //autocompleteFragmentSource.getView().findViewById(R.id.place_autocomplete_clear_button).set;
+
         autocompleteFragmentSource.setBoundsBias(new LatLngBounds(
                 new LatLng(Constants.lowerLeftLatitude, Constants.lowerLeftLongitude),
                 new LatLng(Constants.upperRightLatitude, Constants.upperRigthLongitude)));
@@ -130,19 +158,11 @@ public class RoutesActivity extends FragmentActivity implements OnMapReadyCallba
                 LatLngBounds.Builder builder = new LatLngBounds.Builder();
                 builder.include(source);
                 if(marker_source != null)
-                {
-                    Log.d(TAG, "Entre a borrar");
                     marker_source.remove();
-                }
-
                 marker_source = mMap.addMarker(new MarkerOptions().position(source).title("Inicio").icon(BitmapDescriptorFactory.fromResource(R.drawable.location)));
                 builder.include(actual);
-                if(target != null){
+                if(target != null)
                     builder.include(target);
-                    if(marker_target != null)
-                        marker_target.remove();
-                    marker_target = mMap.addMarker(new MarkerOptions().position(target).title("Destino").icon(BitmapDescriptorFactory.fromResource(R.drawable.location)));
-                }
                 LatLngBounds bounds = builder.build();
                 int width = findViewById(R.id.map).getWidth();
                 int height = findViewById(R.id.map).getHeight();
@@ -158,9 +178,33 @@ public class RoutesActivity extends FragmentActivity implements OnMapReadyCallba
         });
         autocompleteFragmentTarget = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment_target);
-        ((EditText)autocompleteFragmentTarget.getView().findViewById(R.id.place_autocomplete_search_input)).setTextSize(getResources().getDimension(R.dimen.search_edit_size));
-        ((EditText)autocompleteFragmentTarget.getView().findViewById(R.id.place_autocomplete_search_input)).setHint(getResources().getString(R.string.location_target));
-        ((ImageButton)autocompleteFragmentTarget.getView().findViewById(R.id.place_autocomplete_clear_button)).setVisibility(View.GONE);
+        ViewGroup viewGroupTarget = (ViewGroup) autocompleteFragmentTarget.getView();
+        EditText editTextTarget = viewGroupTarget.findViewById(R.id.place_autocomplete_search_input);
+        editTextTarget.setTextSize(getResources().getDimension(R.dimen.search_edit_size));
+        editTextTarget.setHint(getResources().getString(R.string.location_target));
+        ImageButton imageClearButtonTarget = viewGroupTarget.findViewById(R.id.place_autocomplete_clear_button);
+        Log.d(TAG, "Componente: " + viewGroupTarget.findViewById(R.id.place_autocomplete_search_button));
+        imageClearButtonTarget.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                erasePath();
+                ViewGroup viewGroupTarget = (ViewGroup) autocompleteFragmentTarget.getView();
+                EditText editTextTarget = viewGroupTarget.findViewById(R.id.place_autocomplete_search_input);
+                editTextTarget.getText().clear();
+                ImageButton imageClearButtonTarget = viewGroupTarget.findViewById(R.id.place_autocomplete_clear_button);
+                imageClearButtonTarget.setVisibility(View.GONE);
+                if(target != null) marker_target.remove();
+                LatLngBounds.Builder builder = new LatLngBounds.Builder();
+                builder.include(actual);
+                if(source != null) builder.include(source);
+                target = null;
+                LatLngBounds bounds = builder.build();
+                int width = findViewById(R.id.map).getWidth();
+                int height = findViewById(R.id.map).getHeight();
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(bounds.getCenter(), Constants.getBoundsZoomLevel(bounds, width, height)));
+            }
+        });
+
         autocompleteFragmentTarget.getView().setBackgroundResource(R.drawable.autocomplete_fragment_background);
         autocompleteFragmentTarget.setBoundsBias(new LatLngBounds(
                 new LatLng(Constants.lowerLeftLatitude, Constants.lowerLeftLongitude),
@@ -174,14 +218,10 @@ public class RoutesActivity extends FragmentActivity implements OnMapReadyCallba
                 builder.include(target);
                 if(marker_target != null)
                     marker_target.remove();
-                marker_target = mMap.addMarker(new MarkerOptions().position(source).title("Inicio").icon(BitmapDescriptorFactory.fromResource(R.drawable.location)));
+                marker_target = mMap.addMarker(new MarkerOptions().position(target).title("Destino").icon(BitmapDescriptorFactory.fromResource(R.drawable.location)));
                 builder.include(actual);
-                if(source != null){
+                if(source != null)
                     builder.include(source);
-                    if(marker_source != null)
-                        marker_source.remove();
-                    marker_source = mMap.addMarker(new MarkerOptions().position(target).title("Destino").icon(BitmapDescriptorFactory.fromResource(R.drawable.location)));
-                }
                 LatLngBounds bounds = builder.build();
                 int width = findViewById(R.id.map).getWidth();
                 int height = findViewById(R.id.map).getHeight();
@@ -226,12 +266,6 @@ public class RoutesActivity extends FragmentActivity implements OnMapReadyCallba
         //TODO: CARGAR LOS PUNTOS DE INTERES DESDE FIREBASE.
         //TODO: DEFINIR EL TAMAÑO DE LOS MARCADORES, NO SE SI ESTAN MUY GRANDES.
         LatLng bogota = new LatLng(4.65, -74.05);
-        mMap.addMarker(new MarkerOptions().position(new LatLng(4.647752, -74.101672)).title("Gran Estación").snippet("Centro comercial").icon(BitmapDescriptorFactory.fromResource(R.drawable.store)));
-        establecimientos(4.6269739, -74.0821102, "Green Wheels", "8:00 am a 5:00pm");
-        establecimientos(4.7575693, -74.0465737, "La Bicicletería", "9:00 am a 6:00pm");
-        establecimientos(4.6255434, -74.1233942, "Ekon", "8:00 am a 8:00pm");
-        establecimientos(4.6072001, -74.0915225, "El mono megatienda", "7:00 am a 5:00pm");
-        establecimientos(4.597785, -74.0787264, "Bike Suite", "8:00 am a 5:00pm");
         mMap.moveCamera(CameraUpdateFactory.newLatLng(bogota));
         mMap.moveCamera(CameraUpdateFactory.zoomTo(Constants.ZOOM_CITY));
     }
@@ -287,6 +321,7 @@ public class RoutesActivity extends FragmentActivity implements OnMapReadyCallba
                     LocationRequest locationRequest = new LocationRequest();
                     locationRequest.setInterval(10000);
                     locationRequest.setFastestInterval(5000);
+                    locationRequest.setSmallestDisplacement(0.25F);
                     locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
                     LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
                             .addLocationRequest(locationRequest);
@@ -336,30 +371,62 @@ public class RoutesActivity extends FragmentActivity implements OnMapReadyCallba
     public void onClick(View view) {
         int id = view.getId();
         if (id == R.id.btnRoutesSearch) {
-            searchLocation();
+            startRoute();
+        }
+    }
+
+    public void startRoute(){
+        ViewGroup viewGroupSource = (ViewGroup) autocompleteFragmentSource.getView();
+        ViewGroup viewGroupTarget = (ViewGroup) autocompleteFragmentTarget.getView();
+        EditText editTextSource = viewGroupSource.findViewById(R.id.place_autocomplete_search_input);
+        EditText editTextTarget = viewGroupTarget.findViewById(R.id.place_autocomplete_search_input);
+        if(editTextSource.getText().length() != 0 && editTextTarget.getText().length() != 0){
+            onRoute = true;
+            indx_polyLine = 0;
+            findViewById(R.id.form_routes_layout).setVisibility(View.GONE);
+            LatLngBounds.Builder builder = new LatLngBounds.Builder();
+            builder.include(source);
+            LatLngBounds bounds = builder.build();
+            int width = findViewById(R.id.map).getWidth();
+            int height = findViewById(R.id.map).getHeight();
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(bounds.getCenter(), Constants.getBoundsZoomLevel(bounds, width, height)));
+            Log.d(TAG, "Inicio: " + route.get(0).getPoints().get(0));
+            Log.d(TAG, "Fin: " + route.get(0).getPoints().get(1));
+            Log.d(TAG, "Fin2: " + source.toString());
+            Log.d(TAG, String.valueOf(PolyUtil.isLocationOnPath(actual, route.get(0).getPoints(), false,50)));
+            Log.d(TAG, String.valueOf(PolyUtil.isLocationOnPath(source, route.get(0).getPoints(), false,50)));
+
+            Log.d(TAG, String.valueOf(PolyUtil.distanceToLine(actual, route.get(0).getPoints().get(0), route.get(0).getPoints().get(1))));
+            Log.d(TAG, String.valueOf(PolyUtil.isLocationOnPath(target, route.get(0).getPoints(), false,50)));
+
+        }else{
+            Toast.makeText(getBaseContext(), "Aún no se han seleccionado los puntos" , Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    private void erasePath(){
+        if(!route.isEmpty()){
+            for (Polyline aux : route){
+                aux.remove();
+            }
         }
     }
 
     public void searchLocation() {
-        if (mMap != null) {
-            if (!route.isEmpty()) {
-                for (Polyline aux : route) {
-                    aux.remove();
-                }
-            }
-            Location one = new Location("");
-            one.setLatitude(source.latitude);
-            one.setLongitude(source.longitude);
-            Location two = new Location("");
-            two.setLatitude(target.latitude);
-            two.setLongitude(target.longitude);
-            double auxil = (one.distanceTo(two) / 1000.0);
-            String url = getUrl(source, target);
-            Log.d("URLJSON", url.toString());
-            FetchUrl FetchUrl = new FetchUrl();
-            FetchUrl.execute(url);
-            Toast.makeText(this, "La distancia entre los puntos es: " + String.format("%.2g%n", auxil) + " km", Toast.LENGTH_SHORT).show();
-        }
+        erasePath();
+        Location one = new Location("");
+        one.setLatitude(source.latitude);
+        one.setLongitude(source.longitude);
+        Location two = new Location("");
+        two.setLatitude(target.latitude);
+        two.setLongitude(target.longitude);
+        double auxil = (one.distanceTo(two) / 1000.0);
+        String urlSource_Target = getUrl(source, target);
+        Log.d("URLJSON", urlSource_Target.toString());
+        FetchUrl FetchUrlSource_Target = new FetchUrl();
+        FetchUrlSource_Target.execute(urlSource_Target);
+        Toast.makeText(this, "La distancia entre los puntos es: " + String.format("%.2g%n", auxil) + " km", Toast.LENGTH_SHORT).show();
     }
 
     private String getUrl(LatLng origin, LatLng dest) {
@@ -400,7 +467,7 @@ public class RoutesActivity extends FragmentActivity implements OnMapReadyCallba
     public void onLocationChanged(Location location) {
         this.location = location;
         if (location != null) {
-            Log.d(TAG, "onLocationChanged");
+            //Log.d(TAG, "onLocationChanged");
             actual = new LatLng(location.getLatitude(), location.getLongitude());
             if(marker_source == null && marker_target == null){
                 if (marker_current != null) marker_current.remove();

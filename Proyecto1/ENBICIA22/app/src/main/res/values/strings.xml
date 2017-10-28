@@ -119,6 +119,9 @@
     <string name="title_activity_profile">profile</string>
     <string name="title_activity_tourdetail">Map</string>
     <string name="facebook_app_id">207653939771200</string>
+    <!-- [BEGIN Activity Routes Strings] -->
     <string name="location_source">Punto de partida</string>
     <string name="location_target">Punto de llegada</string>
+    <string name="start_route">Iniciar ruta</string>
+    <!-- [END Activity Routes Strings] -->
 </resources>
