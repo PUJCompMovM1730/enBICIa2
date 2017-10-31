@@ -1,23 +1,17 @@
 package com.example.oscar.enbicia2;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
-import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,25 +19,22 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.example.clases.Ciclista;
 import com.example.clases.Constants;
 import com.example.clases.DataParser;
+import com.example.clases.EnBiciaa2;
+import com.example.clases.SitioInteres;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
-import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
@@ -58,12 +49,10 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.maps.android.PolyUtil;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -74,6 +63,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 public class RoutesActivity extends FragmentActivity implements OnMapReadyCallback, View.OnClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
@@ -85,6 +75,7 @@ public class RoutesActivity extends FragmentActivity implements OnMapReadyCallba
     private FirebaseAuth mAuth;
     public List<Polyline> route;
 
+    private EnBiciaa2 enBICIa2;
     private boolean onRoute;
     private int indx_polyLine;
     private Marker marker_target;
@@ -111,6 +102,7 @@ public class RoutesActivity extends FragmentActivity implements OnMapReadyCallba
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        enBICIa2 = new EnBiciaa2();
         onRoute = false;
         mAuth = FirebaseAuth.getInstance();
         marker_target = marker_source = marker_current = null;
@@ -159,7 +151,7 @@ public class RoutesActivity extends FragmentActivity implements OnMapReadyCallba
                 builder.include(source);
                 if(marker_source != null)
                     marker_source.remove();
-                marker_source = mMap.addMarker(new MarkerOptions().position(source).title("Inicio").icon(BitmapDescriptorFactory.fromResource(R.drawable.location)));
+                marker_source = mMap.addMarker(new MarkerOptions().position(source).title("Inicio").icon(BitmapDescriptorFactory.fromResource(R.drawable.route_start)));
                 builder.include(actual);
                 if(target != null)
                     builder.include(target);
@@ -218,7 +210,7 @@ public class RoutesActivity extends FragmentActivity implements OnMapReadyCallba
                 builder.include(target);
                 if(marker_target != null)
                     marker_target.remove();
-                marker_target = mMap.addMarker(new MarkerOptions().position(target).title("Destino").icon(BitmapDescriptorFactory.fromResource(R.drawable.location)));
+                marker_target = mMap.addMarker(new MarkerOptions().position(target).title("Destino").icon(BitmapDescriptorFactory.fromResource(R.drawable.route_finish)));
                 builder.include(actual);
                 if(source != null)
                     builder.include(source);
@@ -263,11 +255,12 @@ public class RoutesActivity extends FragmentActivity implements OnMapReadyCallba
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        //TODO: CARGAR LOS PUNTOS DE INTERES DESDE FIREBASE.
-        //TODO: DEFINIR EL TAMAÑO DE LOS MARCADORES, NO SE SI ESTAN MUY GRANDES.
         LatLng bogota = new LatLng(4.65, -74.05);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(bogota));
         mMap.moveCamera(CameraUpdateFactory.zoomTo(Constants.ZOOM_CITY));
+        FetchUrlMarcadores fetchUrlMarcadores = new FetchUrlMarcadores();
+        String url = Constants.PATH_FIREBASE + "sitio_interes.json?auth=" + Constants.TOKEN_USER;
+        fetchUrlMarcadores.execute(url);
     }
 
     @Override
@@ -471,10 +464,79 @@ public class RoutesActivity extends FragmentActivity implements OnMapReadyCallba
             actual = new LatLng(location.getLatitude(), location.getLongitude());
             if(marker_source == null && marker_target == null){
                 if (marker_current != null) marker_current.remove();
-                marker_current = mMap.addMarker(new MarkerOptions().position(actual).title("Mi posición").snippet("Hola").icon(BitmapDescriptorFactory.fromResource(R.drawable.guy)));
+                marker_current = mMap.addMarker(new MarkerOptions().position(actual).title("Mi posición").snippet("Hola").icon(BitmapDescriptorFactory.fromResource(R.drawable.route_ciclist)));
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(actual));
                 mMap.moveCamera(CameraUpdateFactory.zoomTo(Constants.ZOOM_BUILDINGS));
             }
+        }
+    }
+
+    private class FetchUrlMarcadores extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... url) {
+            String data = "";
+            try {
+                data = downloadUrl(url[0]);
+                Log.d("Background Task data", data.toString());
+            } catch (Exception e) {
+                Log.d("Background Task", e.toString());
+            }
+            return data;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            try {
+                JSONObject json = new JSONObject(result);
+                Iterator<?> keys = json.keys();
+                while (keys.hasNext()) {
+                    String key = (String) keys.next();
+                    SitioInteres aux = new SitioInteres();
+                    JSONObject jsonObject = (JSONObject) json.get(key);
+                    aux.setNombre(jsonObject.getString("nombre"));
+                    aux.setLatitud(jsonObject.getDouble("latitud"));
+                    aux.setLongitud(jsonObject.getDouble("longitud"));
+                    aux.setTipo(jsonObject.getString("tipo"));
+                    enBICIa2.getSitioInteres().add(aux);
+                }
+                for(SitioInteres aux : enBICIa2.getSitioInteres()){
+                    LatLng posAux = new LatLng(aux.getLatitud(), aux.getLongitud());
+                    Log.d(TAG, "Latitud: " + aux.getLatitud() + " Longitud: " + aux.getLongitud());
+                    mMap.addMarker(new MarkerOptions().position(posAux).title(aux.getNombre()).icon(BitmapDescriptorFactory.fromResource(R.drawable.route_ciclist)));
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        private String downloadUrl(String strUrl) throws IOException {
+            String data = "";
+            InputStream iStream = null;
+            HttpURLConnection urlConnection = null;
+            try {
+                URL url = new URL(strUrl);
+                urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.connect();
+                iStream = urlConnection.getInputStream();
+                BufferedReader br = new BufferedReader(new InputStreamReader(iStream));
+                StringBuffer sb = new StringBuffer();
+                String line = "";
+                while ((line = br.readLine()) != null) {
+                    sb.append(line);
+                }
+                data = sb.toString();
+                Log.d("downloadUrl", data.toString());
+                br.close();
+
+            } catch (Exception e) {
+                Log.d("Exception", e.toString());
+            } finally {
+                iStream.close();
+                urlConnection.disconnect();
+            }
+            return data;
         }
     }
 

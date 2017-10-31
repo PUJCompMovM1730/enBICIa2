@@ -6,7 +6,6 @@
     android:orientation="vertical"
     android:background="@color/blanco"
     >
-
     <LinearLayout
         android:id="@+id/form_routes_layout"
         android:layout_width="match_parent"

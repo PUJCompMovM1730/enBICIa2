@@ -12,18 +12,22 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.clases.Constants;
+import com.example.clases.EnBiciaa2;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class SignInActivity extends AppCompatActivity implements View.OnClickListener{
 
     private FirebaseAuth mAuth;
+    private EnBiciaa2 enBICIa2;
     Button bsignin;
     TextView bvolver;
 
@@ -50,6 +54,10 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
+
+        //[BEGIN ]
+        enBICIa2 = new EnBiciaa2();
+        //[END ]
 
         //Instancia Firebase
         mAuth = FirebaseAuth.getInstance();
@@ -129,10 +137,11 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
             pass1.setError("Las contraseñas no son iguales");
             return false;
         }
-        /*if(!isValidPassword(pass1.getText().toString())){
+
+        if(!isValidPassword(pass1.getText().toString())){
             pass1.setError("La contraseña no es válida: 6 o más caracteres");
             return false;
-        }*/
+        }
 
         mAuth.createUserWithEmailAndPassword(email.getText().toString(), pass1.getText().toString())
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -142,6 +151,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("sign_in", "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+                            agregarCiclistaFireBase(user);
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
@@ -164,9 +174,18 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         Log.d("email-password:", "Entre a updateUI");
         Intent intent = new Intent(getBaseContext(), MenuActivity.class);
         if( currentUser != null ){
+            Constants.generateToken();
             startActivity(intent);
             finish();
         }
+    }
+
+    private void agregarCiclistaFireBase(FirebaseUser user){
+        String email = user.getEmail();
+        Date date_birth = null;
+        String Uid = user.getUid();
+        String name = "";
+        enBICIa2.agregarCiclistaFireBase(Uid, name, email, date_birth, cell.getText().toString());
     }
 
 

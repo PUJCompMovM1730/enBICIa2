@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="@string/recorridos">
+        <menu>
+            <item
+                android:id="@+id/it_route_menu"
+                android:icon="@drawable/menu_route"
+                android:title="@string/enrutar" />
+            <item
+                android:id="@+id/it_records_menu"
+                android:icon="@drawable/menu_historic"
+                android:title="@string/historial" />
+            <item
+                android:id="@+id/it_scheduled_menu"
+                android:icon="@drawable/menu_scheduled"
+                android:title="@string/planeados" />
+        </menu>
+    </item>
+
+
+    <item android:title="@string/comunidad">
+        <menu>
+            <item
+                android:id="@+id/it_message_menu"
+                android:icon="@drawable/menu_message"
+                android:title="@string/mensajes" />
+            <item
+                android:id="@+id/it_group_menu"
+                android:icon="@drawable/menu_group"
+                android:title="@string/grupos" />
+
+        </menu>
+    </item>
+
+    <item android:title="@string/otros">
+        <menu>
+            <item
+                android:id="@+id/it_settings_menu"
+                android:icon="@drawable/menu_settings"
+                android:title="@string/configuracion" />
+            <item
+                android:id="@+id/it_exit_menu"
+                android:icon="@drawable/menu_exit"
+                android:title="@string/cerrar_sesion" />
+        </menu>
+    </item>
+</menu>

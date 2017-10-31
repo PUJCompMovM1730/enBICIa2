@@ -9,4 +9,7 @@
     <dimen name="nav_header_height">160dp</dimen>
     <!-- Size of edit text-->
     <dimen name="search_edit_size">7sp</dimen>
+
+    <!--Size of button (add / erase) friend-->
+    <dimen name="add_erase_friend">7sp</dimen>
 </resources>

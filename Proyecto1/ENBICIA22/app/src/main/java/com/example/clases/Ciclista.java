@@ -1,5 +1,8 @@
 package com.example.clases;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.Date;
 import java.util.List;
 
@@ -8,6 +11,15 @@ import java.util.List;
  */
 
 public class Ciclista extends Usuario{
+
+    private String estado;
+    private Long cant_recorridos;
+    private String numero_celular;
+    private Long cant_amigos;
+    private String Uid;
+
+    private FirebaseDatabase database;
+    private DatabaseReference myRef;
 
     /*
         TODO: Agregar método de agregar amigo.
@@ -35,14 +47,34 @@ public class Ciclista extends Usuario{
      */
     private List<Mensaje> bandejaSalida;
 
-    /**
-     * @param password
-     * @param email
-     * @param date_birth
-     * @param username
-     */
-    public Ciclista(String password, String email, Date date_birth, String username) {
-        super(password, email, date_birth, username);
+    public Ciclista() {
+        super();
+    }
+
+    public Ciclista(String name, String email, Date date_birth) {
+        super(name, email, date_birth);
+        database = FirebaseDatabase.getInstance();
+        this.cant_recorridos = 0L;
+        this.cant_amigos = 0L;
+        this.numero_celular = "";
+        this.estado = "";
+    }
+
+    public Ciclista(String name, String email, Date date_birth, String numero_celular) {
+        super(name, email, date_birth);
+        database = FirebaseDatabase.getInstance();
+        this.cant_recorridos = 0L;
+        this.cant_amigos = 0L;
+        this.numero_celular = numero_celular;
+        this.estado = "";
+    }
+
+    public void agregarAmigoFireBase(String Uid, String UidAmigo){
+        database = FirebaseDatabase.getInstance();
+        myRef = database.getReference(Constants.PATH_AMIGOS + Uid);
+        myRef.setValue(UidAmigo);
+        myRef = database.getReference(Constants.PATH_AMIGOS + UidAmigo);
+        myRef.setValue(Uid);
     }
 
     public void agregarHistorial(Punto puntoInicio, Punto puntoFin){
@@ -57,6 +89,74 @@ public class Ciclista extends Usuario{
 
     public void enviarMensaje(String contenido, Ciclista receptor){
         bandejaSalida.add(new Mensaje(contenido, receptor, this));
+    }
+
+    //[BEGIN GETTER AND SETTER Usuario]
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Long getDate_birth() {
+        if(date_birth == null) return 0L;
+        return date_birth.getTime();
+    }
+
+    public void setDate_birth(Date date_birth) {
+        this.date_birth = date_birth;
+    }
+    //[END GETTER AND SETTER Usuario]
+
+
+    public String getUid() {
+        return Uid;
+    }
+
+    public void setUid(String uid) {
+        Uid = uid;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public Long getCant_recorridos() {
+        return cant_recorridos;
+    }
+
+    public void setCant_recorridos(Long cant_recorridos) {
+        this.cant_recorridos = cant_recorridos;
+    }
+
+    public String getNumero_celular() {
+        return numero_celular;
+    }
+
+    public void setNumero_celular(String numero_celular) {
+        this.numero_celular = numero_celular;
+    }
+
+    public Long getCant_amigos() {
+        return cant_amigos;
+    }
+
+    public void setCant_amigos(Long cant_amigos) {
+        this.cant_amigos = cant_amigos;
     }
 
     public List<Ciclista> getAmigos() {

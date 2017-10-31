@@ -4,6 +4,10 @@ import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
 
 /**
  * Created by juanpablorn30 on 26/10/17.
@@ -45,18 +49,37 @@ public final class Constants {
         return (Math.log(mapPx / worldPx / fraction) / LN2);
     }
 
-    /**
-     *  Values of restrict search in Bogota D.C
-     */
+    // [BEGIN declare_bogota_bounds]
     public static final double lowerLeftLatitude = 4.466214;
     public static final double lowerLeftLongitude = -74.225923;
     public static final double upperRightLatitude = 4.825517;
     public static final double upperRigthLongitude = -73.996583;
+    // [END declare_bogota_bounds]
 
-    /**
-     * Values of state Recorrido
-     */
+    //[BEGIN declare_estados_recorrido]
     public static final String FINALIZADO = "finalizado";
     public static final String ACTIVO = "activo";
+    //[END declare_estados_recorrido]
 
+    // [BEGIN path_elements_firebase]
+    public static final String PATH_FIREBASE = "https://enbicia2-ccad2.firebaseio.com/";
+    public static final String PATH_USUARIOS="usuarios/";
+    public static final String PATH_AMIGOS="amigos/";
+    public static final String PATH_SITIO_INTERES="sitio_interes/";
+    // [END path_elements_firebase]
+
+    // [BEGIN declare_tag]
+    public static final String TAG_CLASS = "enBICIa2";
+    // [END declare_tag]
+
+    public static String TOKEN_USER;
+    public static void generateToken(){
+        FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
+        mUser.getIdToken(true).addOnSuccessListener(new OnSuccessListener<GetTokenResult>() {
+            @Override
+            public void onSuccess(GetTokenResult getTokenResult) {
+                TOKEN_USER = getTokenResult.getToken();
+            }
+        });
+    }
 }

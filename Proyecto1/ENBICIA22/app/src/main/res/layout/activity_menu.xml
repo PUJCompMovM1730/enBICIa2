@@ -5,232 +5,233 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/blanco"
+    android:padding="20dp"
   >
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:orientation="horizontal"
-        android:background="@color/colorAccent">
-
-        <ImageButton
-            android:id="@+id/atras"
-            android:layout_width="50dp"
-            android:layout_height="60dp"
-            android:background="@color/colorAccent"
-            android:scaleType="fitStart"
-            android:src="@drawable/back_1"
-            android:gravity="center_vertical"
-            android:padding="15dp"
-            android:tint="@color/blanco"
-            />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:text="Menú"
-            android:textColor="@color/blanco"
-            android:textSize="30dp"
-            android:textStyle="bold"
-            android:paddingLeft="15dp"
-            android:gravity="center_vertical"/>
-
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:padding="30dp">
-
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.3"
             android:gravity="center"
             android:orientation="horizontal">
 
             <LinearLayout
-                android:layout_width="200dp"
-                android:layout_height="200dp"
-                android:layout_margin="10dp"
+
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:layout_height="match_parent"
                 android:gravity="center"
                 android:orientation="vertical">
 
                 <ImageButton
-                    android:id="@+id/perfil"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
-                    android:layout_margin="10dp"
+                    android:id="@+id/lin_perfil_menu"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.7"
                     android:background="@color/blanco"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/user_4" />
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/e2_profile_rounded" />
 
                 <TextView
+                    android:id="@+id/textView5"
                     android:layout_width="match_parent"
-                    android:layout_height="30dp"
+                    android:layout_height="0dp"
                     android:layout_margin="5dp"
+                    android:layout_weight="0.3"
                     android:gravity="center"
                     android:text="Perfíl"
                     android:textColor="@color/colorAccent"
-                    android:textSize="25sp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="200dp"
-                android:layout_height="200dp"
-                android:layout_margin="10dp"
+
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:layout_height="match_parent"
                 android:gravity="center"
-                android:orientation="vertical">
+                android:orientation="vertical"
+               >
 
                 <ImageButton
-                    android:id="@+id/recorrido"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
-                    android:layout_margin="10dp"
+                    android:id="@+id/lin_mensajes_menu"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.7"
                     android:background="@color/blanco"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/map" />
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/e2_message_rounded" />
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:layout_margin="5dp"
-                    android:gravity="center"
-                    android:text="Recorrido"
-                    android:textColor="@color/colorAccent"
-                    android:textSize="25sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:layout_width="200dp"
-                android:layout_height="200dp"
-                android:layout_margin="10dp"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <ImageButton
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
-                    android:layout_margin="10dp"
-                    android:background="@color/blanco"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/users_1" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:layout_margin="5dp"
-                    android:gravity="center"
-                    android:text="Grupos"
-                    android:textColor="@color/colorAccent"
-                    android:textSize="25sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="200dp"
-                android:layout_height="200dp"
-                android:layout_margin="10dp"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <ImageButton
-                    android:id="@+id/imageButton"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
-                    android:layout_margin="10dp"
-                    android:background="@color/blanco"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/chat" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.3"
                     android:layout_margin="5dp"
                     android:gravity="center"
                     android:text="Mensajes"
                     android:textColor="@color/colorAccent"
-                    android:textSize="25sp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
             </LinearLayout>
 
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/amigos"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="0.3"
             android:gravity="center"
             android:orientation="horizontal">
 
             <LinearLayout
-                android:layout_width="200dp"
-                android:layout_height="200dp"
-                android:layout_margin="10dp"
+
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:layout_height="match_parent"
                 android:gravity="center"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                >
 
                 <ImageButton
-                    android:id="@+id/ruta"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
-                    android:layout_margin="10dp"
+                    android:id="@+id/lin_grupos_menu"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.7"
                     android:background="@color/blanco"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/route" />
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/e2_group_rounded" />
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="30dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.3"
                     android:layout_margin="5dp"
                     android:gravity="center"
-                    android:text="Rutas"
+                    android:text="Grupos"
                     android:textColor="@color/colorAccent"
-                    android:textSize="25sp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="200dp"
-                android:layout_height="200dp"
-                android:layout_margin="10dp"
+
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical"
+               >
+
+                <ImageButton
+                    android:id="@+id/lin_amigos_menu"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.7"
+                    android:background="@color/blanco"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/e2_friends_rounded" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.3"
+                    android:layout_margin="5dp"
+                    android:gravity="center"
+                    android:text="Amigos"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.3"
+            android:gravity="center"
+            android:orientation="horizontal"
+          >
+
+            <LinearLayout
+
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical"
+                >
+
+                <ImageButton
+                    android:id="@+id/lin_planeados_menu"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.7"
+                    android:background="@color/blanco"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/e2_scheduled" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.3"
+                    android:layout_margin="5dp"
+                    android:gravity="center"
+                    android:text="Planes"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:layout_height="match_parent"
                 android:gravity="center"
                 android:orientation="vertical">
 
                 <ImageButton
-                    android:id="@+id/tienda"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
-                    android:layout_margin="10dp"
+                    android:id="@+id/lin_marcador_menu"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.7"
                     android:background="@color/blanco"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/shop" />
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/e2_position_rounded" />
 
                 <TextView
+                    android:id="@+id/textView6"
                     android:layout_width="match_parent"
-                    android:layout_height="30dp"
+                    android:layout_height="0dp"
                     android:layout_margin="5dp"
+                    android:layout_weight="0.3"
                     android:gravity="center"
-                    android:text="Tienda"
+                    android:text="Marcador"
                     android:textColor="@color/colorAccent"
-                    android:textSize="25sp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
             </LinearLayout>
 
         </LinearLayout>
 
-    </LinearLayout>
-
-
+        <Button
+            android:id="@+id/lin_ruta_menu"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.1"
+            android:background="@drawable/button"
+            android:text="Iniciar recorrido"
+            android:textColor="@color/blanco"
+            android:textStyle="bold"
+            android:clickable="true"/>
 
 </LinearLayout>
+
+
+

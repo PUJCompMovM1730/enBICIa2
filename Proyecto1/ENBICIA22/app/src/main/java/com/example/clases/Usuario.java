@@ -6,12 +6,16 @@ import java.util.Date;
  * Created by juanpablorn30 on 2/10/17.
  */
 
-public class Usuario {
+public abstract  class Usuario {
 
-    private String password;
-    private String email;
-    private Date date_birth;
-    private String username;
+    protected String password;
+    protected String email;
+    protected Date date_birth;
+    protected String username;
+    protected String name;
+
+    public Usuario() {
+    }
 
     /**
      * @param password
@@ -26,12 +30,18 @@ public class Usuario {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
+    public Usuario(String name, String email, Date date_birth) {
+        this.name = name;
+        this.email = email;
+        this.date_birth = date_birth;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getEmail() {
@@ -42,19 +52,12 @@ public class Usuario {
         this.email = email;
     }
 
-    public Date getDate_birth() {
-        return date_birth;
+    public Long getDate_birth() {
+        if(date_birth == null) return 0L;
+        return date_birth.getTime();
     }
 
     public void setDate_birth(Date date_birth) {
         this.date_birth = date_birth;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 }

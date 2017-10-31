@@ -6,27 +6,50 @@ package com.example.clases;
 
 public class SitioInteres {
 
-    private String direccion;
-    private String propietario;
+    private String nombre;
+    private double latitud;
+    private double longitud;
+    private String tipo;
 
-    public SitioInteres(String direccion, String propietario) {
-        this.direccion = direccion;
-        this.propietario = propietario;
+    public SitioInteres() {
     }
 
-    public String getDireccion() {
-        return direccion;
+    public SitioInteres(String nombre, double latitud, double longitud, String tipo) {
+        this.nombre = nombre;
+        this.latitud = latitud;
+        this.longitud = longitud;
+        this.tipo = tipo;
     }
 
-    public void setDireccion(String direccion) {
-        this.direccion = direccion;
+    public String getNombre() {
+        return nombre;
     }
 
-    public String getPropietario() {
-        return propietario;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
-    public void setPropietario(String propietario) {
-        this.propietario = propietario;
+    public double getLatitud() {
+        return latitud;
+    }
+
+    public void setLatitud(double latitud) {
+        this.latitud = latitud;
+    }
+
+    public double getLongitud() {
+        return longitud;
+    }
+
+    public void setLongitud(double longitud) {
+        this.longitud = longitud;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
     }
 }

@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -13,11 +15,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.clases.Ciclista;
+import com.example.clases.Constants;
+import com.example.clases.EnBiciaa2;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.login.Login;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
@@ -36,12 +42,15 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
+import java.util.Date;
+
 /**
  * A login screen that offers login via email/password.
  */
 public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener{
 
     // [START declare_tag]
+    private static final String TAG = "LoginActivity";
     private static final String TAG_GOOGLE = "GoogleLogin";
     private static final String TAG_FACEBOOK = "FacebookLogin";
     private static final String TAG_EMAIL = "EmailLogin";
@@ -53,6 +62,10 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private FirebaseAuth mAuth;
     // [END declare_auth]
 
+    // [START declare_enBICIa2]
+    private EnBiciaa2 enBICIa2;
+    // [END declare_enBICIa2]
+
     private GoogleApiClient mGoogleApiClient;
 
     private CallbackManager mCallbackManager;
@@ -60,7 +73,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
-    private View mLoginFormView;
     private TextView signin;
 
 
@@ -68,6 +80,10 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        // [START initialize_enBICIa2]
+        enBICIa2 = new EnBiciaa2();
+        // [END initialize_enBICIa2]
 
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         mPasswordView = (EditText) findViewById(R.id.password);
@@ -145,6 +161,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG_EMAIL, "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+                            agregarCiclistaFireBase(user);
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
@@ -172,6 +189,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         Log.d(TAG_GOOGLE, "Entre a updateUI");
         Intent intent = new Intent(getBaseContext(), MenuActivity.class);
         if( currentUser != null ){
+            Constants.generateToken();
             startActivity(intent);
             finish();
         }
@@ -217,6 +235,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG_GOOGLE, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+                            agregarCiclistaFireBase(user);
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
@@ -247,6 +266,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG_FACEBOOK, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+                            agregarCiclistaFireBase(user);
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
@@ -259,6 +279,13 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 });
     }
 
+    private void agregarCiclistaFireBase(FirebaseUser user){
+        String email = user.getEmail();
+        Date date_birth = null;
+        String Uid = user.getUid();
+        String name = user.getDisplayName();
+        enBICIa2.agregarCiclistaFireBase(Uid, name, email, date_birth);
+    }
 
     @Override
     public void onClick(View view) {
