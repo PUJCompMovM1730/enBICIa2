@@ -44,6 +44,9 @@ public class MenuActivity extends AppCompatActivity implements  View.OnClickList
             Intent intent = new Intent(getBaseContext(), LoginActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
+        }else if(itemClicked == R.id.it_settings_menu){
+            Intent intent = new Intent(getBaseContext(), EditProfileActivity.class);
+            startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }

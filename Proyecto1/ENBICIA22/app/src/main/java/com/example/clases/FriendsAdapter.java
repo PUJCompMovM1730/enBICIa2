@@ -89,7 +89,7 @@ public class FriendsAdapter extends ArrayAdapter<Ciclista> implements View.OnCli
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        viewHolder.txtName.setText(dataModel.getName());
+        viewHolder.txtName.setText(dataModel.getEmail());
         viewHolder.btnAgregar.setOnClickListener(this);
         viewHolder.btnEliminar.setOnClickListener(this);
         viewHolder.btnAgregar.setTag(position);

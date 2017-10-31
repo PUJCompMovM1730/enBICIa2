@@ -62,10 +62,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private FirebaseAuth mAuth;
     // [END declare_auth]
 
-    // [START declare_enBICIa2]
-    private EnBiciaa2 enBICIa2;
-    // [END declare_enBICIa2]
-
     private GoogleApiClient mGoogleApiClient;
 
     private CallbackManager mCallbackManager;
@@ -80,11 +76,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-        // [START initialize_enBICIa2]
-        enBICIa2 = new EnBiciaa2();
-        // [END initialize_enBICIa2]
-
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         mPasswordView = (EditText) findViewById(R.id.password);
         btnFacebook = (LoginButton) findViewById(R.id.btnFacebook);
@@ -161,7 +152,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG_EMAIL, "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            agregarCiclistaFireBase(user);
+                            Constants.enBICIa2 = new EnBiciaa2();
+                            Constants.enBICIa2.agregarCiclistaFireBase();
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
@@ -189,7 +181,10 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         Log.d(TAG_GOOGLE, "Entre a updateUI");
         Intent intent = new Intent(getBaseContext(), MenuActivity.class);
         if( currentUser != null ){
-            Constants.enBICIa2 = new EnBiciaa2();
+            if(Constants.enBICIa2 == null){
+                Log.d(TAG, "Si estaba en null");
+                Constants.enBICIa2 = new EnBiciaa2();
+            }
             startActivity(intent);
             finish();
         }
@@ -235,7 +230,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG_GOOGLE, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            agregarCiclistaFireBase(user);
+                            Constants.enBICIa2 = new EnBiciaa2();
+                            Constants.enBICIa2.agregarCiclistaFireBase();
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
@@ -266,7 +262,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG_FACEBOOK, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            agregarCiclistaFireBase(user);
+                            Constants.enBICIa2 = new EnBiciaa2();
+                            Constants.enBICIa2.agregarCiclistaFireBase();
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
@@ -277,14 +274,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                         }
                     }
                 });
-    }
-
-    private void agregarCiclistaFireBase(FirebaseUser user){
-        String email = user.getEmail();
-        Date date_birth = null;
-        String Uid = user.getUid();
-        String name = user.getDisplayName();
-        enBICIa2.agregarCiclistaFireBase(Uid, name, email, date_birth);
     }
 
     @Override

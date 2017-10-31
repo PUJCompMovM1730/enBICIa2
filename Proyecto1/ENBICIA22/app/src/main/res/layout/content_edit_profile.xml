@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.example.oscar.enbicia2.EditProfileActivity"
+    tools:showIn="@layout/activity_edit_profile"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        android:orientation="vertical"
+        android:padding="20dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            >
+            <ImageView
+                android:layout_height="50dp"
+                android:layout_width="0dp"
+                android:layout_weight="0.3"
+                android:padding="5dp"
+                android:src="@drawable/profile_id"
+                android:tint="@color/greydark"/>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="0.7"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="Nombres"/>
+                <EditText
+                    android:id="@+id/et_eprofile_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="No definido"
+                    android:inputType="text"
+                    android:enabled="false"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="5dp"
+            >
+            <ImageView
+                android:layout_height="50dp"
+                android:layout_width="0dp"
+                android:layout_weight="0.3"
+                android:padding="5dp"
+                android:src="@drawable/profile_mail"
+                android:tint="@color/greydark"/>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="0.7"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="Correo electrónico"/>
+                <EditText
+                    android:id="@+id/et_eprofile_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="No definido"
+                    android:inputType="text"
+                    android:enabled="false"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="5dp"
+            >
+            <ImageView
+                android:layout_height="50dp"
+                android:layout_width="0dp"
+                android:layout_weight="0.3"
+                android:padding="5dp"
+                android:src="@drawable/profile_phone"
+                android:tint="@color/greydark"/>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="0.7"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="Número celular"/>
+                <EditText
+                    android:id="@+id/et_eprofile_cell"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="No definido"
+                    android:inputType="number"
+                    android:enabled="false"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="5dp"
+            >
+            <ImageView
+                android:layout_height="50dp"
+                android:layout_width="0dp"
+                android:layout_weight="0.3"
+                android:padding="5dp"
+                android:src="@drawable/profile_age"
+                android:tint="@color/greydark"/>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="0.7"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="Edad"/>
+                <EditText
+                    android:id="@+id/et_eprofile_age"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="No definido"
+                    android:inputType="number"
+                    android:focusable="false"
+                    android:clickable="true"
+                    android:enabled="false"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_eprofile_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cambiar contraseña"/>
+
+        <Button
+            android:id="@+id/btn_eprofile_photo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cambiar foto"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+          >
+            <Button
+                android:id="@+id/btn_eprofile_cancel"
+            android:layout_width="0dp"
+            android:layout_weight="0.3"
+            android:layout_height="wrap_content"
+            android:text="Cancelar"
+                android:layout_margin="5dp"
+                android:background="@color/app"
+                android:textColor="@color/blanco"
+                android:textStyle="bold"
+                android:enabled="false"
+                />
+            <Button
+                android:id="@+id/btn_eprofile_edit"
+                android:layout_width="0dp"
+                android:layout_weight="0.3"
+                android:layout_height="wrap_content"
+                android:text="Editar"
+                android:layout_margin="5dp"
+                android:background="@color/app"
+                android:textColor="@color/blanco"
+                android:textStyle="bold"
+                android:enabled="true"
+                />
+            <Button
+                android:id="@+id/btn_eprofile_save"
+                android:layout_width="0dp"
+                android:layout_weight="0.3"
+                android:layout_height="wrap_content"
+                android:text="Guardar"
+                android:layout_margin="5dp"
+                android:background="@color/app"
+                android:textColor="@color/blanco"
+                android:textStyle="bold"
+                android:enabled="false"
+                />
+        </LinearLayout>
+
+        </LinearLayout>
+
+
+
+
+
+</android.support.v4.widget.NestedScrollView>

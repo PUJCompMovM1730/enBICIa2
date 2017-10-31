@@ -45,6 +45,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -83,7 +84,9 @@ public class RoutesActivity extends FragmentActivity implements OnMapReadyCallba
     private FirebaseAuth mAuth;
     public List<Polyline> route;
     private List<Marker> marcadores;
+    private List<Circle> zonas_peligro;
     private List<SitioInteres> puntos_peligro;
+
 
     private boolean onRoute;
     private int indx_polyLine;
@@ -116,6 +119,7 @@ public class RoutesActivity extends FragmentActivity implements OnMapReadyCallba
 
         marcadores = new ArrayList<>();
         puntos_peligro = new ArrayList<>();
+        zonas_peligro = new ArrayList<>();
         mSitioInteresReference = FirebaseDatabase.getInstance().getReference().child("sitio_interes");
         onRoute = false;
         mAuth = FirebaseAuth.getInstance();
@@ -329,8 +333,7 @@ public class RoutesActivity extends FragmentActivity implements OnMapReadyCallba
                 LatLngBounds bounds = builder.build();
 
                 marcadores.add(mMap.addMarker(new MarkerOptions().position(bounds.getCenter()).title("Peligro").icon(BitmapDescriptorFactory.fromResource(selectImage("Ladron")))));
-                mMap.addCircle(new CircleOptions().center(bounds.getCenter()).radius(Constants.RADIUS_CIRCLE).strokeColor(ResourcesCompat.getColor(getResources(), R.color.circle_background, null)).fillColor(ResourcesCompat.getColor(getResources(), R.color.circle_background, null)));
-                //mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(bounds.getCenter(), Constants.getBoundsZoomLevel(bounds, width, height)));
+                zonas_peligro.add(mMap.addCircle(new CircleOptions().center(bounds.getCenter()).radius(Constants.RADIUS_CIRCLE).strokeColor(ResourcesCompat.getColor(getResources(), R.color.circle_background, null)).fillColor(ResourcesCompat.getColor(getResources(), R.color.circle_background, null))));
             }
         }
     }
@@ -455,13 +458,8 @@ public class RoutesActivity extends FragmentActivity implements OnMapReadyCallba
             int width = findViewById(R.id.map).getWidth();
             int height = findViewById(R.id.map).getHeight();
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(bounds.getCenter(), Constants.getBoundsZoomLevel(bounds, width, height)));
-            Log.d(TAG, "Inicio: " + route.get(0).getPoints().get(0));
-            Log.d(TAG, "Fin: " + route.get(0).getPoints().get(1));
-            Log.d(TAG, "Fin2: " + source.toString());
             Log.d(TAG, String.valueOf(PolyUtil.isLocationOnPath(actual, route.get(0).getPoints(), false,50)));
             Log.d(TAG, String.valueOf(PolyUtil.isLocationOnPath(source, route.get(0).getPoints(), false,50)));
-
-            Log.d(TAG, String.valueOf(PolyUtil.distanceToLine(actual, route.get(0).getPoints().get(0), route.get(0).getPoints().get(1))));
             Log.d(TAG, String.valueOf(PolyUtil.isLocationOnPath(target, route.get(0).getPoints(), false,50)));
 
         }else{
@@ -495,10 +493,10 @@ public class RoutesActivity extends FragmentActivity implements OnMapReadyCallba
     }
 
     private int selectImage(String name){
-        if(name.equals("Ladron")) return R.drawable.mark_thief;
-        if(name.equals("Alquiler")) return R.drawable.mark_rent;
-        if(name.equals("Tienda")) return R.drawable.mark_store;
-        if(name.equals("Taller")) return R.drawable.mark_workshop;
+        if(name.equals("Ladron")) return R.drawable.peque_ladron;
+        if(name.equals("Alquiler")) return R.drawable.peque_alquilar;
+        if(name.equals("Tienda")) return R.drawable.peque_compra;
+        if(name.equals("Taller")) return R.drawable.peque_arreglar;
         return -1;
     }
 

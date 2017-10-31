@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:background="@drawable/borde_linea"
+        android:layout_margin="5dp"
+        >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:background="@color/blanco"
+        android:layout_margin="5dp"
+        >
+
+        <ImageView
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_margin="10dp"
+            android:padding="5dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/forest"
+
+            />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="70dp"
+            android:layout_weight="0.7"
+            android:orientation="vertical"
+            android:padding="10dp"
+            android:background="@drawable/border"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:text="Tiempo"
+                android:gravity="center"
+                android:textColor="@color/colorAccent"
+                android:textStyle="bold"
+                android:textSize="15sp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:text="500"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:textSize="25sp"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="70dp"
+            android:layout_weight="0.7"
+            android:orientation="vertical"
+            android:layout_margin="10dp"
+            android:background="@drawable/border"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:text="Distancia"
+                android:gravity="center"
+                android:textColor="@color/colorAccent"
+                android:textStyle="bold"
+                android:textSize="15sp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:text="500"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:textSize="25sp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="70dp"
+            android:layout_weight="0.7"
+            android:orientation="vertical"
+            android:layout_margin="10dp"
+            android:background="@drawable/border"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:text="Velocidad"
+                android:gravity="center"
+                android:textColor="@color/colorAccent"
+                android:textStyle="bold"
+                android:textSize="15sp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:text="500"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:textSize="25sp"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

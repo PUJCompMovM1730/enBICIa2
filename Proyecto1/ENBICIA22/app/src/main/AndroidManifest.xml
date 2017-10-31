@@ -75,6 +75,10 @@
             android:name=".MarkActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".SearchFriendsActivity"></activity>
+        <activity
+            android:name=".EditProfileActivity"
+            android:label="Editar perfíl"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

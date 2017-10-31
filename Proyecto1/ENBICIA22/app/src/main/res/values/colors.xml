@@ -11,4 +11,5 @@
     <color name="oscuro">#000000</color>
     <color name="grey">#DBDBDB</color>
     <color name="circle_background">#80ED2A2A</color>
+    <color name="greydark">#8492a6</color>
 </resources>

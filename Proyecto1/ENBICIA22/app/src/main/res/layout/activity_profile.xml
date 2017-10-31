@@ -1,44 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.oscar.enbicia2.ProfileActivity">
+    tools:context="com.example.oscar.enbicia2.ProfileActivity"
+    android:orientation="vertical">
 
-    <android.support.design.widget.AppBarLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.NoActionBar.AppBarOverlay">
+        android:layout_height="0dp"
+        android:layout_weight="0.3"
+        android:background="@color/colorAccent"
+        android:gravity="center">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/colorAccent"
-            app:popupTheme="@style/AppTheme.NoActionBar.PopupOverlay" />
+            android:layout_height="wrap_content"
+            android:gravity="center">
 
-    </android.support.design.widget.AppBarLayout>
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_margin="10dp"
+                android:padding="5dp"
+                android:scaleType="center"
+                android:src="@drawable/photo"
+                />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/ic_menu_edit"
-        android:tint="@color/blanco"
-        android:background="@color/colorAccent"/>
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/menu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top|start"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/menu_3"
-        android:tint="@color/blanco"
-        android:background="@color/colorAccent"/>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="100dp"
+                android:layout_weight="0.7"
+                android:orientation="vertical"
+                android:padding="10dp"
+                android:background="@drawable/border"
+                android:gravity="center">
 
-    <include layout="@layout/content_profile" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:text="Amigos"
+                    android:gravity="center"
+                    android:textColor="@color/blanco"
+                    android:textStyle="bold"
+                    android:textSize="15sp"/>
 
-</android.support.design.widget.CoordinatorLayout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:text="500"
+                    android:gravity="center"
+                    android:textColor="@color/blanco"
+                    android:textStyle="bold"
+                    android:textSize="25sp"/>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="100dp"
+                android:layout_weight="0.7"
+                android:orientation="vertical"
+                android:layout_margin="10dp"
+                android:background="@drawable/border"
+                android:gravity="center">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:text="Recorridos"
+                    android:gravity="center"
+                    android:textColor="@color/blanco"
+                    android:textStyle="bold"
+                    android:textSize="15sp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:text="500"
+                    android:gravity="center"
+                    android:textColor="@color/blanco"
+                    android:textStyle="bold"
+                    android:textSize="25sp"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <include layout="@layout/content_profile"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.7"/>
+
+</LinearLayout>

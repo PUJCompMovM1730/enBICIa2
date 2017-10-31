@@ -65,6 +65,7 @@ public class EnBiciaa2 {
     private ValueEventListener mCiclistasListener;
 
     public EnBiciaa2() {
+        Log.d(Constants.TAG_CLASS, "Entre aca");
         mCiclistaReference = FirebaseDatabase.getInstance().getReference().child("usuarios");
         mSitioInteresReference = FirebaseDatabase.getInstance().getReference().child("sitio_interes");
         usuarios = new HashMap<>();
@@ -108,26 +109,51 @@ public class EnBiciaa2 {
     }
 
     public void cargarUsuarios(){
+        Log.d(Constants.TAG_CLASS, "Entre a cargar usuarios");
         ValueEventListener ciclistasListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                usuarios.clear();
-                Log.d(Constants.TAG_CLASS, "Recibi el update");
-                for(DataSnapshot aux : dataSnapshot.getChildren()){
-                    Ciclista ciclista = aux.getValue(Ciclista.class);
-                    ciclista.setUid(aux.getKey());
-                    usuarios.put(ciclista.getUid(), ciclista);
+                try{
+                    usuarios.clear();
+                    Log.d(Constants.TAG_CLASS, "Recibi el update");
+                    for(DataSnapshot aux : dataSnapshot.getChildren()){
+                        Ciclista ciclista = aux.getValue(Ciclista.class);
+                        ciclista.setUid(aux.getKey());
+                        usuarios.put(ciclista.getUid(), ciclista);
+                    }
+                    if(!usuarios.containsKey(FirebaseAuth.getInstance().getCurrentUser().getUid())){
+                        Log.d(Constants.TAG_CLASS, "Estoy agregando");
+                        agregarCiclistaFireBase();
+                    }
 
+                    Log.d(Constants.TAG_CLASS, "Cantidad de ciclistas: " + usuarios.size());
+                }catch (Exception e){
+                    Log.d(Constants.TAG_CLASS, e.getMessage());
+                    e.printStackTrace();
                 }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                Log.d(Constants.TAG_CLASS, "Error: " + databaseError.getMessage());
             }
         };
         mCiclistaReference.addValueEventListener(ciclistasListener);
         mCiclistasListener = ciclistasListener;
+    }
+
+    public void agregarCiclistaFireBase(){
+        try{
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            String email = user.getEmail();
+            Date date_birth = null;
+            String Uid = user.getUid();
+            String name = user.getDisplayName();
+            agregarCiclistaFireBase(Uid, name, email, date_birth);
+        }catch (Exception e){
+            Log.d(Constants.TAG_CLASS, e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     public void cargarSitioInteres(){
