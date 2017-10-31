@@ -1,5 +1,7 @@
 package com.example.clases;
 
+import java.util.Date;
+
 /**
  * Created by juanpablorn30 on 3/10/17.
  */
@@ -10,6 +12,7 @@ public class SitioInteres {
     private double latitud;
     private double longitud;
     private String tipo;
+    private Date fecha;
 
     public SitioInteres() {
     }
@@ -19,6 +22,7 @@ public class SitioInteres {
         this.latitud = latitud;
         this.longitud = longitud;
         this.tipo = tipo;
+        this.fecha = new Date();
     }
 
     public String getNombre() {
@@ -51,5 +55,13 @@ public class SitioInteres {
 
     public void setTipo(String tipo) {
         this.tipo = tipo;
+    }
+
+    public Long getFecha() {
+        return fecha.getTime();
+    }
+
+    public void setFecha(Long fecha) {
+        this.fecha = new Date(fecha);
     }
 }

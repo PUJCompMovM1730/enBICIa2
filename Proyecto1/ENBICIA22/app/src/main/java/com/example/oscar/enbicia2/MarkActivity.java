@@ -38,7 +38,6 @@ public class MarkActivity extends AppCompatActivity implements OnMapReadyCallbac
     private LatLng target;
     private GoogleMap mMap;
     private int indx_categoria;
-    private EnBiciaa2 enBICIa2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,11 +47,9 @@ public class MarkActivity extends AppCompatActivity implements OnMapReadyCallbac
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.mapMark);
         mapFragment.getMapAsync(this);
-
-        enBICIa2 = new EnBiciaa2();
         target = null;
         marker_target = null;
-        indx_categoria = 0;
+        indx_categoria = -1;
 
        //Find ids
         nombre_sitio = findViewById(R.id.etMarkNombreUbicacion);
@@ -122,6 +119,9 @@ public class MarkActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        LatLng bogota = new LatLng(4.65, -74.05);
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(bogota));
+        mMap.moveCamera(CameraUpdateFactory.zoomTo(Constants.ZOOM_CITY));
     }
 
     @Override
@@ -132,14 +132,14 @@ public class MarkActivity extends AppCompatActivity implements OnMapReadyCallbac
             thief.setColorFilter(Color.rgb(0,0,0) );
             store.setColorFilter(Color.rgb(0,0,0));
             workshop.setColorFilter(Color.rgb(0,0,0));
-            indx_categoria = 0;
+            indx_categoria = 1;
         }
         else if( i == R.id.imb_mark_thief ) {
             rent.setColorFilter(Color.rgb(0,0,0));
             thief.setColorFilter(Color.rgb(206,20,20) );
             store.setColorFilter(Color.rgb(0,0,0));
             workshop.setColorFilter(Color.rgb(0,0,0) );
-            indx_categoria = 1;
+            indx_categoria = 0;
         }
         else if( i == R.id.imb_mark_store ) {
             rent.setColorFilter(Color.rgb(0,0,0));
@@ -155,15 +155,20 @@ public class MarkActivity extends AppCompatActivity implements OnMapReadyCallbac
             workshop.setColorFilter(Color.rgb(181,166,209) );
             indx_categoria = 3;
         }else if( i == R.id.btnMarkGuardarZona){
-            enBICIa2.agregarSitioInteresFireBase(nombre_sitio.getText().toString(), target.latitude, target.longitude, indx_categoria);
-            Snackbar.make(view, "El marcador se ha agregado correctamente", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
-            nombre_sitio.getText().clear();
-            rent.setColorFilter(Color.rgb(0,0,0));
-            thief.setColorFilter(Color.rgb(0,0,0) );
-            store.setColorFilter(Color.rgb(0,0,0));
-            workshop.setColorFilter(Color.rgb(0,0,0));
-            ((EditText)autocompleteFragmentTarget.getView().findViewById(R.id.place_autocomplete_search_input)).getText().clear();
+            if(nombre_sitio.getText().toString().isEmpty() || target == null || indx_categoria == -1){
+                Snackbar.make(view, "No se ha seleccionado todos los datos", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }else{
+                Constants.enBICIa2.agregarSitioInteresFireBase(nombre_sitio.getText().toString(), target.latitude, target.longitude, indx_categoria);
+                Snackbar.make(view, "El marcador se ha agregado correctamente", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+                nombre_sitio.getText().clear();
+                rent.setColorFilter(Color.rgb(0,0,0));
+                thief.setColorFilter(Color.rgb(0,0,0) );
+                store.setColorFilter(Color.rgb(0,0,0));
+                workshop.setColorFilter(Color.rgb(0,0,0));
+                ((EditText)autocompleteFragmentTarget.getView().findViewById(R.id.place_autocomplete_search_input)).getText().clear();
+            }
         }
     }
 

@@ -174,7 +174,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         Log.d("email-password:", "Entre a updateUI");
         Intent intent = new Intent(getBaseContext(), MenuActivity.class);
         if( currentUser != null ){
-            Constants.generateToken();
+            Constants.enBICIa2 = new EnBiciaa2();
             startActivity(intent);
             finish();
         }

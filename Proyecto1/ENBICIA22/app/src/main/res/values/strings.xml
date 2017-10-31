@@ -42,9 +42,13 @@
     <!-- [END Activity Mark Strings] -->
 
     <!--[BEGIN FriendsActivity Strings]-->
-    <string name="agregar_amigo">Agregar amigo</string>
+    <string name="buscar_personas">Buscar Personas</string>
     <string name="eliminar_amigo">Eliminar amigo</string>
     <!--[END FriendsActivity Strings]-->
+
+    <!--[BEGIN SearchFriendsActivity Strings]-->
+    <string name="agregar_amigo">Agregar amigo</string>
+    <!--[BEGIN SearchFriendsActivity Strings]-->
 
     <!-- [BEGIN strings_menu] -->
     <string name="configuracion">Configuración</string>

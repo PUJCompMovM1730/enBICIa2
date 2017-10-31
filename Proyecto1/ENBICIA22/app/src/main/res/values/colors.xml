@@ -10,4 +10,5 @@
     <color name="app">#41B787</color>
     <color name="oscuro">#000000</color>
     <color name="grey">#DBDBDB</color>
+    <color name="circle_background">#80ED2A2A</color>
 </resources>

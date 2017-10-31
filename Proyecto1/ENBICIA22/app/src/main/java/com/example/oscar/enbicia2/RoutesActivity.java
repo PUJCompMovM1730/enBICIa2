@@ -3,6 +3,7 @@ package com.example.oscar.enbicia2;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.AsyncTask;
@@ -12,6 +13,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.res.ResourcesCompat;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +45,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -50,6 +53,11 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.maps.android.PolyUtil;
 
 import org.json.JSONException;
@@ -74,8 +82,9 @@ public class RoutesActivity extends FragmentActivity implements OnMapReadyCallba
     private String TAG = "RoutesActivity";
     private FirebaseAuth mAuth;
     public List<Polyline> route;
+    private List<Marker> marcadores;
+    private List<SitioInteres> puntos_peligro;
 
-    private EnBiciaa2 enBICIa2;
     private boolean onRoute;
     private int indx_polyLine;
     private Marker marker_target;
@@ -87,6 +96,9 @@ public class RoutesActivity extends FragmentActivity implements OnMapReadyCallba
     private LatLng target;
     private PlaceAutocompleteFragment autocompleteFragmentSource;
     private PlaceAutocompleteFragment autocompleteFragmentTarget;
+
+    private DatabaseReference mSitioInteresReference;
+    private ValueEventListener mSitioInteresListener;
 
     private GoogleApiClient googleApiClient;
     private GoogleMap mMap;
@@ -102,11 +114,12 @@ public class RoutesActivity extends FragmentActivity implements OnMapReadyCallba
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        enBICIa2 = new EnBiciaa2();
+        marcadores = new ArrayList<>();
+        puntos_peligro = new ArrayList<>();
+        mSitioInteresReference = FirebaseDatabase.getInstance().getReference().child("sitio_interes");
         onRoute = false;
         mAuth = FirebaseAuth.getInstance();
         marker_target = marker_source = marker_current = null;
-        //mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         route = new ArrayList<>();
 
         autocompleteFragmentSource = (PlaceAutocompleteFragment)
@@ -258,9 +271,68 @@ public class RoutesActivity extends FragmentActivity implements OnMapReadyCallba
         LatLng bogota = new LatLng(4.65, -74.05);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(bogota));
         mMap.moveCamera(CameraUpdateFactory.zoomTo(Constants.ZOOM_CITY));
-        FetchUrlMarcadores fetchUrlMarcadores = new FetchUrlMarcadores();
-        String url = Constants.PATH_FIREBASE + "sitio_interes.json?auth=" + Constants.TOKEN_USER;
-        fetchUrlMarcadores.execute(url);
+
+        ValueEventListener sitioInteresListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                puntos_peligro.clear();
+                for(Marker aux : marcadores){
+                    aux.remove();
+                }
+                for(SitioInteres aux : Constants.enBICIa2.getSitioInteres()){
+                    LatLng posAux = new LatLng(aux.getLatitud(), aux.getLongitud());
+                    if(aux.getTipo().equals("Ladron")) puntos_peligro.add(aux);
+                    else marcadores.add(mMap.addMarker(new MarkerOptions().position(posAux).title(aux.getNombre()).icon(BitmapDescriptorFactory.fromResource(selectImage(aux.getTipo())))));
+                }
+                actualizarPuntosPeligro();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+        mSitioInteresReference.addValueEventListener(sitioInteresListener);
+        mSitioInteresListener = sitioInteresListener;
+
+    }
+
+    private void actualizarPuntosPeligro(){
+        Log.d(TAG, "Entre");
+        boolean[] visited = new boolean[puntos_peligro.size()];
+        for(int i = 0 ;  i< visited.length ; i++) visited[i] = false;
+        for(int i = 0 ; i < puntos_peligro.size() ; i++){
+            LatLngBounds.Builder builder = new LatLngBounds.Builder();
+            Log.d(TAG, "Entre al primer for: " + visited[i]);
+            if(!visited[i]){
+                visited[i] = true;
+                SitioInteres inicio = puntos_peligro.get(i);
+                Location one = new Location("");
+                one.setLatitude(inicio.getLatitud());
+                one.setLongitude(inicio.getLongitud());
+                builder.include(new LatLng(inicio.getLatitud(), inicio.getLongitud()));
+                for(int j = i+1 ; j < puntos_peligro.size() ; j++){
+                    SitioInteres fin = puntos_peligro.get(j);
+                    Log.d(TAG, "Entre al segundo for");
+                    if(!visited[j]){
+                        Location two = new Location("");
+                        two.setLatitude(fin.getLatitud());
+                        two.setLongitude(fin.getLongitud());
+                        double distance = (one.distanceTo(two));
+                        Log.d(TAG, "La distancia es: " + distance);
+                        if(distance < Constants.RADIUS_COMUN){
+                            visited[j] = true;
+                            builder.include(new LatLng(fin.getLatitud(), fin.getLongitud()));
+                        }
+                    }
+                }
+                LatLngBounds bounds = builder.build();
+
+                marcadores.add(mMap.addMarker(new MarkerOptions().position(bounds.getCenter()).title("Peligro").icon(BitmapDescriptorFactory.fromResource(selectImage("Ladron")))));
+                mMap.addCircle(new CircleOptions().center(bounds.getCenter()).radius(Constants.RADIUS_CIRCLE).strokeColor(ResourcesCompat.getColor(getResources(), R.color.circle_background, null)).fillColor(ResourcesCompat.getColor(getResources(), R.color.circle_background, null)));
+                //mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(bounds.getCenter(), Constants.getBoundsZoomLevel(bounds, width, height)));
+            }
+        }
     }
 
     @Override
@@ -422,6 +494,14 @@ public class RoutesActivity extends FragmentActivity implements OnMapReadyCallba
         Toast.makeText(this, "La distancia entre los puntos es: " + String.format("%.2g%n", auxil) + " km", Toast.LENGTH_SHORT).show();
     }
 
+    private int selectImage(String name){
+        if(name.equals("Ladron")) return R.drawable.mark_thief;
+        if(name.equals("Alquiler")) return R.drawable.mark_rent;
+        if(name.equals("Tienda")) return R.drawable.mark_store;
+        if(name.equals("Taller")) return R.drawable.mark_workshop;
+        return -1;
+    }
+
     private String getUrl(LatLng origin, LatLng dest) {
         String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
         String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
@@ -468,75 +548,6 @@ public class RoutesActivity extends FragmentActivity implements OnMapReadyCallba
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(actual));
                 mMap.moveCamera(CameraUpdateFactory.zoomTo(Constants.ZOOM_BUILDINGS));
             }
-        }
-    }
-
-    private class FetchUrlMarcadores extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected String doInBackground(String... url) {
-            String data = "";
-            try {
-                data = downloadUrl(url[0]);
-                Log.d("Background Task data", data.toString());
-            } catch (Exception e) {
-                Log.d("Background Task", e.toString());
-            }
-            return data;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-            try {
-                JSONObject json = new JSONObject(result);
-                Iterator<?> keys = json.keys();
-                while (keys.hasNext()) {
-                    String key = (String) keys.next();
-                    SitioInteres aux = new SitioInteres();
-                    JSONObject jsonObject = (JSONObject) json.get(key);
-                    aux.setNombre(jsonObject.getString("nombre"));
-                    aux.setLatitud(jsonObject.getDouble("latitud"));
-                    aux.setLongitud(jsonObject.getDouble("longitud"));
-                    aux.setTipo(jsonObject.getString("tipo"));
-                    enBICIa2.getSitioInteres().add(aux);
-                }
-                for(SitioInteres aux : enBICIa2.getSitioInteres()){
-                    LatLng posAux = new LatLng(aux.getLatitud(), aux.getLongitud());
-                    Log.d(TAG, "Latitud: " + aux.getLatitud() + " Longitud: " + aux.getLongitud());
-                    mMap.addMarker(new MarkerOptions().position(posAux).title(aux.getNombre()).icon(BitmapDescriptorFactory.fromResource(R.drawable.route_ciclist)));
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-
-        private String downloadUrl(String strUrl) throws IOException {
-            String data = "";
-            InputStream iStream = null;
-            HttpURLConnection urlConnection = null;
-            try {
-                URL url = new URL(strUrl);
-                urlConnection = (HttpURLConnection) url.openConnection();
-                urlConnection.connect();
-                iStream = urlConnection.getInputStream();
-                BufferedReader br = new BufferedReader(new InputStreamReader(iStream));
-                StringBuffer sb = new StringBuffer();
-                String line = "";
-                while ((line = br.readLine()) != null) {
-                    sb.append(line);
-                }
-                data = sb.toString();
-                Log.d("downloadUrl", data.toString());
-                br.close();
-
-            } catch (Exception e) {
-                Log.d("Exception", e.toString());
-            } finally {
-                iStream.close();
-                urlConnection.disconnect();
-            }
-            return data;
         }
     }
 

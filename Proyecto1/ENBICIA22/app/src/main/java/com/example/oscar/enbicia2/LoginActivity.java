@@ -189,7 +189,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         Log.d(TAG_GOOGLE, "Entre a updateUI");
         Intent intent = new Intent(getBaseContext(), MenuActivity.class);
         if( currentUser != null ){
-            Constants.generateToken();
+            Constants.enBICIa2 = new EnBiciaa2();
             startActivity(intent);
             finish();
         }

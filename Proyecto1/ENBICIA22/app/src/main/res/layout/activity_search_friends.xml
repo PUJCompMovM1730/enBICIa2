@@ -7,21 +7,15 @@
     android:orientation="vertical"
     android:background="@color/background"
     tools:context="com.example.oscar.enbicia2.FriendsActivity">
-
-    <TextView
-        android:id="@+id/txtFriendsNoFriends"
+    <EditText
+        android:id="@+id/etFriendsSearch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:ems="10"
+        android:inputType="textPersonName" />
 
     <ListView
-        android:id="@+id/listFriendsList"
+        android:id="@+id/listFriendsSearch"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    <Button
-        android:id="@+id/btnFriendsSearch"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/buscar_personas" />
-
+        android:layout_height="match_parent" />
 </LinearLayout>

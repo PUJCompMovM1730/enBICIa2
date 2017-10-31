@@ -2,6 +2,7 @@ package com.example.oscar.enbicia2;
 
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -13,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -28,6 +30,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,133 +43,117 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
-public class FriendsActivity extends AppCompatActivity{
+public class FriendsActivity extends AppCompatActivity implements View.OnClickListener{
 
     private String TAG = "FriendsActivity";
 
-    private FirebaseAuth mAuth;
-    private EnBiciaa2 enBICIa2;
+    private DatabaseReference mCurrentUserReference;
+    private ValueEventListener mAmigosListener;
 
-    private EditText etFriendsSearch;
     private ListView listView;
-    private List<Ciclista> search;
+    private TextView txtNoFriends;
+
+    private HashMap<String, Ciclista> amigos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friends);
-        enBICIa2 = new EnBiciaa2();
-        listView = findViewById(R.id.listFriendsSearch);
-        etFriendsSearch = findViewById(R.id.etFriendsSearch);
-        etFriendsSearch.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-            }
+        // Initialize Database
+        mCurrentUserReference = FirebaseDatabase.getInstance().getReference().child("usuarios").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                enBICIa2.getUsuarios().clear();
-                String url = Constants.PATH_FIREBASE + "usuarios.json?auth=" + Constants.TOKEN_USER;
-                FetchUrl fetchUrl = new FetchUrl();
-                fetchUrl.execute(url);
-            }
 
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
+        amigos = new HashMap<>();
+        txtNoFriends = findViewById(R.id.txtFriendsNoFriends);
+        txtNoFriends.setVisibility(View.GONE);
+        txtNoFriends.setText("Aún no tienes amigos");
+        listView = findViewById(R.id.listFriendsList);
+        findViewById(R.id.btnFriendsSearch).setOnClickListener(this);
     }
 
-    private void searchPeople(String text){
-        List<Ciclista> ciclistas = new ArrayList<>();
-        if(text.isEmpty()){
-            enBICIa2.getUsuarios().clear();
-            FriendsAdapter adapter = new FriendsAdapter(ciclistas, getBaseContext());
-            listView.setAdapter(adapter);
-            return;
-        }
-        text = text.toLowerCase();
-        Set<String> key = enBICIa2.getUsuarios().keySet();
-        for(String aux : key){
-            if(!FirebaseAuth.getInstance().getCurrentUser().getUid().equals(aux)){
-                if(enBICIa2.getUsuarios().get(aux).getName().toLowerCase().contains(text)){
-                    ((Ciclista)enBICIa2.getUsuarios().get(aux)).setUid(aux);
-                    ciclistas.add((Ciclista) enBICIa2.getUsuarios().get(aux));
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.d(TAG, "onStart");
+        ValueEventListener amigosListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                amigos.clear();
+                Ciclista current = dataSnapshot.getValue(Ciclista.class);
+                if(current.getAmigos() == null) Log.d(TAG, "Estoy en null");
+                if (current.getAmigos() != null) {
+                    Set<String> keys = current.getAmigos().keySet();
+
+                    for (String aux : keys) {
+                        String UidAmigo = current.getAmigos().get(aux);
+                        Ciclista auxCiclista = (Ciclista) Constants.enBICIa2.getUsuarios().get(UidAmigo);
+                        amigos.put(auxCiclista.getUid(), auxCiclista);
+                    }
+                    cargarAmigos();
+                    txtNoFriends.setVisibility(View.GONE);
+                    listView.setVisibility(View.VISIBLE);
+                } else {
+                    txtNoFriends.setVisibility(View.VISIBLE);
+                    listView.setVisibility(View.GONE);
                 }
             }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+        mCurrentUserReference.addValueEventListener(amigosListener);
+        mAmigosListener = amigosListener;
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(mAmigosListener != null) mCurrentUserReference.removeEventListener(mAmigosListener);
+    }
+
+    private void cargarAmigos(){
+        Log.d(TAG, "Llamaron a cargar amigos");
+        List<Ciclista> aux = new ArrayList<>();
+        Set<String> key = amigos.keySet();
+        for(String key_aux: key){
+            aux.add(amigos.get(key_aux));
         }
-        FriendsAdapter adapter = new FriendsAdapter(ciclistas, getBaseContext());
+        Log.d(TAG, "EL tam es: " + aux.size());
+        FriendsAdapter adapter = new FriendsAdapter(aux, getBaseContext(), TAG);
         listView.setAdapter(adapter);
     }
 
-    private class FetchUrl extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected String doInBackground(String... url) {
-            String data = "";
-            try {
-                data = downloadUrl(url[0]);
-                Log.d("Background Task data", data.toString());
-            } catch (Exception e) {
-                Log.d("Background Task", e.toString());
-            }
-            return data;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-            try {
-                JSONObject json = new JSONObject(result);
-                Iterator<?> keys = json.keys();
-                while (keys.hasNext()) {
-                    String key = (String) keys.next();
-                    Ciclista aux = new Ciclista();
-                    JSONObject jsonObject = (JSONObject) json.get(key);
-                    aux.setName(jsonObject.getString("name"));
-                    enBICIa2.getUsuarios().put(key, aux);
+    @Override
+    public void onClick(View view) {
+        int id = view.getId();
+        if(id == R.id.btnFriendsSearch){
+            try{
+                Intent intent = new Intent(getBaseContext(), SearchFriendsActivity.class);
+                Bundle bundle = new Bundle();
+                ArrayList<String> keys = new ArrayList<>();
+                for(String aux : amigos.keySet()){
+                    keys.add(aux);
                 }
-                searchPeople(etFriendsSearch.getText().toString());
-            } catch (JSONException e) {
+                intent.putExtra("amigos", keys);
+                startActivity(intent);
+
+            }catch (Exception e){
+                Log.d(TAG, e.getMessage());
                 e.printStackTrace();
             }
-        }
-
-        private String downloadUrl(String strUrl) throws IOException {
-            String data = "";
-            InputStream iStream = null;
-            HttpURLConnection urlConnection = null;
-            try {
-                URL url = new URL(strUrl);
-                urlConnection = (HttpURLConnection) url.openConnection();
-                urlConnection.connect();
-                iStream = urlConnection.getInputStream();
-                BufferedReader br = new BufferedReader(new InputStreamReader(iStream));
-                StringBuffer sb = new StringBuffer();
-                String line = "";
-                while ((line = br.readLine()) != null) {
-                    sb.append(line);
-                }
-                data = sb.toString();
-                Log.d("downloadUrl", data.toString());
-                br.close();
-
-            } catch (Exception e) {
-                Log.d("Exception", e.toString());
-            } finally {
-                iStream.close();
-                urlConnection.disconnect();
-            }
-            return data;
         }
     }
 }

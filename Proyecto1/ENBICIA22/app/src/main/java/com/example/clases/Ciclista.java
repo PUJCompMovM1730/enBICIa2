@@ -1,10 +1,17 @@
 package com.example.clases;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * Created by juanpablorn30 on 2/10/17.
@@ -25,7 +32,7 @@ public class Ciclista extends Usuario{
         TODO: Agregar método de agregar amigo.
         TODO: Agregar método de eliminar amigo.
      */
-    private List<Ciclista> amigos;
+    private Map<String, String> amigos;
 
     private List<Recorrido> historial;
 
@@ -58,6 +65,7 @@ public class Ciclista extends Usuario{
         this.cant_amigos = 0L;
         this.numero_celular = "";
         this.estado = "";
+        this.amigos = new HashMap<>();
     }
 
     public Ciclista(String name, String email, Date date_birth, String numero_celular) {
@@ -67,14 +75,41 @@ public class Ciclista extends Usuario{
         this.cant_amigos = 0L;
         this.numero_celular = numero_celular;
         this.estado = "";
+        this.amigos = new HashMap<>();
     }
 
     public void agregarAmigoFireBase(String Uid, String UidAmigo){
         database = FirebaseDatabase.getInstance();
-        myRef = database.getReference(Constants.PATH_AMIGOS + Uid);
-        myRef.setValue(UidAmigo);
-        myRef = database.getReference(Constants.PATH_AMIGOS + UidAmigo);
-        myRef.setValue(Uid);
+        myRef = database.getReference();
+        myRef.child(Constants.PATH_USUARIOS).child(Uid).child("amigos").push().setValue(UidAmigo);
+        myRef.child(Constants.PATH_USUARIOS).child(UidAmigo).child("amigos").push().setValue(Uid);
+    }
+
+    public void eliminarAmigoFireBase(String Uid, String UidAmigo){
+        DatabaseReference referenceUsuario = FirebaseDatabase.getInstance().getReference().child("usuarios").child(Uid);
+        DatabaseReference referenceAmigo = FirebaseDatabase.getInstance().getReference().child("usuarios").child(UidAmigo);
+        addListenerForErase(referenceUsuario, Uid, UidAmigo);
+        addListenerForErase(referenceAmigo, UidAmigo, Uid);
+    }
+
+    private void addListenerForErase(final DatabaseReference reference, String Uid, final String UidAmigo){
+        ValueEventListener ciclistasListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Ciclista ciclista = dataSnapshot.getValue(Ciclista.class);
+                for(String key : ciclista.getAmigos().keySet()){
+                    if(ciclista.getAmigos().get(key).equals(UidAmigo)){
+                        reference.child("amigos").child(key).setValue(null);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+        reference.addListenerForSingleValueEvent(ciclistasListener);
     }
 
     public void agregarHistorial(Punto puntoInicio, Punto puntoFin){
@@ -113,8 +148,8 @@ public class Ciclista extends Usuario{
         return date_birth.getTime();
     }
 
-    public void setDate_birth(Date date_birth) {
-        this.date_birth = date_birth;
+    public void setDate_birth(Long date_birth) {
+        this.date_birth = new Date(date_birth);
     }
     //[END GETTER AND SETTER Usuario]
 
@@ -159,8 +194,12 @@ public class Ciclista extends Usuario{
         this.cant_amigos = cant_amigos;
     }
 
-    public List<Ciclista> getAmigos() {
+    public Map<String, String> getAmigos() {
         return amigos;
+    }
+
+    public void setAmigos(Map<String, String> amigos) {
+        this.amigos = amigos;
     }
 
     public List<Recorrido> getHistorial() {

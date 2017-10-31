@@ -57,7 +57,7 @@ public abstract  class Usuario {
         return date_birth.getTime();
     }
 
-    public void setDate_birth(Date date_birth) {
-        this.date_birth = date_birth;
+    public void setDate_birth(Long date_birth) {
+        this.date_birth = new Date(date_birth);
     }
 }

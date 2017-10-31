@@ -5,9 +5,13 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.view.View;
 
+import com.example.oscar.enbicia2.R;
 import com.example.oscar.enbicia2.RoutesActivity;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -50,17 +54,23 @@ public class EnBiciaa2 {
     private Map<String, Usuario> usuarios;
     private List<SitioInteres> sitioInteres;
 
-    private boolean finish;
-
     //[BEGIN declase_firebase_database]
-    private FirebaseDatabase database;
+    private DatabaseReference mCiclistaReference;
+    private DatabaseReference mSitioInteresReference;
     private DatabaseReference myRef;
     //[END declare_firebase_database ]
 
+
+    private ValueEventListener mSitioInteresListener;
+    private ValueEventListener mCiclistasListener;
+
     public EnBiciaa2() {
-        database = FirebaseDatabase.getInstance();
+        mCiclistaReference = FirebaseDatabase.getInstance().getReference().child("usuarios");
+        mSitioInteresReference = FirebaseDatabase.getInstance().getReference().child("sitio_interes");
         usuarios = new HashMap<>();
         sitioInteres = new ArrayList<>();
+        cargarUsuarios();
+        cargarSitioInteres();
     }
 
     public void agregarSitioInteresFireBase(String nombre, double latitud, double longitud, int indx){
@@ -75,22 +85,70 @@ public class EnBiciaa2 {
             case 3: tipo = "Taller";
                 break;
         }
-        Log.d(Constants.TAG_CLASS, "Agregando sitio");
-        myRef = database.getReference();
-        String key = myRef.push().getKey();
-        Log.d(Constants.TAG_CLASS, "La llave es: " + key);
-        myRef = database.getReference(Constants.PATH_SITIO_INTERES + key);
-        myRef.setValue(new SitioInteres(nombre, latitud, longitud, tipo));
+        try{
+
+        String key = FirebaseDatabase.getInstance().getReference().push().getKey();
+
+            myRef = FirebaseDatabase.getInstance().getReference(Constants.PATH_SITIO_INTERES + key);
+            myRef.setValue(new SitioInteres(nombre, latitud, longitud, tipo));
+        }catch (Exception e){
+            Log.d(Constants.TAG_CLASS, e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     public void agregarCiclistaFireBase(String Uid, String name, String email, Date date_birth){
-        myRef = database.getReference(Constants.PATH_USUARIOS + Uid);
+        myRef = FirebaseDatabase.getInstance().getReference(Constants.PATH_USUARIOS + Uid);
         myRef.setValue(new Ciclista(name, email, date_birth));
     }
 
     public void agregarCiclistaFireBase(String Uid, String name, String email, Date date_birth, String cell){
-        myRef = database.getReference(Constants.PATH_USUARIOS + Uid);
+        myRef = FirebaseDatabase.getInstance().getReference(Constants.PATH_USUARIOS + Uid);
         myRef.setValue(new Ciclista(name, email, date_birth, cell));
+    }
+
+    public void cargarUsuarios(){
+        ValueEventListener ciclistasListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                usuarios.clear();
+                Log.d(Constants.TAG_CLASS, "Recibi el update");
+                for(DataSnapshot aux : dataSnapshot.getChildren()){
+                    Ciclista ciclista = aux.getValue(Ciclista.class);
+                    ciclista.setUid(aux.getKey());
+                    usuarios.put(ciclista.getUid(), ciclista);
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+        mCiclistaReference.addValueEventListener(ciclistasListener);
+        mCiclistasListener = ciclistasListener;
+    }
+
+    public void cargarSitioInteres(){
+        ValueEventListener sitioInteresListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                sitioInteres.clear();
+                for(DataSnapshot aux : dataSnapshot.getChildren()){
+                    SitioInteres aux_sitioInteres = aux.getValue(SitioInteres.class);
+                    sitioInteres.add(aux_sitioInteres);
+                    Log.d(Constants.TAG_CLASS, "Entre al sitio: " + aux_sitioInteres.toString());
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+        mSitioInteresReference.addValueEventListener(sitioInteresListener);
+        mSitioInteresListener = sitioInteresListener;
     }
 
     public Map<String, Usuario> getUsuarios() {

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,11 +16,14 @@ import android.widget.CursorAdapter;
 import android.widget.TextView;
 
 import com.example.oscar.enbicia2.R;
+import com.example.oscar.enbicia2.SearchFriendsActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by juanpablorn30 on 30/10/17.
@@ -29,6 +33,7 @@ public class FriendsAdapter extends ArrayAdapter<Ciclista> implements View.OnCli
 
     private List<Ciclista> dataSet;
     Context mContext;
+    private String name;
 
     // View lookup cache
     private static class ViewHolder {
@@ -37,10 +42,11 @@ public class FriendsAdapter extends ArrayAdapter<Ciclista> implements View.OnCli
         Button btnEliminar;
     }
 
-    public FriendsAdapter(List<Ciclista> data, Context context) {
+    public FriendsAdapter(List<Ciclista> data, Context context, String name) {
         super(context, R.layout.list_search_friends, data);
         this.dataSet = data;
         this.mContext=context;
+        this.name = name;
     }
 
     @Override
@@ -49,16 +55,21 @@ public class FriendsAdapter extends ArrayAdapter<Ciclista> implements View.OnCli
         if(id == R.id.btnAgregarAmigo){
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             int position = (Integer) view.getTag();
-            Ciclista aux = (Ciclista)getItem(position);
-            Log.d(Constants.TAG_CLASS, "Pase aca");
-            try{
-                aux.agregarAmigoFireBase(user.getUid() , aux.getUid());
-
-            }catch (Exception e){
-                e.printStackTrace();
-            }
+            Ciclista aux = getItem(position);
+            aux.agregarAmigoFireBase(user.getUid() , aux.getUid());
+            dataSet.remove(position);
+            Snackbar.make(view, "¡Amigo añadido exitosamente!", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+            notifyDataSetChanged();
         }else if(id == R.id.btnEliminarAmigo){
-
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            int position = (Integer) view.getTag();
+            Ciclista aux = getItem(position);
+            aux.eliminarAmigoFireBase(user.getUid() , aux.getUid());
+            dataSet.remove(position);
+            Snackbar.make(view, "¡Amigo eliminado exitosamente!", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+            notifyDataSetChanged();
         }
     }
 
@@ -66,9 +77,6 @@ public class FriendsAdapter extends ArrayAdapter<Ciclista> implements View.OnCli
     public View getView(int position, View convertView, ViewGroup parent) {
         Ciclista dataModel = getItem(position);
         ViewHolder viewHolder;
-
-        final View result;
-
         if (convertView == null) {
 
             viewHolder = new ViewHolder();
@@ -77,18 +85,22 @@ public class FriendsAdapter extends ArrayAdapter<Ciclista> implements View.OnCli
             viewHolder.txtName = (TextView) convertView.findViewById(R.id.txtNombreAmigo);
             viewHolder.btnAgregar = convertView.findViewById(R.id.btnAgregarAmigo);
             viewHolder.btnEliminar = convertView.findViewById(R.id.btnEliminarAmigo);
-            result=convertView;
-
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
-            result=convertView;
         }
         viewHolder.txtName.setText(dataModel.getName());
         viewHolder.btnAgregar.setOnClickListener(this);
         viewHolder.btnEliminar.setOnClickListener(this);
         viewHolder.btnAgregar.setTag(position);
         viewHolder.btnEliminar.setTag(position);
+        if(name.equals("SearchFriendsActivity")){
+            viewHolder.btnEliminar.setVisibility(View.GONE);
+        }
+        else{
+            viewHolder.btnAgregar.setVisibility(View.GONE);
+        }
+
         return convertView;
     }
 }

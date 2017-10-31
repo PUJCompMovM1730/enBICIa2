@@ -15,6 +15,10 @@ import com.google.firebase.auth.GetTokenResult;
 
 public final class Constants {
 
+    // [BEGIN declare_enBICIa2]
+    public static EnBiciaa2 enBICIa2;
+    // [END declare_enBICIa2]
+
     /**
      *  Values of zoom in google maps api
      */
@@ -72,14 +76,7 @@ public final class Constants {
     public static final String TAG_CLASS = "enBICIa2";
     // [END declare_tag]
 
-    public static String TOKEN_USER;
-    public static void generateToken(){
-        FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
-        mUser.getIdToken(true).addOnSuccessListener(new OnSuccessListener<GetTokenResult>() {
-            @Override
-            public void onSuccess(GetTokenResult getTokenResult) {
-                TOKEN_USER = getTokenResult.getToken();
-            }
-        });
-    }
+    public static final Long TIME_LIMIT = 300000L;
+    public static final Long RADIUS_CIRCLE = 200L;
+    public static final Long RADIUS_COMUN = 400L;
 }
