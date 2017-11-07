@@ -71,6 +71,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -176,7 +177,7 @@ public class RoutesActivity extends FragmentActivity implements OnMapReadyCallba
                 int width = findViewById(R.id.map).getWidth();
                 int height = findViewById(R.id.map).getHeight();
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(bounds.getCenter(), Constants.getBoundsZoomLevel(bounds, width, height)));
-                if(target != null && source != null) searchLocation();
+                if(target != null && source != null) searchLocation(source, target);
             }
 
             @Override
@@ -192,7 +193,6 @@ public class RoutesActivity extends FragmentActivity implements OnMapReadyCallba
         editTextTarget.setTextSize(getResources().getDimension(R.dimen.search_edit_size));
         editTextTarget.setHint(getResources().getString(R.string.location_target));
         ImageButton imageClearButtonTarget = viewGroupTarget.findViewById(R.id.place_autocomplete_clear_button);
-        Log.d(TAG, "Componente: " + viewGroupTarget.findViewById(R.id.place_autocomplete_search_button));
         imageClearButtonTarget.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -235,7 +235,7 @@ public class RoutesActivity extends FragmentActivity implements OnMapReadyCallba
                 int width = findViewById(R.id.map).getWidth();
                 int height = findViewById(R.id.map).getHeight();
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(bounds.getCenter(), Constants.getBoundsZoomLevel(bounds, width, height)));
-                if(target != null && source != null) searchLocation();
+                if(target != null && source != null) searchLocation(source, target);
             }
 
             @Override
@@ -302,12 +302,17 @@ public class RoutesActivity extends FragmentActivity implements OnMapReadyCallba
     }
 
     private void actualizarPuntosPeligro(){
-        Log.d(TAG, "Entre");
+        Date now = new Date();
+        Log.d(TAG, "Tiempo ahora: " + now.getTime());
         boolean[] visited = new boolean[puntos_peligro.size()];
         for(int i = 0 ;  i< visited.length ; i++) visited[i] = false;
         for(int i = 0 ; i < puntos_peligro.size() ; i++){
+            Log.d(TAG, "Tiempo punto: " + puntos_peligro.get(i).getFecha());
+            if(puntos_peligro.get(i).getFecha() + Constants.TIME_LIMIT < now.getTime())
+                visited[i] = true;
+        }
+        for(int i = 0 ; i < puntos_peligro.size() ; i++){
             LatLngBounds.Builder builder = new LatLngBounds.Builder();
-            Log.d(TAG, "Entre al primer for: " + visited[i]);
             if(!visited[i]){
                 visited[i] = true;
                 SitioInteres inicio = puntos_peligro.get(i);
@@ -317,13 +322,11 @@ public class RoutesActivity extends FragmentActivity implements OnMapReadyCallba
                 builder.include(new LatLng(inicio.getLatitud(), inicio.getLongitud()));
                 for(int j = i+1 ; j < puntos_peligro.size() ; j++){
                     SitioInteres fin = puntos_peligro.get(j);
-                    Log.d(TAG, "Entre al segundo for");
                     if(!visited[j]){
                         Location two = new Location("");
                         two.setLatitude(fin.getLatitud());
                         two.setLongitude(fin.getLongitud());
                         double distance = (one.distanceTo(two));
-                        Log.d(TAG, "La distancia es: " + distance);
                         if(distance < Constants.RADIUS_COMUN){
                             visited[j] = true;
                             builder.include(new LatLng(fin.getLatitud(), fin.getLongitud()));
@@ -331,7 +334,6 @@ public class RoutesActivity extends FragmentActivity implements OnMapReadyCallba
                     }
                 }
                 LatLngBounds bounds = builder.build();
-
                 marcadores.add(mMap.addMarker(new MarkerOptions().position(bounds.getCenter()).title("Peligro").icon(BitmapDescriptorFactory.fromResource(selectImage("Ladron")))));
                 zonas_peligro.add(mMap.addCircle(new CircleOptions().center(bounds.getCenter()).radius(Constants.RADIUS_CIRCLE).strokeColor(ResourcesCompat.getColor(getResources(), R.color.circle_background, null)).fillColor(ResourcesCompat.getColor(getResources(), R.color.circle_background, null))));
             }
@@ -365,11 +367,6 @@ public class RoutesActivity extends FragmentActivity implements OnMapReadyCallba
         }
     }
 
-    private void establecimientos(double lat, double lon, String title, String info) {
-        LatLng gw = new LatLng(lat, lon);
-        mMap.addMarker(new MarkerOptions().position(gw).title(title).snippet(info).icon(BitmapDescriptorFactory.fromResource(R.drawable.store)));
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -387,8 +384,8 @@ public class RoutesActivity extends FragmentActivity implements OnMapReadyCallba
                 if (permissionLocation == PackageManager.PERMISSION_GRANTED) {
                     location = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
                     LocationRequest locationRequest = new LocationRequest();
-                    locationRequest.setInterval(10000);
-                    locationRequest.setFastestInterval(5000);
+                    locationRequest.setInterval(20000);
+                    locationRequest.setFastestInterval(10000);
                     locationRequest.setSmallestDisplacement(0.25F);
                     locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
                     LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
@@ -458,14 +455,41 @@ public class RoutesActivity extends FragmentActivity implements OnMapReadyCallba
             int width = findViewById(R.id.map).getWidth();
             int height = findViewById(R.id.map).getHeight();
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(bounds.getCenter(), Constants.getBoundsZoomLevel(bounds, width, height)));
-            Log.d(TAG, String.valueOf(PolyUtil.isLocationOnPath(actual, route.get(0).getPoints(), false,50)));
-            Log.d(TAG, String.valueOf(PolyUtil.isLocationOnPath(source, route.get(0).getPoints(), false,50)));
-            Log.d(TAG, String.valueOf(PolyUtil.isLocationOnPath(target, route.get(0).getPoints(), false,50)));
 
         }else{
             Toast.makeText(getBaseContext(), "Aún no se han seleccionado los puntos" , Toast.LENGTH_SHORT).show();
         }
 
+    }
+
+    private boolean recalculate(){
+        Log.d(TAG, "Entre a recalcular");
+        LatLng point1 = route.get(0).getPoints().get(indx_polyLine);
+        LatLng point2 = route.get(0).getPoints().get(indx_polyLine + 1);
+        double distance = PolyUtil.distanceToLine(actual, point1, point2);
+        indx_polyLine++;
+        while(indx_polyLine < route.get(0).getPoints().size()-1 && distance > Constants.RADIUS_COMUN){
+            if(point1.equals(point2)){
+                indx_polyLine++;
+            }
+            point1 = route.get(0).getPoints().get(indx_polyLine);
+            point2 = route.get(0).getPoints().get(indx_polyLine + 1);
+            distance = PolyUtil.distanceToLine(actual, point1, point2);
+            indx_polyLine++;
+        }
+        Log.d(TAG, "El indice es: " + indx_polyLine);
+        Log.d(TAG, "El tam es: " + route.get(0).getPoints().size());
+        List<LatLng> aux = new ArrayList<>();
+        boolean inRoute = false;
+        for(int i = indx_polyLine ; i < route.get(0).getPoints().size() ; i++){
+            aux.add(route.get(0).getPoints().get(i));
+            inRoute = true;
+        }
+        if(!inRoute){
+            return true;
+        }
+        Log.d(TAG, "Esta en el path: " + PolyUtil.isLocationOnPath(actual, aux, false,100));
+        return PolyUtil.isLocationOnPath(actual, aux, false,100) ;
     }
 
     private void erasePath(){
@@ -476,7 +500,7 @@ public class RoutesActivity extends FragmentActivity implements OnMapReadyCallba
         }
     }
 
-    public void searchLocation() {
+    public void searchLocation(LatLng source, LatLng target) {
         erasePath();
         Location one = new Location("");
         one.setLatitude(source.latitude);
@@ -546,6 +570,21 @@ public class RoutesActivity extends FragmentActivity implements OnMapReadyCallba
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(actual));
                 mMap.moveCamera(CameraUpdateFactory.zoomTo(Constants.ZOOM_BUILDINGS));
             }
+            if (!route.isEmpty() && !recalculate()) {
+                Log.d(TAG, "Entrando a recalcular");
+                indx_polyLine = 0;
+                marker_source.remove();
+                LatLngBounds.Builder builder = new LatLngBounds.Builder();
+                builder.include(actual);
+                builder.include(target);
+                LatLngBounds bounds = builder.build();
+                int width = findViewById(R.id.map).getWidth();
+                int height = findViewById(R.id.map).getHeight();
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(bounds.getCenter(), Constants.getBoundsZoomLevel(bounds, width, height)));
+                marker_source = mMap.addMarker(new MarkerOptions().position(actual).title("Inicio").icon(BitmapDescriptorFactory.fromResource(R.drawable.route_start)));
+                searchLocation(actual, target);
+            }
+
         }
     }
 

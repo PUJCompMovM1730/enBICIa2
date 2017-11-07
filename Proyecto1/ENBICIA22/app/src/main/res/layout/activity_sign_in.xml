@@ -45,10 +45,10 @@
             android:id="@+id/usertag"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/username"
+            android:hint="@string/name"
             >
         <EditText
-            android:id="@+id/username"
+            android:id="@+id/et_signIn_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"

@@ -73,32 +73,8 @@ public class SearchFriendsActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                searchAll.clear();
                 search.clear();
-                ValueEventListener ciclistasListener = new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        try {
-                            for (DataSnapshot aux : dataSnapshot.getChildren()) {
-                                Ciclista ciclista = aux.getValue(Ciclista.class);
-                                ciclista.setUid(aux.getKey());
-                                if(!amigosUid.contains(aux.getKey()))
-                                    searchAll.put(aux.getKey(), ciclista);
-                            }
-                            searchPeople(etFriendsSearch.getText().toString());
-                        }catch (Exception e){
-                            Log.d(TAG, e.getMessage());
-                            e.printStackTrace();
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                };
-                mCiclistaReference.addListenerForSingleValueEvent(ciclistasListener);
-
+                searchPeople(etFriendsSearch.getText().toString());
             }
 
             @Override
@@ -115,15 +91,15 @@ public class SearchFriendsActivity extends AppCompatActivity {
             listView.setAdapter(adapter);
             return;
         }
-        if(!searchAll.isEmpty())
+        if(!Constants.enBICIa2.getUsuarios().isEmpty())
         {
             text = text.toLowerCase();
-            Set<String> key = searchAll.keySet();
+            Set<String> key = Constants.enBICIa2.getUsuarios().keySet();
             for(String aux : key){
+                Log.d(TAG, aux);
                 if(!FirebaseAuth.getInstance().getCurrentUser().getUid().equals(aux)){
-                    if(searchAll.get(aux).getName().toLowerCase().contains(text)){
-                        (searchAll.get(aux)).setUid(aux);
-                        search.add(searchAll.get(aux));
+                    if(Constants.enBICIa2.getUsuarios().get(aux).getEmail().toLowerCase().startsWith(text)){
+                        search.add((Ciclista) Constants.enBICIa2.getUsuarios().get(aux));
                     }
                 }
             }

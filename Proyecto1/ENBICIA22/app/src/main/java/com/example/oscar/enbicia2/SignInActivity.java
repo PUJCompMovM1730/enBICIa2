@@ -33,23 +33,6 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     EditText user,email,cell, pass1, pass2;
 
     @Override
-    public void onClick(View view) {
-        Toast.makeText(this,"click",Toast.LENGTH_SHORT);
-        int i = view.getId();
-        if( i == R.id.reg ) {
-          if(create_account()){
-              Intent intent= new Intent(getBaseContext(),MenuActivity.class);
-              startActivity(intent);
-          }
-        } else if( i == R.id.volver ){
-
-            Intent intent= new Intent(getBaseContext(),LoginActivity.class);
-           startActivity(intent);
-        }
-
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
@@ -98,39 +81,39 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
     }
 
-    public boolean create_account(){
-        user = (EditText) findViewById(R.id.username);
+    public void create_account(){
+        user = (EditText) findViewById(R.id.et_signIn_name);
         email = (EditText) findViewById(R.id.mail);
         cell = (EditText) findViewById(R.id.cellphone);
         pass1 = (EditText) findViewById(R.id.pass);
         pass2 = (EditText) findViewById(R.id.confirmpass);
         if(user.getText().toString().isEmpty()) {
            user.setError("Falta: Nombre de usuario");
-            return false;
+            return;
         }
         if(email.getText().toString().isEmpty()) {
             email.setError("Falta: Correo");
-            return false;
+            return;
         }
         if(!isValidEmail(email.getText().toString())) {
             email.setError("Correo inválido");
-            return false;
+            return;
         }
         if(cell.getText().toString().isEmpty()) {
             cell.setError("Falta: Teléfono Celular");
-            return false;
+            return;
         }
         if(pass1.getText().toString().isEmpty()) {
             pass1.setError("Falta: Contraseña");
-            return false;
+            return;
         }
         if(pass2.getText().toString().isEmpty()) {
             pass2.setError("Falta: Confirmar contraseña");
-            return false;
+            return;
         }
         if(!pass1.getText().toString().equals(pass2.getText().toString())){
             pass1.setError("Las contraseñas no son iguales");
-            return false;
+            return;
         }
 
         /*if(!isValidPassword(pass1.getText().toString())){
@@ -160,9 +143,6 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                         // ...
                     }
                 });
-
-        return true;
-
     }
 
     //Valida si el usuario ya ha iniciado sesión
@@ -179,9 +159,19 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         String email = user.getEmail();
         Date date_birth = null;
         String Uid = user.getUid();
-        String name = "";
-        Constants.enBICIa2.agregarCiclistaFireBase(Uid, name, email, date_birth, cell.getText().toString());
+        Constants.enBICIa2.agregarCiclistaFireBase(Uid, this.user.getText().toString(), email, date_birth, cell.getText().toString());
     }
 
+    @Override
+    public void onClick(View view) {
+        Toast.makeText(this,"click",Toast.LENGTH_SHORT);
+        int i = view.getId();
+        if( i == R.id.reg ) {
+            create_account();
+        } else if( i == R.id.volver ){
 
+            Intent intent= new Intent(getBaseContext(),LoginActivity.class);
+            startActivity(intent);
+        }
+    }
 }

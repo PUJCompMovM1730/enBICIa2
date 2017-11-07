@@ -20,7 +20,7 @@
     </string>
     <string name="continua">O continúa con:</string>
     <string name="forget_password">¿Olvidaste la contraseña?</string>
-    <string name="username">Nombre de Usuario</string>
+    <string name="name">Nombre Completo</string>
     <string name="title_activity_routes">Map</string>
     <string name="title_activity_menu">menu</string>
 
