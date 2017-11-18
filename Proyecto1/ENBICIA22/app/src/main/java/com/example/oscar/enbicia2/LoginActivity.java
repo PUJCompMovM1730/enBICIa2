@@ -2,6 +2,7 @@ package com.example.oscar.enbicia2;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -41,6 +42,11 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Date;
 
@@ -71,6 +77,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private EditText mPasswordView;
     private TextView signin;
 
+    private DatabaseReference mCurrentUserReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +87,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         mPasswordView = (EditText) findViewById(R.id.password);
         btnFacebook = (LoginButton) findViewById(R.id.btnFacebook);
         signin= (TextView) findViewById(R.id.registrarse);
+
+        mCurrentUserReference = FirebaseDatabase.getInstance().getReference().child("usuarios");
 
         // [START initialize_auth]
         mAuth = FirebaseAuth.getInstance();
@@ -153,7 +162,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             Log.d(TAG_EMAIL, "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             Constants.enBICIa2 = new EnBiciaa2();
-                            Constants.enBICIa2.agregarCiclistaFireBase();
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
@@ -182,7 +190,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         Intent intent = new Intent(getBaseContext(), MenuActivity.class);
         if( currentUser != null ){
             if(Constants.enBICIa2 == null){
-                Log.d(TAG, "Si estaba en null");
                 Constants.enBICIa2 = new EnBiciaa2();
             }
             startActivity(intent);
@@ -231,7 +238,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             Log.d(TAG_GOOGLE, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             Constants.enBICIa2 = new EnBiciaa2();
-                            Constants.enBICIa2.agregarCiclistaFireBase();
+                            agregarCiclistaFireBase();
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
@@ -263,7 +270,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             Log.d(TAG_FACEBOOK, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             Constants.enBICIa2 = new EnBiciaa2();
-                            Constants.enBICIa2.agregarCiclistaFireBase();
+                            agregarCiclistaFireBase();
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
@@ -276,13 +283,40 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 });
     }
 
+    private void agregarCiclistaFireBase(){
+        ValueEventListener usuariosListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                boolean can_save = true;
+                for(DataSnapshot aux : dataSnapshot.getChildren()){
+                    if(aux.getKey().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) can_save = false;
+                }
+                if(can_save){
+                    FirebaseUser user = mAuth.getCurrentUser();
+                    DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("usuarios/" + user.getUid());
+                    myRef.setValue(new Ciclista(user.getDisplayName(), user.getEmail(), null, user.getPhoneNumber()));
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+        mCurrentUserReference.addListenerForSingleValueEvent(usuariosListener);
+    }
+
     @Override
     public void onClick(View view) {
         int i = view.getId();
         if( i == R.id.btnGoogle ) {
             signInGoogle();
         } else if( i == R.id.email_sign_in_button ){
-            signInEmail(mEmailView.getText().toString(), mPasswordView.getText().toString());
+            if(mEmailView.getText().length() == 0 || mPasswordView.getText().length() == 0){
+                Snackbar.make(view, "El email y/o password están vacios", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+            }else{
+                signInEmail(mEmailView.getText().toString(), mPasswordView.getText().toString());
+            }
         }
         else if( i == R.id.registrarse){
             Intent intent= new Intent(getBaseContext(),SignInActivity.class);

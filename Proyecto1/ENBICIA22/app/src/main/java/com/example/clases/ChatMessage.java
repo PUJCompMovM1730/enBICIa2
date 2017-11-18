@@ -9,15 +9,19 @@ import java.util.Date;
 public class ChatMessage {
 
     private String messageText;
-    private String messageUser;
-    private long messageTime;
+    private String UidSender;
+    private Date messageTime;
 
-    public ChatMessage(String messageText, String messageUser) {
+    public ChatMessage(String messageText, String UidSender) {
         this.messageText = messageText;
-        this.messageUser = messageUser;
+        this.UidSender = UidSender;
+        this.messageTime = new Date();
+    }
 
-        // Initialize to current time
-        messageTime = new Date().getTime();
+    public ChatMessage(String messageText, String uidSender, Date messageTime) {
+        this.messageText = messageText;
+        UidSender = uidSender;
+        this.messageTime = messageTime;
     }
 
     public ChatMessage() {
@@ -32,19 +36,19 @@ public class ChatMessage {
         this.messageText = messageText;
     }
 
-    public String getMessageUser() {
-        return messageUser;
+    public String getUidSender() {
+        return UidSender;
     }
 
-    public void setMessageUser(String messageUser) {
-        this.messageUser = messageUser;
+    public void setUidSender(String uidSender) {
+        UidSender = uidSender;
     }
 
-    public long getMessageTime() {
-        return messageTime;
+    public Long getMessageTime() {
+        return messageTime.getTime();
     }
 
-    public void setMessageTime(long messageTime) {
-        this.messageTime = messageTime;
+    public void setMessageTime(Long messageTime) {
+        this.messageTime = new Date(messageTime);
     }
 }

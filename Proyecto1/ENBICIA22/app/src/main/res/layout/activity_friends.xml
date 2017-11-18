@@ -5,8 +5,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:padding="10dp"
     android:background="@color/background"
     tools:context="com.example.oscar.enbicia2.FriendsActivity">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Mis amigos"
+        android:textColor="@color/colorAccent"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        />
 
     <TextView
         android:id="@+id/txtFriendsNoFriends"
@@ -15,13 +26,8 @@
         android:text="TextView" />
 
     <ListView
-        android:id="@+id/listFriendsList"
+        android:id="@+id/list_friends_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    <Button
-        android:id="@+id/btnFriendsSearch"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/buscar_personas" />
+        android:layout_height="match_parent" />
 
 </LinearLayout>

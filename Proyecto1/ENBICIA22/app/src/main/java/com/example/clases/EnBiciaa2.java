@@ -50,7 +50,6 @@ import java.util.concurrent.ExecutionException;
 
 public class EnBiciaa2 {
 
-
     private Map<String, Usuario> usuarios;
     private List<SitioInteres> sitioInteres;
 
@@ -59,7 +58,6 @@ public class EnBiciaa2 {
     private DatabaseReference mSitioInteresReference;
     private DatabaseReference myRef;
     //[END declare_firebase_database ]
-
 
     private ValueEventListener mSitioInteresListener;
     private ValueEventListener mCiclistasListener;
@@ -98,18 +96,12 @@ public class EnBiciaa2 {
         }
     }
 
-    public void agregarCiclistaFireBase(String Uid, String name, String email, Date date_birth){
-        myRef = FirebaseDatabase.getInstance().getReference(Constants.PATH_USUARIOS + Uid);
-        myRef.setValue(new Ciclista(name, email, date_birth));
-    }
-
     public void agregarCiclistaFireBase(String Uid, String name, String email, Date date_birth, String cell){
         myRef = FirebaseDatabase.getInstance().getReference(Constants.PATH_USUARIOS + Uid);
         myRef.setValue(new Ciclista(name, email, date_birth, cell));
     }
 
     public void cargarUsuarios(){
-        Log.d(Constants.TAG_CLASS, "Entre a cargar usuarios");
         ValueEventListener ciclistasListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -121,11 +113,6 @@ public class EnBiciaa2 {
                         ciclista.setUid(aux.getKey());
                         usuarios.put(ciclista.getUid(), ciclista);
                     }
-                    if(!usuarios.containsKey(FirebaseAuth.getInstance().getCurrentUser().getUid())){
-                        Log.d(Constants.TAG_CLASS, "Estoy agregando");
-                        agregarCiclistaFireBase();
-                    }
-
                     Log.d(Constants.TAG_CLASS, "Cantidad de ciclistas: " + usuarios.size());
                 }catch (Exception e){
                     Log.d(Constants.TAG_CLASS, e.getMessage());
@@ -142,20 +129,6 @@ public class EnBiciaa2 {
         mCiclistasListener = ciclistasListener;
     }
 
-    public void agregarCiclistaFireBase(){
-        try{
-            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            String email = user.getEmail();
-            Date date_birth = null;
-            String Uid = user.getUid();
-            String name = user.getDisplayName();
-            agregarCiclistaFireBase(Uid, name, email, date_birth);
-        }catch (Exception e){
-            Log.d(Constants.TAG_CLASS, e.getMessage());
-            e.printStackTrace();
-        }
-    }
-
     public void cargarSitioInteres(){
         ValueEventListener sitioInteresListener = new ValueEventListener() {
             @Override
@@ -164,7 +137,6 @@ public class EnBiciaa2 {
                 for(DataSnapshot aux : dataSnapshot.getChildren()){
                     SitioInteres aux_sitioInteres = aux.getValue(SitioInteres.class);
                     sitioInteres.add(aux_sitioInteres);
-                    Log.d(Constants.TAG_CLASS, "Entre al sitio: " + aux_sitioInteres.toString());
                 }
             }
 

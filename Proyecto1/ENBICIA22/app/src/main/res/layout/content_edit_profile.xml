@@ -3,11 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.oscar.enbicia2.EditProfileActivity"
-    tools:showIn="@layout/activity_edit_profile"
-    >
+    tools:showIn="@layout/activity_edit_profile" >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,9 +17,10 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            >
+            android:gravity="center" >
+
             <ImageView
+                android:id="@+id/iv_fotoperfil"
                 android:layout_height="50dp"
                 android:layout_width="0dp"
                 android:layout_weight="0.3"
@@ -52,8 +52,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:layout_marginTop="5dp"
-            >
+            android:layout_marginTop="5dp" >
+
             <ImageView
                 android:layout_height="50dp"
                 android:layout_width="0dp"
@@ -86,8 +86,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:layout_marginTop="5dp"
-            >
+            android:layout_marginTop="5dp" >
+
             <ImageView
                 android:layout_height="50dp"
                 android:layout_width="0dp"
@@ -120,8 +120,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:layout_marginTop="5dp"
-            >
+            android:layout_marginTop="5dp" >
+
             <ImageView
                 android:layout_height="50dp"
                 android:layout_width="0dp"
@@ -167,20 +167,19 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-          >
+            android:layout_gravity="bottom" >
+
             <Button
                 android:id="@+id/btn_eprofile_cancel"
-            android:layout_width="0dp"
-            android:layout_weight="0.3"
-            android:layout_height="wrap_content"
-            android:text="Cancelar"
+                android:layout_width="0dp"
+                android:layout_weight="0.3"
+                android:layout_height="wrap_content"
+                android:text="Cancelar"
                 android:layout_margin="5dp"
                 android:background="@color/app"
                 android:textColor="@color/blanco"
-                android:textStyle="bold"
-                android:enabled="false"
-                />
+                android:textStyle="bold" />
+
             <Button
                 android:id="@+id/btn_eprofile_edit"
                 android:layout_width="0dp"
@@ -190,9 +189,8 @@
                 android:layout_margin="5dp"
                 android:background="@color/app"
                 android:textColor="@color/blanco"
-                android:textStyle="bold"
-                android:enabled="true"
-                />
+                android:textStyle="bold" />
+
             <Button
                 android:id="@+id/btn_eprofile_save"
                 android:layout_width="0dp"
@@ -202,15 +200,7 @@
                 android:layout_margin="5dp"
                 android:background="@color/app"
                 android:textColor="@color/blanco"
-                android:textStyle="bold"
-                android:enabled="false"
-                />
+                android:textStyle="bold" />
         </LinearLayout>
-
-        </LinearLayout>
-
-
-
-
-
+    </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

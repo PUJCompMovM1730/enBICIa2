@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.clases.Ciclista;
 import com.example.clases.Constants;
 import com.example.clases.EnBiciaa2;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -19,6 +20,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Date;
 import java.util.regex.Matcher;
@@ -28,8 +31,6 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
     private FirebaseAuth mAuth;
     Button bsignin;
-    TextView bvolver;
-
     EditText user,email,cell, pass1, pass2;
 
     @Override
@@ -42,12 +43,9 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
         //Creación e instancia Elements
         bsignin = (Button) findViewById(R.id.reg);
-        bvolver = (TextView) findViewById(R.id.volver);
 
         // Button listeners
         findViewById(R.id.reg).setOnClickListener(this);
-        findViewById(R.id.volver).setOnClickListener(this);
-
     }
 
     @Override
@@ -147,7 +145,6 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
     //Valida si el usuario ya ha iniciado sesión
     private void updateUI(FirebaseUser currentUser) {
-        Log.d("email-password:", "Entre a updateUI");
         Intent intent = new Intent(getBaseContext(), MenuActivity.class);
         if( currentUser != null ){
             startActivity(intent);
@@ -164,14 +161,9 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void onClick(View view) {
-        Toast.makeText(this,"click",Toast.LENGTH_SHORT);
         int i = view.getId();
         if( i == R.id.reg ) {
             create_account();
-        } else if( i == R.id.volver ){
-
-            Intent intent= new Intent(getBaseContext(),LoginActivity.class);
-            startActivity(intent);
         }
     }
 }

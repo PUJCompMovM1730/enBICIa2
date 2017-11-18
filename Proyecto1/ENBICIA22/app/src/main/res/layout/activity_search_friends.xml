@@ -6,16 +6,19 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/background"
+    android:padding="10dp"
     tools:context="com.example.oscar.enbicia2.FriendsActivity">
+
     <EditText
-        android:id="@+id/etFriendsSearch"
+        android:id="@+id/edit_search_name"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
+        android:layout_height="40dp"
+        android:hint="Buscar amigo"
+        android:imeOptions="actionSearch"
         android:inputType="textPersonName" />
 
     <ListView
-        android:id="@+id/listFriendsSearch"
+        android:id="@+id/list_friends_search"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </LinearLayout>

@@ -46,13 +46,13 @@ public class Ciclista extends Usuario{
         TODO: Agregar método de recibir mensajes.
         TODO: Agregar método de eliminar mensajes.
      */
-    private List<Mensaje> bandejaEntrada;
+    private List<ChatMessage> bandejaEntrada;
 
     /*
         TODO: Agregar método de enviar mensajes.
         TODO: Agregar método de eliminar mensajes.
      */
-    private List<Mensaje> bandejaSalida;
+    private List<ChatMessage> bandejaSalida;
 
     public Ciclista() {
         super();
@@ -123,7 +123,7 @@ public class Ciclista extends Usuario{
     }
 
     public void enviarMensaje(String contenido, Ciclista receptor){
-        bandejaSalida.add(new Mensaje(contenido, receptor, this));
+        bandejaSalida.add(new ChatMessage(contenido, receptor.getUid()));
     }
 
     //[BEGIN GETTER AND SETTER Usuario]
@@ -210,11 +210,11 @@ public class Ciclista extends Usuario{
         return creados;
     }
 
-    public List<Mensaje> getBandejaEntrada() {
+    public List<ChatMessage> getBandejaEntrada() {
         return bandejaEntrada;
     }
 
-    public List<Mensaje> getBandejaSalida() {
+    public List<ChatMessage> getBandejaSalida() {
         return bandejaSalida;
     }
 }

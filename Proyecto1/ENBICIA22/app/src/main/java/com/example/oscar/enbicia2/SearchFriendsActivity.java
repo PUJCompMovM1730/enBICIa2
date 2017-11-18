@@ -40,14 +40,9 @@ import java.util.Set;
 public class SearchFriendsActivity extends AppCompatActivity {
 
     private String TAG = "SearchFriendsActivity";
-
-    private FirebaseAuth mAuth;
-    private DatabaseReference mCiclistaReference;
-
     private EditText etFriendsSearch;
     private ListView listView;
     private List<Ciclista> search;
-    private Map<String, Ciclista> searchAll;
     private List<String> amigosUid;
 
     @Override
@@ -59,12 +54,10 @@ public class SearchFriendsActivity extends AppCompatActivity {
         if(amigosUid == null){
             throw new IllegalArgumentException("Must pass AMIGOS");
         }
-        mCiclistaReference = FirebaseDatabase.getInstance().getReference().child("usuarios");
-        searchAll = new HashMap<>();
         search = new ArrayList<>();
 
-        listView = findViewById(R.id.listFriendsSearch);
-        etFriendsSearch = findViewById(R.id.etFriendsSearch);
+        listView = findViewById(R.id.list_friends_search);
+        etFriendsSearch = findViewById(R.id.edit_search_name);
         etFriendsSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -96,9 +89,8 @@ public class SearchFriendsActivity extends AppCompatActivity {
             text = text.toLowerCase();
             Set<String> key = Constants.enBICIa2.getUsuarios().keySet();
             for(String aux : key){
-                Log.d(TAG, aux);
                 if(!FirebaseAuth.getInstance().getCurrentUser().getUid().equals(aux)){
-                    if(Constants.enBICIa2.getUsuarios().get(aux).getEmail().toLowerCase().startsWith(text)){
+                    if(Constants.enBICIa2.getUsuarios().get(aux).getEmail().toLowerCase().startsWith(text) && !alreadyFriend(aux)){
                         search.add((Ciclista) Constants.enBICIa2.getUsuarios().get(aux));
                     }
                 }
@@ -106,5 +98,12 @@ public class SearchFriendsActivity extends AppCompatActivity {
             FriendsAdapter adapter = new FriendsAdapter(search, getBaseContext(), TAG);
             listView.setAdapter(adapter);
         }
+    }
+
+    private boolean alreadyFriend(String Uid){
+        for(String aux : amigosUid){
+            if(aux.equals(Uid)) return true;
+        }
+        return false;
     }
 }

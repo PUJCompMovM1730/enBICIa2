@@ -53,7 +53,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class FriendsActivity extends AppCompatActivity implements View.OnClickListener{
+public class FriendsActivity extends AppCompatActivity{
 
     private String TAG = "FriendsActivity";
 
@@ -64,48 +64,52 @@ public class FriendsActivity extends AppCompatActivity implements View.OnClickLi
     private TextView txtNoFriends;
 
     private HashMap<String, Ciclista> amigos;
+    private List<Ciclista> amigosList;
+    private FriendsAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friends);
 
-        // Initialize Database
-        mCurrentUserReference = FirebaseDatabase.getInstance().getReference().child("usuarios").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
-
+        mCurrentUserReference = FirebaseDatabase.getInstance().getReference().child("usuarios").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("amigos");
 
         amigos = new HashMap<>();
         txtNoFriends = findViewById(R.id.txtFriendsNoFriends);
         txtNoFriends.setVisibility(View.GONE);
         txtNoFriends.setText("Aún no tienes amigos");
-        listView = findViewById(R.id.listFriendsList);
-        findViewById(R.id.btnFriendsSearch).setOnClickListener(this);
+        listView = findViewById(R.id.list_friends_list);
+        amigosList = new ArrayList<>();
+        adapter = new FriendsAdapter(amigosList, this, TAG);
+        listView.setAdapter(adapter);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        Log.d(TAG, "onStart");
         ValueEventListener amigosListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 amigos.clear();
-                Ciclista current = dataSnapshot.getValue(Ciclista.class);
-                if(current.getAmigos() == null) Log.d(TAG, "Estoy en null");
-                if (current.getAmigos() != null) {
-                    Set<String> keys = current.getAmigos().keySet();
+                amigosList.clear();
+                for(DataSnapshot aux : dataSnapshot.getChildren()){
+                    final String key_friend = (String) aux.getValue();
+                    DatabaseReference friendReference = FirebaseDatabase.getInstance().getReference().child("usuarios").child(key_friend);
+                    friendReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            Ciclista current = dataSnapshot.getValue(Ciclista.class);
+                            current.setUid(key_friend);
+                            amigos.put(current.getUid(), current);
+                            amigosList.add(current);
+                            adapter.notifyDataSetChanged();
+                        }
 
-                    for (String aux : keys) {
-                        String UidAmigo = current.getAmigos().get(aux);
-                        Ciclista auxCiclista = (Ciclista) Constants.enBICIa2.getUsuarios().get(UidAmigo);
-                        amigos.put(auxCiclista.getUid(), auxCiclista);
-                    }
-                    cargarAmigos();
-                    txtNoFriends.setVisibility(View.GONE);
-                    listView.setVisibility(View.VISIBLE);
-                } else {
-                    txtNoFriends.setVisibility(View.VISIBLE);
-                    listView.setVisibility(View.GONE);
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
                 }
             }
 
@@ -124,36 +128,24 @@ public class FriendsActivity extends AppCompatActivity implements View.OnClickLi
         if(mAmigosListener != null) mCurrentUserReference.removeEventListener(mAmigosListener);
     }
 
-    private void cargarAmigos(){
-        Log.d(TAG, "Llamaron a cargar amigos");
-        List<Ciclista> aux = new ArrayList<>();
-        Set<String> key = amigos.keySet();
-        for(String key_aux: key){
-            aux.add(amigos.get(key_aux));
-        }
-        Log.d(TAG, "EL tam es: " + aux.size());
-        FriendsAdapter adapter = new FriendsAdapter(aux, getBaseContext(), TAG);
-        listView.setAdapter(adapter);
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_friends_bar, menu);
+        return true;
     }
 
     @Override
-    public void onClick(View view) {
-        int id = view.getId();
-        if(id == R.id.btnFriendsSearch){
-            try{
-                Intent intent = new Intent(getBaseContext(), SearchFriendsActivity.class);
-                Bundle bundle = new Bundle();
-                ArrayList<String> keys = new ArrayList<>();
-                for(String aux : amigos.keySet()){
-                    keys.add(aux);
-                }
-                intent.putExtra("amigos", keys);
-                startActivity(intent);
-
-            }catch (Exception e){
-                Log.d(TAG, e.getMessage());
-                e.printStackTrace();
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemClicked = item.getItemId();
+        if(itemClicked == R.id.it_friends_search){
+            Intent intent = new Intent(getBaseContext(), SearchFriendsActivity.class);
+            ArrayList<String> keys = new ArrayList<>();
+            for(String aux : amigos.keySet()){
+                keys.add(aux);
             }
+            intent.putExtra("amigos", keys);
+            startActivity(intent);
         }
+        return super.onOptionsItemSelected(item);
     }
 }

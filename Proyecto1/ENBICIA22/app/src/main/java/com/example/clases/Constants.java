@@ -68,8 +68,8 @@ public final class Constants {
     // [BEGIN path_elements_firebase]
     public static final String PATH_FIREBASE = "https://enbicia2-ccad2.firebaseio.com/";
     public static final String PATH_USUARIOS="usuarios/";
-    public static final String PATH_AMIGOS="amigos/";
     public static final String PATH_SITIO_INTERES="sitio_interes/";
+    public static final String PATH_MESSAGES="messages/";
     // [END path_elements_firebase]
 
     // [BEGIN declare_tag]
@@ -79,4 +79,6 @@ public final class Constants {
     public static final Long TIME_LIMIT = 300000L;
     public static final Long RADIUS_CIRCLE = 200L;
     public static final Long RADIUS_COMUN = 400L;
+
+    public static int mNotificationId = 1;
 }

@@ -1,29 +1,30 @@
 <LinearLayout android:layout_height="match_parent"
+    android:id="@+id/lin_mark_parent"
     android:layout_width="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
+
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:map="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/mapMark"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.4"
+        android:layout_weight="0.5"
         tools:context="com.example.oscar.enbicia2.DangerZoneActivity" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.6"
+        android:layout_weight="0.5"
         android:orientation="vertical"
         android:padding="15dp"
         tools:mockup_opacity="0.1">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.05"
+            android:layout_weight="0.1"
             android:text="Reportar zona de peligro"
             android:gravity="center"
             android:textStyle="bold"
@@ -37,6 +38,7 @@
             android:hint="@string/name_location"
             />
         <fragment
+
             android:id="@+id/place_autocomplete_fragment_target_mark"
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -47,62 +49,63 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.1"
+            android:layout_weight="0.05"
             android:text="Seleccione la categoría"
             android:gravity="center"
             android:textColor="@color/colorAccent"
             android:textStyle="bold"/>
-       <LinearLayout
-           android:layout_width="match_parent"
-           android:layout_height="0dp"
-           android:layout_weight="0.15"
-           android:orientation="horizontal"
-           android:padding="7dp"
-           >
-           <ImageButton
-               android:id="@+id/imb_mark_thief"
-               android:layout_width="0dp"
-               android:layout_weight="0.2"
-               android:layout_height="match_parent"
-               android:src="@drawable/mark_thief"
-               android:scaleType="fitCenter"
-               android:background="@null"/>
-           <ImageButton
-               android:id="@+id/imb_mark_rent"
-               android:layout_width="0dp"
-               android:layout_weight="0.2"
-               android:layout_height="match_parent"
-               android:src="@drawable/mark_rent"
-               android:scaleType="fitCenter"
-               android:background="@null"/>
-           <ImageButton
-               android:id="@+id/imb_mark_store"
-               android:layout_width="0dp"
-               android:layout_weight="0.2"
-               android:layout_height="match_parent"
-               android:src="@drawable/mark_store"
-               android:scaleType="fitCenter"
-               android:background="@null"/>
-           <ImageButton
-               android:id="@+id/imb_mark_workshop"
-               android:layout_width="0dp"
-               android:layout_weight="0.2"
-               android:layout_height="match_parent"
-               android:src="@drawable/mark_workshop"
-               android:scaleType="fitCenter"
-               android:background="@null"
-               />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.1"
+            android:orientation="horizontal"
+            android:padding="7dp"
+            >
+            <ImageButton
+                android:id="@+id/imb_mark_thief"
+                android:layout_width="0dp"
+                android:layout_weight="0.2"
+                android:layout_height="match_parent"
+                android:src="@drawable/mark_thief"
+                android:scaleType="fitCenter"
+                android:background="@null"/>
+            <ImageButton
+                android:id="@+id/imb_mark_rent"
+                android:layout_width="0dp"
+                android:layout_weight="0.2"
+                android:layout_height="match_parent"
+                android:src="@drawable/mark_rent"
+                android:scaleType="fitCenter"
+                android:background="@null"/>
+            <ImageButton
+                android:id="@+id/imb_mark_store"
+                android:layout_width="0dp"
+                android:layout_weight="0.2"
+                android:layout_height="match_parent"
+                android:src="@drawable/mark_store"
+                android:scaleType="fitCenter"
+                android:background="@null"/>
+            <ImageButton
+                android:id="@+id/imb_mark_workshop"
+                android:layout_width="0dp"
+                android:layout_weight="0.2"
+                android:layout_height="match_parent"
+                android:src="@drawable/mark_workshop"
+                android:scaleType="fitCenter"
+                android:background="@null"
+                />
 
-       </LinearLayout>
+        </LinearLayout>
 
         <Button
             android:id="@+id/btnMarkGuardarZona"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.15"
+            android:layout_weight="0.1"
             android:background="@drawable/button"
             android:text="Añadir zona"
             android:textStyle="bold"
             android:textColor="@color/blanco"/>
+
     </LinearLayout>
 </LinearLayout>

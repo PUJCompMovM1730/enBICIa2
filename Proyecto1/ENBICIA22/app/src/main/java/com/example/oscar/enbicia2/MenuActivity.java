@@ -27,6 +27,8 @@ public class MenuActivity extends AppCompatActivity implements  View.OnClickList
         //Listener Button
         findViewById(R.id.lin_ruta_menu).setOnClickListener(this);
 
+        Intent intent = new Intent(getBaseContext(), MessageIntentService.class);
+        startService(intent);
     }
 
     @Override
@@ -82,7 +84,5 @@ public class MenuActivity extends AppCompatActivity implements  View.OnClickList
             Intent intent= new Intent(getBaseContext(),RoutesActivity.class);
             startActivity(intent);
         }
-
-
     }
 }
