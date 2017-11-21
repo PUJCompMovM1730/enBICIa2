@@ -91,6 +91,15 @@
         <activity
             android:name=".ClimaActivity" />
 
+        <activity
+            android:name=".NewTripActivity" />
+
+        <activity
+            android:name=".SearchGroupActivity" />
+
+        <activity
+            android:name=".GroupTripActivity" />
+
         <provider android:authorities="com.facebook.app.FacebookContentProvider207653939771200"
             android:name="com.facebook.FacebookContentProvider"
             android:exported="true"/>

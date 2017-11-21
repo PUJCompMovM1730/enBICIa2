@@ -334,7 +334,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
     }
 
     private void dialog() {
-        final CharSequence[] options = {"Share", "Cancel"};
+        final CharSequence[] options = {"Share","Terminar viaje", "Cancel"};
         AlertDialog.Builder builder = new AlertDialog.Builder(MapActivity.this);
         builder.setTitle("Publicar");
         builder.setItems(options, new DialogInterface.OnClickListener() {
@@ -351,6 +351,10 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
                     shareButton.setShareContent(content);*/
                 } else if (options[i].equals("Cancel")) {
                     dialogInterface.dismiss();
+                }else{
+                    Intent intent = new Intent(getBaseContext(), MenuActivity.class);
+                    startActivity(intent);
+                    finish();
                 }
             }
         });
