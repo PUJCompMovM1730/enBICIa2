@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+
 import com.example.clases.Constants;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -76,7 +77,7 @@ public class MarkActivity extends AppCompatActivity implements OnMapReadyCallbac
         rent = findViewById(R.id.imb_mark_rent);
         store = findViewById(R.id.imb_mark_store);
         thief = findViewById(R.id.imb_mark_thief);
-        workshop =  findViewById(R.id.imb_mark_workshop);
+        workshop = findViewById(R.id.imb_mark_workshop);
 
 
         //Listener ImageButton
@@ -144,40 +145,37 @@ public class MarkActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onClick(View view) {
         int i = view.getId();
-        rent.setColorFilter(Color.rgb(0,0,0));
-        thief.setColorFilter(Color.rgb(0,0,0) );
-        store.setColorFilter(Color.rgb(0,0,0));
-        workshop.setColorFilter(Color.rgb(0,0,0));
-        if( i == R.id.imb_mark_rent ) {
-            rent.setColorFilter(Color.rgb(20,206,206));
+        rent.setColorFilter(Color.rgb(0, 0, 0));
+        thief.setColorFilter(Color.rgb(0, 0, 0));
+        store.setColorFilter(Color.rgb(0, 0, 0));
+        workshop.setColorFilter(Color.rgb(0, 0, 0));
+        if (i == R.id.imb_mark_rent) {
+            rent.setColorFilter(Color.rgb(20, 206, 206));
             indx_categoria = 1;
-        }
-        else if( i == R.id.imb_mark_thief ) {
+        } else if (i == R.id.imb_mark_thief) {
 
-            thief.setColorFilter(Color.rgb(206,20,20) );
+            thief.setColorFilter(Color.rgb(206, 20, 20));
             indx_categoria = 0;
-        }
-        else if( i == R.id.imb_mark_store ) {
-            store.setColorFilter(Color.rgb(230,159,0));
+        } else if (i == R.id.imb_mark_store) {
+            store.setColorFilter(Color.rgb(230, 159, 0));
             indx_categoria = 2;
-        }
-        else if( i == R.id.imb_mark_workshop ) {
-            workshop.setColorFilter(Color.rgb(181,166,209) );
+        } else if (i == R.id.imb_mark_workshop) {
+            workshop.setColorFilter(Color.rgb(181, 166, 209));
             indx_categoria = 3;
-        }else if( i == R.id.btnMarkGuardarZona){
-            if(nombre_sitio.getText().toString().isEmpty() || editTextTarget.getText().toString() == null || indx_categoria == -1){
+        } else if (i == R.id.btnMarkGuardarZona) {
+            if (nombre_sitio.getText().toString().isEmpty() || editTextTarget.getText().toString() == null || indx_categoria == -1) {
                 make(view, "No se ha seleccionado todos los datos", LENGTH_LONG)
                         .setAction("Action", null).show();
-            }else{
-                Constants.enBICIa2.agregarSitioInteresFireBase(nombre_sitio.getText().toString(), marker_target.getPosition().latitude,marker_target.getPosition().longitude, indx_categoria);
+            } else {
+                Constants.enBICIa2.agregarSitioInteresFireBase(nombre_sitio.getText().toString(), marker_target.getPosition().latitude, marker_target.getPosition().longitude, indx_categoria);
                 make(view, "El marcador se ha agregado correctamente", LENGTH_LONG)
                         .setAction("Action", null).show();
                 nombre_sitio.getText().clear();
-                rent.setColorFilter(Color.rgb(0,0,0));
-                thief.setColorFilter(Color.rgb(0,0,0) );
-                store.setColorFilter(Color.rgb(0,0,0));
-                workshop.setColorFilter(Color.rgb(0,0,0));
-                ((EditText)autocompleteFragmentTarget.getView().findViewById(R.id.place_autocomplete_search_input)).getText().clear();
+                rent.setColorFilter(Color.rgb(0, 0, 0));
+                thief.setColorFilter(Color.rgb(0, 0, 0));
+                store.setColorFilter(Color.rgb(0, 0, 0));
+                workshop.setColorFilter(Color.rgb(0, 0, 0));
+                ((EditText) autocompleteFragmentTarget.getView().findViewById(R.id.place_autocomplete_search_input)).getText().clear();
             }
         }
     }
@@ -200,7 +198,7 @@ public class MarkActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                 Location currentLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
                 LatLngBounds.Builder builder = new LatLngBounds.Builder();
-                LatLng latlng = new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude());
+                LatLng latlng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
                 builder.include(latlng);
                 if (marker_target != null)
                     marker_target.remove();
@@ -210,7 +208,7 @@ public class MarkActivity extends AppCompatActivity implements OnMapReadyCallbac
                 int width = findViewById(R.id.mapMark).getWidth();
                 int height = findViewById(R.id.mapMark).getHeight();
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(bounds.getCenter(), Constants.getBoundsZoomLevel(bounds, width, height)));
-                editTextTarget.setText( getAddress(latlng.latitude,latlng.longitude));
+                editTextTarget.setText(getAddress(latlng.latitude, latlng.longitude));
                 return false;
             }
         });
@@ -229,9 +227,9 @@ public class MarkActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             @Override
             public void onMarkerDragEnd(Marker marker) {
-                LatLng pos=marker.getPosition();
+                LatLng pos = marker.getPosition();
 
-                editTextTarget.setText( getAddress(pos.latitude,pos.longitude));
+                editTextTarget.setText(getAddress(pos.latitude, pos.longitude));
             }
         });
 
@@ -271,7 +269,7 @@ public class MarkActivity extends AppCompatActivity implements OnMapReadyCallbac
             return addresses.get(0).getAddressLine(0);
         } catch (IOException e) {
             e.printStackTrace();
-            make(findViewById(R.id.lin_mark_parent),  e.getMessage(), LENGTH_LONG)
+            make(findViewById(R.id.lin_mark_parent), e.getMessage(), LENGTH_LONG)
                     .setAction("Action", null).show();
 
         }

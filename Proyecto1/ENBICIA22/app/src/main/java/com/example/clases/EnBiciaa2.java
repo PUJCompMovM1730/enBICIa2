@@ -63,12 +63,10 @@ public class EnBiciaa2 {
     private ValueEventListener mCiclistasListener;
 
     public EnBiciaa2() {
-        Log.d(Constants.TAG_CLASS, "Entre aca");
         mCiclistaReference = FirebaseDatabase.getInstance().getReference().child("usuarios");
         mSitioInteresReference = FirebaseDatabase.getInstance().getReference().child("sitio_interes");
         usuarios = new HashMap<>();
         sitioInteres = new ArrayList<>();
-        cargarUsuarios();
         cargarSitioInteres();
     }
 
@@ -101,34 +99,6 @@ public class EnBiciaa2 {
         myRef.setValue(new Ciclista(name, email, date_birth, cell));
     }
 
-    public void cargarUsuarios(){
-        ValueEventListener ciclistasListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                try{
-                    usuarios.clear();
-                    Log.d(Constants.TAG_CLASS, "Recibi el update");
-                    for(DataSnapshot aux : dataSnapshot.getChildren()){
-                        Ciclista ciclista = aux.getValue(Ciclista.class);
-                        ciclista.setUid(aux.getKey());
-                        usuarios.put(ciclista.getUid(), ciclista);
-                    }
-                    Log.d(Constants.TAG_CLASS, "Cantidad de ciclistas: " + usuarios.size());
-                }catch (Exception e){
-                    Log.d(Constants.TAG_CLASS, e.getMessage());
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.d(Constants.TAG_CLASS, "Error: " + databaseError.getMessage());
-            }
-        };
-        mCiclistaReference.addValueEventListener(ciclistasListener);
-        mCiclistasListener = ciclistasListener;
-    }
-
     public void cargarSitioInteres(){
         ValueEventListener sitioInteresListener = new ValueEventListener() {
             @Override
@@ -147,6 +117,20 @@ public class EnBiciaa2 {
         };
         mSitioInteresReference.addValueEventListener(sitioInteresListener);
         mSitioInteresListener = sitioInteresListener;
+    }
+
+    public String agregarRutaFireBase(RecorridoGrupal rg){
+        String key = FirebaseDatabase.getInstance().getReference().push().getKey();
+        myRef = FirebaseDatabase.getInstance().getReference(Constants.PATH_USUARIOS+rg.getOrganizador()+"/recorridos/").child(key);
+        myRef.setValue(key);
+        myRef = FirebaseDatabase.getInstance().getReference(Constants.PATH_RECORRIDOS).child(key);
+        myRef.setValue(rg);
+        myRef = FirebaseDatabase.getInstance().getReference(Constants.PATH_RECORRIDOS).child(key).child("id");
+        myRef.setValue(key);
+        myRef = FirebaseDatabase.getInstance().getReference(Constants.PATH_RECORRIDOS).child(key).child("usuario").child(rg.getOrganizador());
+        myRef.setValue(rg.getOrganizador());
+
+        return key;
     }
 
     public Map<String, Usuario> getUsuarios() {

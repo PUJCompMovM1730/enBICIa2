@@ -16,6 +16,11 @@ import com.example.oscar.enbicia2.ChatDetailActivity;
 import com.example.oscar.enbicia2.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
 
@@ -28,20 +33,23 @@ public class MessageAdapter extends ArrayAdapter<ChatMessage>{
     private String TAG = "MessageAdapter";
     private List<ChatMessage> dataSet;
     private List<String> friendUid;
+    private List<Ciclista> friends;
+
     Context mContext;
 
-    // View lookup cache
     private static class ViewHolder {
         TextView txtName;
         TextView txtMessage;
         ImageView imgPhoto;
     }
 
-    public MessageAdapter(List<ChatMessage> data,List<String> friendUid, Context context) {
+    public MessageAdapter(List<ChatMessage> data,List<String> friendUid,List<Ciclista> friends, Context context) {
         super(context, R.layout.list_messages, data);
         this.dataSet = data;
         this.friendUid = friendUid;
         this.mContext = context;
+        this.friends = friends;
+
     }
 
     @Override
@@ -61,14 +69,22 @@ public class MessageAdapter extends ArrayAdapter<ChatMessage>{
             viewHolder = (ViewHolder) convertView.getTag();
         }
         // TODO: AGREGAR FOTO ACA
-        // TODO: BORRAR ESTO
-        Ciclista actual = (Ciclista) Constants.enBICIa2.getUsuarios().get(friendUid.get(position));
-        if(actual.getName().isEmpty()){
-            viewHolder.txtName.setText(actual.getEmail());
-        }else{
-            viewHolder.txtName.setText(actual.getName());
+        Ciclista actual = findUid(friendUid.get(position));
+        if(actual != null){
+            if(actual.getName().isEmpty()){
+                viewHolder.txtName.setText(actual.getEmail());
+            }else{
+                viewHolder.txtName.setText(actual.getName());
+            }
+            viewHolder.txtMessage.setText(dataModel.getMessageText());
         }
-        viewHolder.txtMessage.setText(dataModel.getMessageText());
         return convertView;
+    }
+
+    private Ciclista findUid(String uid){
+        for(Ciclista curr : friends){
+            if(curr.getUid().equals(uid)) return curr;
+        }
+        return null;
     }
 }

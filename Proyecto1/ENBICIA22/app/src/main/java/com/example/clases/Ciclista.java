@@ -1,5 +1,9 @@
 package com.example.clases;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.util.Log;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -17,7 +21,7 @@ import java.util.Objects;
  * Created by juanpablorn30 on 2/10/17.
  */
 
-public class Ciclista extends Usuario{
+public class Ciclista extends Usuario implements Parcelable{
 
     private String estado;
     private Long cant_recorridos;
@@ -35,6 +39,7 @@ public class Ciclista extends Usuario{
     private Map<String, String> amigos;
 
     private List<Recorrido> historial;
+    private Map<String, String> recorridos;
 
     /*
         TODO: Agregar método de agregar a creados.
@@ -113,7 +118,7 @@ public class Ciclista extends Usuario{
     }
 
     public void agregarHistorial(Punto puntoInicio, Punto puntoFin){
-        this.historial.add(new Recorrido(Constants.FINALIZADO, puntoInicio, puntoFin, this));
+        //this.historial.add(new Recorrido(Constants.FINALIZADO, puntoInicio, puntoFin, this));
     }
 
     //TODO: Pensar como eliminar el recorrido, con que criterio.
@@ -216,5 +221,46 @@ public class Ciclista extends Usuario{
 
     public List<ChatMessage> getBandejaSalida() {
         return bandejaSalida;
+    }
+
+    public Map<String, String> getRecorridos() {
+        return recorridos;
+    }
+
+    public void setRecorridos(Map<String, String> recorridos) {
+        this.recorridos = recorridos;
+    }
+
+    public Ciclista(Parcel in){
+        String[] data = new String[3];
+        in.readStringArray(data);
+        this.setEmail(data[0]);
+        this.setUid(data[1]);
+        this.setName(data[2]);
+    }
+
+    public static final Parcelable.Creator<Ciclista> CREATOR
+            = new Parcelable.Creator<Ciclista>() {
+        public Ciclista createFromParcel(Parcel in) {
+            return new Ciclista(in);
+        }
+
+        public Ciclista[] newArray(int size) {
+            return new Ciclista[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+            parcel.writeStringArray(new String[]{
+                    this.getEmail(),
+                    this.getUid(),
+                    this.getName(),
+            });
     }
 }

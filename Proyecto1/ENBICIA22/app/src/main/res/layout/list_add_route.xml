@@ -3,55 +3,60 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="100dp">
+    android:layout_height="50dp">
 
     <ImageView
-        android:id="@+id/img_adapterlist_photo"
+        android:id="@+id/img_adapterlist2_photo"
         android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_height="50dp"
         android:layout_gravity="center"
-        android:layout_weight="0.2"
-        app:srcCompat="@drawable/user_4" />
+        android:layout_weight="0.1"
+        android:layout_marginLeft="10dp"
+        app:srcCompat="@drawable/scheduled_route" />
 
     <TextView
-        android:id="@+id/txt_adapter_name"
+        android:id="@+id/txt_adapter2_name"
         android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:text="Nombre amigo"
+        android:layout_height="50dp"
+        android:text="Nombre recorrido"
         android:layout_weight="0.5"
+        android:layout_marginLeft="10dp"
         android:layout_gravity="center_vertical"
         android:gravity="center_vertical"/>
 
     <Button
-        android:id="@+id/btn_adapter_message"
+        android:id="@+id/btn_adapter2_delete"
         android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:text="Mensaje"
-        android:textSize="11sp"
-        android:layout_weight="0.2"
-        android:layout_gravity="center"
-        android:background="@drawable/button"
-        android:textColor="@color/blanco"/>
-
-    <Button
-        android:id="@+id/btn_adapter_delete"
-        android:layout_width="0dp"
-        android:layout_height="40dp"
+        android:layout_height="50dp"
         android:text="Eliminar"
         android:textSize="11sp"
         android:layout_weight="0.2"
         android:layout_gravity="center"
-        android:background="@drawable/button"
-        android:textColor="@color/blanco"/>
+        android:background="@drawable/google"
+        android:textColor="@color/blanco"
+        android:layout_marginRight="5dp"/>
 
     <Button
-        android:id="@+id/btn_adapter_add"
+        android:id="@+id/btn_adapter2_add"
         android:layout_width="0dp"
-        android:layout_height="40dp"
+        android:layout_height="50dp"
         android:text="Agregar"
         android:textSize="11sp"
         android:layout_weight="0.2"
         android:layout_gravity="center"
         android:background="@drawable/button"
-        android:textColor="@color/blanco"/>
+        android:textColor="@color/blanco"
+        android:layout_marginRight="5dp"/>
+
+    <Button
+        android:id="@+id/btn_adapter2_watch"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:text="Ver"
+        android:textSize="11sp"
+        android:layout_weight="0.2"
+        android:layout_gravity="center"
+        android:background="@drawable/button"
+        android:textColor="@color/blanco"
+        android:layout_marginRight="5dp"/>
 </LinearLayout>

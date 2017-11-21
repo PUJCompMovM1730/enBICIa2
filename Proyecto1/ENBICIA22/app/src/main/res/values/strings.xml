@@ -75,4 +75,9 @@
     <string name="channel_description">Notificaciones aplicación enBICIa2</string>
     <!--[END NOTIFICACIONES]-->
 
+    <!--[BEGIN RECORRIDOS]-->
+    <string name="nombre_ruta">Nombre Ruta</string>
+    <string name="Hora">Hora</string>
+    <!--[END RECORRIDOS]-->
+
 </resources>

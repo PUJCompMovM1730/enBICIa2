@@ -22,7 +22,9 @@ import java.util.List;
 
 public class MessageDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+    private String TAG = "MessageDetailAdapter";
     private List<ChatMessage> dataSet;
+    private Ciclista friend;
 
     public static class ViewHolderSender extends RecyclerView.ViewHolder {
 
@@ -50,8 +52,9 @@ public class MessageDetailAdapter extends RecyclerView.Adapter<RecyclerView.View
         }
     }
 
-    public MessageDetailAdapter(List<ChatMessage> data) {
+    public MessageDetailAdapter(List<ChatMessage> data, Ciclista friend) {
         this.dataSet = data;
+        this.friend= friend;
     }
 
     @Override
@@ -86,7 +89,12 @@ public class MessageDetailAdapter extends RecyclerView.Adapter<RecyclerView.View
                 chatMessage = dataSet.get(position);
                 d = new Date(chatMessage.getMessageTime());
                 sdf = new SimpleDateFormat("hh:mm a");
-                holder1.nombre.setText(Constants.enBICIa2.getUsuarios().get(chatMessage.getUidSender()).getName());
+                Log.d(TAG, friend.getName());
+                Log.d(TAG, friend.getEmail());
+                if(friend.getName().length() > 0)
+                    holder1.nombre.setText(friend.getName());
+                else
+                    holder1.nombre.setText(friend.getEmail());
                 holder1.mensaje.setText(chatMessage.getMessageText());
                 holder1.hora.setText(sdf.format(d));
                 break;

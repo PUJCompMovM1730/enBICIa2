@@ -10,7 +10,6 @@ import java.util.List;
 public class Empresa extends Usuario{
 
     private String NIT;
-    private String sitioWeb;
 
     /*
         TODO: Agregar método de agregar item a recorridos.
@@ -24,10 +23,13 @@ public class Empresa extends Usuario{
      */
     private List<Indicador> indicadores;
 
+    public Empresa(){
+        super();
+    }
+
     public Empresa(String password, String email, Date date_birth, String username, String NIT, String sitioWeb) {
         super(password, email, date_birth, username);
         this.NIT = NIT;
-        this.sitioWeb = sitioWeb;
     }
 
     public String getNIT() {
@@ -36,14 +38,6 @@ public class Empresa extends Usuario{
 
     public void setNIT(String NIT) {
         this.NIT = NIT;
-    }
-
-    public String getSitioWeb() {
-        return sitioWeb;
-    }
-
-    public void setSitioWeb(String sitioWeb) {
-        this.sitioWeb = sitioWeb;
     }
 
     public List<RecorridoOrganizado> getRecorridos() {

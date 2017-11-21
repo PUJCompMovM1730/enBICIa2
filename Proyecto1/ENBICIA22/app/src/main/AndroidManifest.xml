@@ -77,6 +77,10 @@
             android:label="Editar perfíl"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".ChatDetailActivity" />
+        <activity android:name=".CreateSRouteActivity" />
+        <activity android:name=".ListScheduledActivity" />
+        <activity android:name=".SearchRouteActivity" />
+        <activity android:name=".ViewScheduledActivity" />
 
         <service
             android:name=".MessageIntentService"

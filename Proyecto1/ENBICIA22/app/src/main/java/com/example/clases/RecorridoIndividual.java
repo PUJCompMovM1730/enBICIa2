@@ -6,14 +6,13 @@ import java.util.Date;
  * Created by juanpablorn30 on 2/10/17.
  */
 
-public class RecorridoIndividual extends Recorrido{
+public class RecorridoIndividual{
 
     private String informeClima;
     private String distanciaRecorrida;
     private int tiempoTranscurrido;
 
     public RecorridoIndividual(String estado, Punto puntoInicio, Punto puntoFin, Ciclista organizador, String informeClima, String distanciaRecorrida, int tiempoTranscurrido) {
-        super(estado, puntoInicio, puntoFin, organizador);
         this.informeClima = informeClima;
         this.distanciaRecorrida = distanciaRecorrida;
         this.tiempoTranscurrido = tiempoTranscurrido;

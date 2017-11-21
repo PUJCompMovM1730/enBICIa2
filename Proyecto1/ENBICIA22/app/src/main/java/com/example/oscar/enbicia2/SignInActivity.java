@@ -1,18 +1,16 @@
 package com.example.oscar.enbicia2;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.clases.Ciclista;
 import com.example.clases.Constants;
 import com.example.clases.EnBiciaa2;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -20,18 +18,14 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Date;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-public class SignInActivity extends AppCompatActivity implements View.OnClickListener{
+public class SignInActivity extends AppCompatActivity implements View.OnClickListener {
 
     private FirebaseAuth mAuth;
     Button bsignin;
-    EditText user,email,cell, pass1, pass2;
+    EditText user, email, cell, pass1, pass2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,51 +59,51 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
     public static boolean isValidPassword(String pswd) {
         //check that there are letters
-        if(!pswd.matches("[a-zA-Z]+"))
+        if (!pswd.matches("[a-zA-Z]+"))
             return false;  //nope no letters, stop checking and fail!
         //check if there are any numbers
-        if(!pswd.matches("[0-9]+"))
+        if (!pswd.matches("[0-9]+"))
             return false;  //nope no numbers, stop checking and fail!
         //check any valid special characters
         //if(!pswd.matches("[.!#*()?,]+"))
-          //  return false;  //nope no special chars, fail!
+        //  return false;  //nope no special chars, fail!
 
         //everything has passed so far, lets return valid
         return true;
 
     }
 
-    public void create_account(){
+    public void create_account() {
         user = (EditText) findViewById(R.id.et_signIn_name);
         email = (EditText) findViewById(R.id.mail);
         cell = (EditText) findViewById(R.id.cellphone);
         pass1 = (EditText) findViewById(R.id.pass);
         pass2 = (EditText) findViewById(R.id.confirmpass);
-        if(user.getText().toString().isEmpty()) {
-           user.setError("Falta: Nombre de usuario");
+        if (user.getText().toString().isEmpty()) {
+            user.setError("Falta: Nombre de usuario");
             return;
         }
-        if(email.getText().toString().isEmpty()) {
+        if (email.getText().toString().isEmpty()) {
             email.setError("Falta: Correo");
             return;
         }
-        if(!isValidEmail(email.getText().toString())) {
+        if (!isValidEmail(email.getText().toString())) {
             email.setError("Correo inválido");
             return;
         }
-        if(cell.getText().toString().isEmpty()) {
+        if (cell.getText().toString().isEmpty()) {
             cell.setError("Falta: Teléfono Celular");
             return;
         }
-        if(pass1.getText().toString().isEmpty()) {
+        if (pass1.getText().toString().isEmpty()) {
             pass1.setError("Falta: Contraseña");
             return;
         }
-        if(pass2.getText().toString().isEmpty()) {
+        if (pass2.getText().toString().isEmpty()) {
             pass2.setError("Falta: Confirmar contraseña");
             return;
         }
-        if(!pass1.getText().toString().equals(pass2.getText().toString())){
+        if (!pass1.getText().toString().equals(pass2.getText().toString())) {
             pass1.setError("Las contraseñas no son iguales");
             return;
         }
@@ -146,13 +140,13 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     //Valida si el usuario ya ha iniciado sesión
     private void updateUI(FirebaseUser currentUser) {
         Intent intent = new Intent(getBaseContext(), MenuActivity.class);
-        if( currentUser != null ){
+        if (currentUser != null) {
             startActivity(intent);
             finish();
         }
     }
 
-    private void agregarCiclistaFireBase(FirebaseUser user){
+    private void agregarCiclistaFireBase(FirebaseUser user) {
         String email = user.getEmail();
         Date date_birth = null;
         String Uid = user.getUid();
@@ -162,7 +156,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onClick(View view) {
         int i = view.getId();
-        if( i == R.id.reg ) {
+        if (i == R.id.reg) {
             create_account();
         }
     }

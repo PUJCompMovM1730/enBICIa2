@@ -1,17 +1,13 @@
 package com.example.oscar.enbicia2;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-
-import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,15 +19,12 @@ import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
-import com.facebook.login.Login;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.auth.api.signin.SignInAccount;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -48,12 +41,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.Date;
-
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener{
+public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
 
     // [START declare_tag]
     private static final String TAG = "LoginActivity";
@@ -86,7 +77,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         mPasswordView = (EditText) findViewById(R.id.password);
         btnFacebook = (LoginButton) findViewById(R.id.btnFacebook);
-        signin= (TextView) findViewById(R.id.registrarse);
+        signin = (TextView) findViewById(R.id.registrarse);
 
         mCurrentUserReference = FirebaseDatabase.getInstance().getReference().child("usuarios");
 
@@ -146,7 +137,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         signin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent= new Intent(getBaseContext(),SignInActivity.class);
+                Intent intent = new Intent(getBaseContext(), SignInActivity.class);
                 startActivity(intent);
             }
         });
@@ -176,7 +167,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     }
 
 
-
     @Override
     public void onStart() {
         super.onStart();
@@ -188,8 +178,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private void updateUI(FirebaseUser currentUser) {
         Log.d(TAG_GOOGLE, "Entre a updateUI");
         Intent intent = new Intent(getBaseContext(), MenuActivity.class);
-        if( currentUser != null ){
-            if(Constants.enBICIa2 == null){
+        if (currentUser != null) {
+            if (Constants.enBICIa2 == null) {
                 Constants.enBICIa2 = new EnBiciaa2();
             }
             startActivity(intent);
@@ -217,9 +207,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 // Google Sign In failed, update UI appropriately
                 // ...
             }
-        }
-        else
-        {
+        } else {
             // Pass the activity result back to the Facebook SDK
             mCallbackManager.onActivityResult(requestCode, resultCode, data);
         }
@@ -283,15 +271,16 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 });
     }
 
-    private void agregarCiclistaFireBase(){
+    private void agregarCiclistaFireBase() {
         ValueEventListener usuariosListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 boolean can_save = true;
-                for(DataSnapshot aux : dataSnapshot.getChildren()){
-                    if(aux.getKey().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) can_save = false;
+                for (DataSnapshot aux : dataSnapshot.getChildren()) {
+                    if (aux.getKey().equals(FirebaseAuth.getInstance().getCurrentUser().getUid()))
+                        can_save = false;
                 }
-                if(can_save){
+                if (can_save) {
                     FirebaseUser user = mAuth.getCurrentUser();
                     DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("usuarios/" + user.getUid());
                     myRef.setValue(new Ciclista(user.getDisplayName(), user.getEmail(), null, user.getPhoneNumber()));
@@ -309,17 +298,16 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     @Override
     public void onClick(View view) {
         int i = view.getId();
-        if( i == R.id.btnGoogle ) {
+        if (i == R.id.btnGoogle) {
             signInGoogle();
-        } else if( i == R.id.email_sign_in_button ){
-            if(mEmailView.getText().length() == 0 || mPasswordView.getText().length() == 0){
+        } else if (i == R.id.email_sign_in_button) {
+            if (mEmailView.getText().length() == 0 || mPasswordView.getText().length() == 0) {
                 Snackbar.make(view, "El email y/o password están vacios", Snackbar.LENGTH_LONG).setAction("Action", null).show();
-            }else{
+            } else {
                 signInEmail(mEmailView.getText().toString(), mPasswordView.getText().toString());
             }
-        }
-        else if( i == R.id.registrarse){
-            Intent intent= new Intent(getBaseContext(),SignInActivity.class);
+        } else if (i == R.id.registrarse) {
+            Intent intent = new Intent(getBaseContext(), SignInActivity.class);
             startActivity(intent);
         }
     }

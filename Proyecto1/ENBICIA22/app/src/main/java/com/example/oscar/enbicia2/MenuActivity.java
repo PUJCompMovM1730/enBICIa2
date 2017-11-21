@@ -9,7 +9,7 @@ import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-public class MenuActivity extends AppCompatActivity implements  View.OnClickListener {
+public class MenuActivity extends AppCompatActivity implements View.OnClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,13 +40,13 @@ public class MenuActivity extends AppCompatActivity implements  View.OnClickList
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemClicked = item.getItemId();
-        if(itemClicked == R.id.it_exit_menu){
+        if (itemClicked == R.id.it_exit_menu) {
             FirebaseAuth mAuth = FirebaseAuth.getInstance();
             mAuth.signOut();
             Intent intent = new Intent(getBaseContext(), LoginActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
-        }else if(itemClicked == R.id.it_settings_menu){
+        } else if (itemClicked == R.id.it_settings_menu) {
             Intent intent = new Intent(getBaseContext(), EditProfileActivity.class);
             startActivity(intent);
         }
@@ -56,32 +56,32 @@ public class MenuActivity extends AppCompatActivity implements  View.OnClickList
     @Override
     public void onClick(View view) {
         int i = view.getId();
-        if( i == R.id.lin_perfil_menu ) {
-            Intent intent= new Intent(getBaseContext(),ProfileActivity.class);
+        if (i == R.id.lin_perfil_menu) {
+            Intent intent = new Intent(getBaseContext(), ProfileActivity.class);
             startActivity(intent);
         }
-        if( i == R.id.lin_amigos_menu) {
-            Intent intent= new Intent(getBaseContext(),FriendsActivity.class);
+        if (i == R.id.lin_amigos_menu) {
+            Intent intent = new Intent(getBaseContext(), FriendsActivity.class);
             startActivity(intent);
         }
-        if( i == R.id.lin_grupos_menu) {
-            Intent intent= new Intent(getBaseContext(),GroupActivity.class);
+        if (i == R.id.lin_grupos_menu) {
+            Intent intent = new Intent(getBaseContext(), GroupActivity.class);
             startActivity(intent);
         }
-        if( i == R.id.lin_marcador_menu ) {
-            Intent intent= new Intent(getBaseContext(),MarkActivity.class);
+        if (i == R.id.lin_marcador_menu) {
+            Intent intent = new Intent(getBaseContext(), MarkActivity.class);
             startActivity(intent);
         }
-        if( i == R.id.lin_mensajes_menu ) {
-            Intent intent= new Intent(getBaseContext(),ChatActivity.class);
+        if (i == R.id.lin_mensajes_menu) {
+            Intent intent = new Intent(getBaseContext(), ChatActivity.class);
             startActivity(intent);
         }
-        if( i == R.id.lin_planeados_menu ) {
-            Intent intent= new Intent(getBaseContext(),TourActivity.class);
+        if (i == R.id.lin_planeados_menu) {
+            Intent intent = new Intent(getBaseContext(), ListScheduledActivity.class);
             startActivity(intent);
         }
-        if( i == R.id.lin_ruta_menu ) {
-            Intent intent= new Intent(getBaseContext(),RoutesActivity.class);
+        if (i == R.id.lin_ruta_menu) {
+            Intent intent = new Intent(getBaseContext(), RoutesActivity.class);
             startActivity(intent);
         }
     }

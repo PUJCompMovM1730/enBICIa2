@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
@@ -24,14 +23,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
 import com.example.clases.Ciclista;
-import com.example.clases.Constants;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -55,7 +48,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 public class EditProfileActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -65,7 +57,6 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
     Button cancel, edit, save, photo;
     Uri imageUri, downloadPhoto;
     UploadTask uploadTask;
-    ImageView ivfoto;
 
     String name_prev, email_prev, cell_prev, age_prev;
 
@@ -98,8 +89,6 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
         cancel = findViewById(R.id.btn_eprofile_cancel);
         edit = findViewById(R.id.btn_eprofile_edit);
         photo = findViewById(R.id.btn_eprofile_photo);
-
-        ivfoto = findViewById(R.id.iv_fotoperfil);
         //TODO: Implementar editar password.
         // Quitar para la ultima entrega
         findViewById(R.id.btn_eprofile_password).setVisibility(View.GONE);
@@ -144,31 +133,28 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Ciclista current = dataSnapshot.getValue(Ciclista.class);
-                if( current.getName() != null)
-                {
+                if (current.getName() != null) {
                     name_prev = current.getName();
                     name.setText(current.getName());
                 }
-                if( current.getName() != null)
-                {
+                if (current.getName() != null) {
                     email_prev = current.getEmail();
                     mail.setText(current.getEmail());
                 }
-                if( current.getName() != null)
-                {
+                if (current.getName() != null) {
                     cell_prev = current.getNumero_celular();
                     cell.setText(current.getNumero_celular());
                 }
-                if( current.getDate_birth() != 0){
+                if (current.getDate_birth() != 0) {
                     DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
                     Calendar calendar = Calendar.getInstance();
                     calendar.setTimeInMillis(current.getDate_birth());
                     age_prev = formatter.format(calendar.getTime());
                     age.setText(formatter.format(calendar.getTime()));
-                }else{
+                } else {
                     age.setText("");
                 }
-                StorageReference pathReference = mStorageRef.child("usuarios/"+FirebaseAuth.getInstance().getCurrentUser().getUid()+"/photo/fotoPerfil.jpg");
+                StorageReference pathReference = mStorageRef.child("usuarios/" + FirebaseAuth.getInstance().getCurrentUser().getUid() + "/photo/fotoPerfil.jpg");
                 try {
                     final File localPhoto = File.createTempFile("profile", "jpg");
                     pathReference.getFile(localPhoto).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
@@ -245,7 +231,7 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
             }
             case IMAGE_REQUEST: {
                 if (resultCode == RESULT_OK) {
-                    try{
+                    try {
                         if (data != null) {
                             imageUri = data.getData();
                             File f = new File(getRealPathFromURI(imageUri));
@@ -254,7 +240,7 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
                                 findViewById(R.id.toolbar_layout).setBackground(Drawable.createFromPath(f.getAbsolutePath()));
                             }
                         }
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         Log.d(TAG, e.getMessage());
                         e.printStackTrace();
                     }
@@ -288,7 +274,7 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
         }
     }
 
-    private void uploadFireBase(){
+    private void uploadFireBase() {
         uploadTask = imageRef.putFile(imageUri);
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
@@ -365,7 +351,7 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
                     .setAction("Action", null).show();
         } else if (i == R.id.et_eprofile_age) {
             showDatePickerDialog();
-        }else if(i == R.id.btn_eprofile_photo){
+        } else if (i == R.id.btn_eprofile_photo) {
             choosePhoto();
         }
     }

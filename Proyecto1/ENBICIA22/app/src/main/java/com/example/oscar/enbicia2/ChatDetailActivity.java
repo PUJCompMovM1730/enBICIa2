@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.example.clases.ChatMessage;
+import com.example.clases.Ciclista;
 import com.example.clases.Constants;
 import com.example.clases.MessageDetailAdapter;
 import com.google.firebase.auth.FirebaseAuth;
@@ -25,15 +26,15 @@ import java.util.List;
  * Created by juanpablorn30 on 15/11/17.
  */
 
-public class ChatDetailActivity extends AppCompatActivity implements View.OnClickListener{
+public class ChatDetailActivity extends AppCompatActivity implements View.OnClickListener {
 
     private String TAG = "ChatActivity";
     private EditText mensajeTexto;
     private RecyclerView rvMensajes;
     private MessageDetailAdapter adapter;
-    private String friendUid;
 
     private List<ChatMessage> listaMensajes;
+    private Ciclista friend;
 
     private DatabaseReference databaseReferenceSender;
     private DatabaseReference databaseReferenceReceiver;
@@ -48,11 +49,12 @@ public class ChatDetailActivity extends AppCompatActivity implements View.OnClic
         rvMensajes.setHasFixedSize(true);
         findViewById(R.id.btn_chat_send).setOnClickListener(this);
 
-        friendUid = getIntent().getStringExtra("friendUid");
-        databaseReferenceSender = FirebaseDatabase.getInstance().getReference(Constants.PATH_MESSAGES).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(friendUid);
-        databaseReferenceReceiver = FirebaseDatabase.getInstance().getReference(Constants.PATH_MESSAGES).child(friendUid).child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        friend = getIntent().getParcelableExtra("friend");
+
+        databaseReferenceSender = FirebaseDatabase.getInstance().getReference(Constants.PATH_MESSAGES).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(friend.getUid());
+        databaseReferenceReceiver = FirebaseDatabase.getInstance().getReference(Constants.PATH_MESSAGES).child(friend.getUid()).child(FirebaseAuth.getInstance().getCurrentUser().getUid());
         listaMensajes = new ArrayList<>();
-        adapter = new MessageDetailAdapter(listaMensajes);
+        adapter = new MessageDetailAdapter(listaMensajes, friend);
         rvMensajes.setLayoutManager(new LinearLayoutManager(this));
         rvMensajes.setAdapter(adapter);
     }
@@ -97,16 +99,17 @@ public class ChatDetailActivity extends AppCompatActivity implements View.OnClic
     @Override
     protected void onStop() {
         super.onStop();
-        if(mMensajesListener != null) databaseReferenceSender.removeEventListener(mMensajesListener);
+        if (mMensajesListener != null)
+            databaseReferenceSender.removeEventListener(mMensajesListener);
     }
 
     @Override
     public void onClick(View view) {
         int id = view.getId();
-        if(id == R.id.btn_chat_send){
-            if(mensajeTexto.getText().length() > 0){
-                databaseReferenceSender.push().setValue(new ChatMessage(mensajeTexto.getText().toString(),FirebaseAuth.getInstance().getCurrentUser().getUid()));
-                databaseReferenceReceiver.push().setValue(new ChatMessage(mensajeTexto.getText().toString(),FirebaseAuth.getInstance().getCurrentUser().getUid()));
+        if (id == R.id.btn_chat_send) {
+            if (mensajeTexto.getText().length() > 0) {
+                databaseReferenceSender.push().setValue(new ChatMessage(mensajeTexto.getText().toString(), FirebaseAuth.getInstance().getCurrentUser().getUid()));
+                databaseReferenceReceiver.push().setValue(new ChatMessage(mensajeTexto.getText().toString(), FirebaseAuth.getInstance().getCurrentUser().getUid()));
                 mensajeTexto.getText().clear();
             }
         }

@@ -21,6 +21,10 @@ public class Punto {
      */
     private List<Peligro> peligros;
 
+    public Punto(){
+        super();
+    }
+
     public Punto(String ciudad, String direccion, double latitud, double longitud, String nombre) {
         this.ciudad = ciudad;
         this.direccion = direccion;

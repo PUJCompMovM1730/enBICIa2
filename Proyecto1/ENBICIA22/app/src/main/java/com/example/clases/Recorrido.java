@@ -15,18 +15,21 @@ public class Recorrido {
     private Date fecha_hora;
     private Punto puntoInicio;
     private Punto puntoFin;
-    private Ciclista organizador;
-    private List<Ciclista> grupo;
+    private String organizador;
+    private List<String> grupo;
 
-    public Recorrido(String estado, Punto puntoInicio, Punto puntoFin, Ciclista organizador) {
+    public Recorrido(){super(); grupo=new ArrayList<>();}
+
+    public Recorrido(String estado, Punto puntoInicio, Punto puntoFin, String organizador, Date fecha_hora) {
         this.estado = estado;
         this.fecha_hora = Calendar.getInstance().getTime();
         this.puntoInicio = puntoInicio;
         this.puntoFin = puntoFin;
         this.organizador = organizador;
+        this.fecha_hora=fecha_hora;
     }
 
-    public Recorrido(String estado, Date fecha_hora, Punto puntoInicio, Punto puntoFin, Ciclista organizador, List<Ciclista> grupo) {
+    public Recorrido(String estado, Date fecha_hora, Punto puntoInicio, Punto puntoFin, String organizador, List<String> grupo) {
         this.estado = estado;
         this.fecha_hora = fecha_hora;
         this.puntoInicio = puntoInicio;
@@ -35,8 +38,10 @@ public class Recorrido {
         this.grupo = new ArrayList<>();
     }
 
+
+
     //TODO: Cambiar Ciclista por datos.
-    public void agregarCiclista(Ciclista actual){
+    public void agregarCiclista(String actual){
         this.grupo.add(actual);
     }
 
@@ -53,12 +58,12 @@ public class Recorrido {
         this.estado = estado;
     }
 
-    public Date getFecha_hora() {
-        return fecha_hora;
+    public Long getFecha_hora() {
+        return fecha_hora.getTime();
     }
 
-    public void setFecha_hora(Date fecha_hora) {
-        this.fecha_hora = fecha_hora;
+    public void setFecha_hora(Long fecha_hora) {
+        this.fecha_hora = new Date(fecha_hora);
     }
 
     public Punto getPuntoInicio() {
@@ -77,11 +82,19 @@ public class Recorrido {
         this.puntoFin = puntoFin;
     }
 
-    public Ciclista getOrganizador() {
+    public String getOrganizador() {
         return organizador;
     }
 
-    public void setOrganizador(Ciclista organizador) {
+    public void setOrganizador(String organizador) {
         this.organizador = organizador;
+    }
+
+    public List<String> getGrupo() {
+        return grupo;
+    }
+
+    public void setGrupo(List<String> grupo) {
+        this.grupo = grupo;
     }
 }

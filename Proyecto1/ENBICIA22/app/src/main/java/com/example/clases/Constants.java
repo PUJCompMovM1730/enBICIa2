@@ -70,6 +70,7 @@ public final class Constants {
     public static final String PATH_USUARIOS="usuarios/";
     public static final String PATH_SITIO_INTERES="sitio_interes/";
     public static final String PATH_MESSAGES="messages/";
+    public static final String PATH_RECORRIDOS="recorridos/";
     // [END path_elements_firebase]
 
     // [BEGIN declare_tag]

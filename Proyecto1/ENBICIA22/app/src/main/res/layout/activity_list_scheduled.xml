@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp"
+    android:background="@color/background"
+    tools:context="com.example.oscar.enbicia2.FriendsActivity">
+
+    <TextView
+        android:id="@+id/tv_LS_titulo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="MIS RUTAS PROGRAMADAS"
+        android:textColor="@color/colorAccent"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_marginBottom="10dp"
+        />
+
+    <Button
+        android:id="@+id/btn_LS_anadir"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rnd_rectangle_in_msg"
+        android:backgroundTint="@color/colorAccent"
+        android:textColor="@color/blanco"
+        android:text="Añadir ruta planeada"
+        android:layout_marginBottom="10dp"/>
+
+    <TextView
+        android:id="@+id/txtnoRoute"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="TextView" />
+
+    <ListView
+        android:id="@+id/list_route_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+
+</LinearLayout>
