@@ -71,13 +71,14 @@ public final class Constants {
     public static final String PATH_SITIO_INTERES="sitio_interes/";
     public static final String PATH_MESSAGES="messages/";
     public static final String PATH_RECORRIDOS="recorridos/";
+    public static final String PATH_GROUPS="groups/";
     // [END path_elements_firebase]
 
     // [BEGIN declare_tag]
     public static final String TAG_CLASS = "enBICIa2";
     // [END declare_tag]
 
-    public static final Long TIME_LIMIT = 300000L;
+    public static final Long TIME_LIMIT = 30000000L;
     public static final Long RADIUS_CIRCLE = 200L;
     public static final Long RADIUS_COMUN = 400L;
 

@@ -484,13 +484,8 @@ public class CreateSRouteActivity extends AppCompatActivity implements OnMapRead
 
             }
         };
-            mMap.snapshot(callback);
+        mMap.snapshot(callback);
     }
-
-
-
-
-
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {

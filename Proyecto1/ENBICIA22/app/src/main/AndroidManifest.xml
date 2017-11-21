@@ -59,9 +59,7 @@
         <activity
             android:name=".TourActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".GroupActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".GroupActivity" />
         <activity
             android:name=".TourDetailActivity"
             android:label="@string/title_activity_tourdetail" />
@@ -84,7 +82,20 @@
 
         <service
             android:name=".MessageIntentService"
-            android:exported="false"></service>
+            android:exported="false" />
+
+        <activity
+            android:name=".MapActivity"
+            android:label="@string/title_activity_map"/>
+
+        <activity
+            android:name=".ClimaActivity" />
+
+        <provider android:authorities="com.facebook.app.FacebookContentProvider207653939771200"
+            android:name="com.facebook.FacebookContentProvider"
+            android:exported="true"/>
     </application>
+
+
 
 </manifest>

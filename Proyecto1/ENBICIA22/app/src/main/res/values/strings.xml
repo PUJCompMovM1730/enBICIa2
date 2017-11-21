@@ -78,6 +78,7 @@
     <!--[BEGIN RECORRIDOS]-->
     <string name="nombre_ruta">Nombre Ruta</string>
     <string name="Hora">Hora</string>
+    <string name="title_activity_map">Map</string>
     <!--[END RECORRIDOS]-->
 
 </resources>

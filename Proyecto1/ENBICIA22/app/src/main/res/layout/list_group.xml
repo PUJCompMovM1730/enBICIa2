@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="45dp">
+
+    <ImageView
+        android:id="@+id/img_adapterlist_photo"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_weight="0.1"
+        app:srcCompat="@drawable/e2_group_rounded" />
+
+    <TextView
+        android:id="@+id/txt_adapter_name"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:text="Nombre grupo"
+        android:layout_weight="0.7"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
+        android:layout_marginLeft="3dp"
+        android:clickable="true"/>
+
+    <Button
+        android:id="@+id/btn_groups_unsuscribe"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:text="Borrar"
+        android:textSize="11sp"
+        android:layout_weight="0.2"
+        android:layout_gravity="center"
+        android:background="@drawable/button"
+        android:textColor="@color/blanco"/>
+
+    <Button
+        android:id="@+id/btn_groups_suscribe"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:text="Suscribir"
+        android:textSize="11sp"
+        android:layout_weight="0.2"
+        android:layout_gravity="center"
+        android:background="@drawable/button"
+        android:textColor="@color/blanco"/>
+</LinearLayout>

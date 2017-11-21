@@ -1,37 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/sv_CSR_scroll"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:orientation="vertical"
+    android:padding="10dp">
 
-
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:tools="http://schemas.android.com/tools"
-            android:id="@+id/IV_CSRoute_map"
-            android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/scheduled_route"
-            tools:context="com.example.oscar.enbicia2.ViewSRouteActivity" />
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="20dp">
+            android:orientation="vertical">
 
+            <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/img_group_trip"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/scheduled_route" />
             <TextView
-                android:id="@+id/tv_VS_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:padding="10dp"
-                android:text="Nombre Ruta"
+                android:text="Información del grupo"
                 android:textColor="@color/colorAccent"
                 android:textSize="25dp"
                 android:textStyle="bold" />
@@ -39,24 +35,23 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
+                android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:padding="10dp">
+                android:padding="5dp">
 
                 <TextView
-
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Creado por: "
+                    android:text="Nombre: "
                     android:textColor="@color/colorAccent"
                     android:textSize="15dp"
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/tv_VS_createdby"
+                    android:id="@+id/txt_group_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=""
+                    android:text="Los 7 chiflados"
                     android:textSize="15dp"
                     android:textStyle="bold" />
             </LinearLayout>
@@ -64,24 +59,23 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
+                android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:padding="10dp">
+                android:padding="5dp">
 
                 <TextView
-
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Punto de partida: "
+                    android:text="Descripción: "
                     android:textColor="@color/colorAccent"
                     android:textSize="15dp"
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/tv_VS_start"
+                    android:id="@+id/txt_group_description"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=""
+                    android:text="El grupo de los que somos"
                     android:textSize="15dp"
                     android:textStyle="bold" />
             </LinearLayout>
@@ -89,23 +83,23 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
+                android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:padding="10dp">
+                android:padding="5dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Punto de destino: "
+                    android:text="Administrador: "
                     android:textColor="@color/colorAccent"
                     android:textSize="15dp"
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/tv_VS_target"
+                    android:id="@+id/txt_group_admin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=""
+                    android:text="Pepito Pérez"
                     android:textSize="15dp"
                     android:textStyle="bold" />
             </LinearLayout>
@@ -113,23 +107,23 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
+                android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:padding="10dp">
+                android:padding="5dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Hora de partida: "
+                    android:text="Inicia en : "
                     android:textColor="@color/colorAccent"
                     android:textSize="15dp"
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/tv_VS_hour"
+                    android:id="@+id/txt_group_start"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=""
+                    android:text="Cll 42."
                     android:textSize="15dp"
                     android:textStyle="bold" />
             </LinearLayout>
@@ -137,9 +131,33 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
+                android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:padding="10dp">
+                android:padding="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Termina en: "
+                    android:textColor="@color/colorAccent"
+                    android:textSize="15dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txt_group_end"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Cra. 30"
+                    android:textSize="15dp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="5dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -150,46 +168,47 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/tv_VS_date"
+                    android:id="@+id/txt_group_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=""
+                    android:text="15/10/2017"
                     android:textSize="15dp"
                     android:textStyle="bold" />
             </LinearLayout>
 
             <TextView
+                android:id="@+id/textView4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:padding="10dp"
-                android:text="Usan el recorrido:"
+                android:text="Participantes"
                 android:textColor="@color/colorAccent"
-                android:textSize="20dp"
+                android:textSize="25dp"
                 android:textStyle="bold" />
 
             <ListView
-                android:id="@+id/list_friends_list"
+                android:id="@+id/list_group_members"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-
-            <ListView
-                android:id="@+id/list_view_scheduled_participants"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="wrap_content"/>
 
             <Button
-                android:id="@+id/btn_comenzar_ruta"
+                android:id="@+id/btn_group_addFriend"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Comenzar ruta"
-                android:background="@drawable/button"
-                android:textColor="@color/blanco"/>
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:text="Agregar amigos" />
+
+            <Button
+                android:id="@+id/btn_group_exitGroup"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="3dp"
+                android:background="@color/google"
+                android:text="Salir del grupo" />
 
         </LinearLayout>
-    </LinearLayout>
 
+    </ScrollView>
 
-</ScrollView>
-
-
+</LinearLayout>

@@ -40,6 +40,7 @@ public class Ciclista extends Usuario implements Parcelable{
 
     private List<Recorrido> historial;
     private Map<String, String> recorridos;
+    private Map<String, String> grupos;
 
     /*
         TODO: Agregar método de agregar a creados.
@@ -262,5 +263,13 @@ public class Ciclista extends Usuario implements Parcelable{
                     this.getUid(),
                     this.getName(),
             });
+    }
+
+    public Map<String, String> getGrupos() {
+        return grupos;
+    }
+
+    public void setGrupos(Map<String, String> grupos) {
+        this.grupos = grupos;
     }
 }

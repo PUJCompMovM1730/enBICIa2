@@ -167,6 +167,7 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
                         }
                     });
                 } catch (IOException e) {
+                    progressDialog.dismiss();
                     e.printStackTrace();
                 }
             }

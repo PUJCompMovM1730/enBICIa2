@@ -19,6 +19,7 @@ import com.example.clases.FriendsAdapter;
 import com.example.clases.RecorridoGrupal;
 import com.example.oscar.enbicia2.R;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -38,7 +39,7 @@ import java.util.Locale;
 import static android.support.design.widget.Snackbar.LENGTH_LONG;
 import static android.support.design.widget.Snackbar.make;
 
-public class ViewScheduledActivity extends AppCompatActivity {
+public class ViewScheduledActivity extends AppCompatActivity implements View.OnClickListener{
 
     private String TAG = "ViewScheduledActivity";
 
@@ -54,6 +55,7 @@ public class ViewScheduledActivity extends AppCompatActivity {
 
     private String key;
     private String tipo;
+    private RecorridoGrupal route;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +79,7 @@ public class ViewScheduledActivity extends AppCompatActivity {
         listParticipants = findViewById(R.id.list_view_scheduled_participants);
         adapter = new FriendsAdapter(usuariosList, this, TAG, null);
         listParticipants.setAdapter(adapter);
+        findViewById(R.id.btn_comenzar_ruta).setOnClickListener(this);
     }
 
     @Override
@@ -92,7 +95,7 @@ public class ViewScheduledActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Log.d(Constants.TAG_CLASS, "Recibi el update " + dataSnapshot.getRef().toString());
-                final RecorridoGrupal route = dataSnapshot.getValue(RecorridoGrupal.class);
+                route = dataSnapshot.getValue(RecorridoGrupal.class);
                 DatabaseReference ScheduledReference;
                 if(tipo.equals("usuario")){
                     ScheduledReference = FirebaseDatabase.getInstance().getReference().child("usuarios").child(route.getOrganizador());
@@ -203,5 +206,21 @@ public class ViewScheduledActivity extends AppCompatActivity {
         super.onStop();
         if (mRecorridoListener != null) myRef.removeEventListener(mRecorridoListener);
 
+    }
+
+    @Override
+    public void onClick(View view) {
+        int id = view.getId();
+        if(id == R.id.btn_comenzar_ruta){
+            Intent intent = new Intent(getBaseContext(), MapActivity.class);
+            Bundle args = new Bundle();
+            LatLng source = new LatLng(route.getPuntoInicio().getLatitud(),route.getPuntoInicio().getLongitud());
+            LatLng target = new LatLng(route.getPuntoFin().getLatitud(),route.getPuntoFin().getLongitud());
+            args.putParcelable("from_position", source);
+            args.putParcelable("to_position", target);
+            intent.putExtra("bundle", args);
+            Log.d(TAG, "Ire a map");
+            startActivity(intent);
+        }
     }
 }

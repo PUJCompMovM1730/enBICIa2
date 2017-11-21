@@ -1,42 +1,45 @@
 <LinearLayout
-
-    android:layout_height="match_parent"
-    android:layout_width="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="@color/blanco"
-    >
+    android:orientation="vertical">
+
     <LinearLayout
         android:id="@+id/form_routes_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_gravity="bottom"
-        android:padding="20dp"
         android:background="#00000000"
-        >
-        <fragment
-            android:id="@+id/place_autocomplete_fragment_target"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
-            android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
-            />
+        android:orientation="vertical"
+        android:padding="20dp">
+
         <Button
-            android:id="@+id/btnRoutesSearch"
+            android:id="@+id/btnRoutesFinish"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_gravity="bottom"
-            android:text="@string/start_route"
-            android:background="@color/colorAccent"/>
+            android:background="@color/colorAccent"
+            android:text="Finalizar Ruta" />
+
+        <Button
+            android:id="@+id/btnClima"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_gravity="bottom"
+            android:background="@color/colorAccent"
+            android:text="Mostrar Clima" />
     </LinearLayout>
+
+
+
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:map="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/map"
+        android:id="@+id/map_start_route"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.example.oscar.enbicia2.RoutesActivity" />
+        tools:context="com.example.oscar.enbicia2.MapActivity" />
 </LinearLayout>
 

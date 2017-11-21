@@ -85,7 +85,6 @@ public class RecorridoGrupal extends Recorrido{
 
     public void eliminarRecorridoFireBase(RecorridoGrupal rg, String UidAmigo){
         DatabaseReference referenceUsuario = FirebaseDatabase.getInstance().getReference().child("usuarios").child(UidAmigo).child("recorridos");
-        Log.v("RG--", referenceUsuario.getRoot()+" "+rg.getId());
         referenceUsuario.child(rg.getId()).removeValue();
 
         referenceUsuario = FirebaseDatabase.getInstance().getReference().child("recorridos").child(rg.getId()).child("usuario");
